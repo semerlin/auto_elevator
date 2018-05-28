@@ -43,7 +43,8 @@
 /* interrupt priority */
 #define USART1_PRIORITY        (13)
 #define EXTI3_PRIORITY         (14)
-
+#define I2C_EV_PRIORITY        (12)
+#define I2C_ER_PRIORITY        (12)
 
 #endif /* _GLOBAL_H_ */
 

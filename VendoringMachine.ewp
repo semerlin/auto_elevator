@@ -317,6 +317,7 @@
           <state>$PROJ_DIR$\platform\cm3</state>
           <state>$PROJ_DIR$\platform\stm32f10x\inc</state>
           <state>$PROJ_DIR$\board</state>
+          <state>D:\project\AutoElevator\board\sensor</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1920,6 +1921,30 @@
   </configuration>
   <group>
     <name>board</name>
+    <group>
+      <name>sensor</name>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\bh1750.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\bh1750.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\delay.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\delay.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\environment.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\iicsensor.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\board\sensor\iicsensor.h</name>
+      </file>
+    </group>
     <file>
       <name>$PROJ_DIR$\board\application.c</name>
     </file>
@@ -1949,6 +1974,15 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\global.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c_hardware.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c_software.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\keymap.c</name>

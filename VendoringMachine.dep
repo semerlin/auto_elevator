@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>633464916</fileChecksum>
+  <fileChecksum>229583953</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -313,11 +313,41 @@
       <file>$TOOLKIT_DIR$\inc\c\string.h</file>
       <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_scb.c</file>
       <file>$PROJ_DIR$\Debug\Obj\mqtt.__cstat.et</file>
+      <file>$PROJ_DIR$\board\fm24cl64.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\keymap.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\keymap.o</file>
       <file>$PROJ_DIR$\board\keymap.h</file>
       <file>$PROJ_DIR$\..\VendoringMachine\board\mode.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_hardware.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_software.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_software.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_hardware.pbi</file>
+      <file>$PROJ_DIR$\board\i2c_hardware.c</file>
+      <file>$PROJ_DIR$\board\i2c_hardware.h</file>
+      <file>$PROJ_DIR$\board\i2c.c</file>
       <file>$PROJ_DIR$\board\keymap.c</file>
+      <file>$PROJ_DIR$\board\i2c_software.c</file>
+      <file>$PROJ_DIR$\board\i2c.h</file>
+      <file>$PROJ_DIR$\board\fm24cl64.c</file>
+      <file>$PROJ_DIR$\board\sensor\environment.h</file>
+      <file>$PROJ_DIR$\board\sensor\iicsensor.h</file>
+      <file>$PROJ_DIR$\board\sensor\bh1750.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\bh1750.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\bmp280.o</file>
+      <file>$PROJ_DIR$\board\sensor\iicsensor.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.o</file>
+      <file>$PROJ_DIR$\board\sensor\bh1750.c</file>
+      <file>$PROJ_DIR$\board\sensor\bmp280.c</file>
+      <file>$PROJ_DIR$\board\sensor\bmp280.h</file>
+      <file>$PROJ_DIR$\board\sensor\delay.c</file>
+      <file>$PROJ_DIR$\board\sensor\delay.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\bmp280.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\bh1750.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\iicsensor.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\iicsensor.o</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\board\motorctl.c</name>
@@ -338,7 +368,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 226 41 197 214 217 210 51 30 262 254 242 199 207 284 89 14 220 263 258 257 198 202 116 9 69 38 76 121 224 243 201 266 261 264 259 252 235 222 200 234 216 236 213</file>
+          <file> 226 41 197 214 201 210 51 30 89 262 254 242 199 207 284 121 220 224 243 263 258 257 198 202 116 9 14 69 38 76 217 266 261 264 259 252 235 222 200 234 216 236 213</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -433,7 +463,7 @@
       <inputs>
         <tool>
           <name>ILINK</name>
-          <file> 147 20 70 71 129 80 33 141 7 91 82 3 293 278 27 72 273 279 296 281 46 136 21 78 282 137 53 47 84 133 68 55 43 280 4 52 167 99 166 100 66 34</file>
+          <file> 147 20 328 70 71 129 80 331 33 141 7 308 314 316 341 311 91 82 3 293 278 27 72 273 279 296 281 46 136 21 78 282 137 53 47 84 133 68 55 43 280 4 52 167 99 166 100 66 34</file>
         </tool>
       </inputs>
     </file>
@@ -625,7 +655,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 9 204 41 14 214 116 200 51 30 89 210 224 243 242 220 121 217 284 198 69 38 76 207 234 216 264 236 213</file>
+          <file> 9 89 214 51 204 116 200 284 242 220 14 121 217 41 30 210 224 243 198 69 38 76 207 234 216 264 236 213</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -652,7 +682,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 38 234 41 76 89 124 214 210 201 62 198 51 159 69 14 121 197 116 202 30 284 11 9 217 216 243 304 220 266 263 261 262 264 258 259 226 252 257 235 254 207 200 224 236</file>
+          <file> 38 234 41 76 89 124 210 214 201 62 198 51 159 69 9 121 197 116 202 30 284 11 14 217 216 243 304 220 266 263 261 262 264 258 259 226 252 257 235 254 207 200 224 236</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -702,7 +732,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 214 89 259 51 30 261 235 41 266 264 252 217 197 207 284 220 263 262 258 226 257 254 14 216 243 120 116 9 69 38 76 210 198 121 234 103 200 224 236</file>
+          <file> 214 89 259 51 30 261 235 41 266 264 252 217 197 207 284 220 263 262 258 226 257 254 198 14 216 243 120 116 9 69 38 76 210 121 234 103 200 224 236</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -727,6 +757,10 @@
         </tool>
       </outputs>
       <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 207 51 89 199 38 220 69 30 210 236 214 9 14 41 284 110 76</file>
+        </tool>
         <tool>
           <name>ICCARM</name>
           <file> 110 214 207 14 51 89 69 30 284 38 76 41 9 210 220 236 199</file>
@@ -825,7 +859,7 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 207 51 200 89 236 226 204 38 76 262 254 202 124 9 69 220 234 201 263 258 257 214 197 116 14 121 217 41 30 284 216 264 266 261 259 252 235 198 210 224 243</file>
+          <file> 266 200 89 51 264 252 204 38 76 214 202 124 9 69 216 261 259 235 198 201 197 116 14 121 217 41 30 284 220 207 234 236 263 262 258 226 257 254 210 224 243</file>
         </tool>
         <tool>
           <name>ICCARM</name>
@@ -1646,22 +1680,185 @@
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\keymap.c</name>
+      <name>$PROJ_DIR$\board\i2c_hardware.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 307</file>
+          <file> 317</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 314</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 14 51 224 323 217 41 89 210 243 202 304 121 214 201 197 116 9 200 69 38 76 198 30 284 220 207 234 216 264 236 266 263 261 262 258 259 226 252 257 235 254 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 198 14 51 89 69 30 284 38 76 41 9 121 210 214 207 220 200 217 224 234 264 243 236 216 201 202 197 266 263 261 262 258 259 226 252 257 235 254 323 116 304 159</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 309</file>
         </tool>
         <tool>
           <name>ICCARM</name>
           <file> 308</file>
         </tool>
       </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 220 214 121 69 234 198 14 217 89 38 76 51 207 304 9 200 41 30 284 216 243 323 210 224 264 236 159</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 323 198 14 51 89 69 30 284 38 76 41 9 121 210 214 207 220 200 217 224 234 264 243 236 216 304 159</file>
+        </tool>
+      </inputs>
     </file>
-    <forcedrebuild>
-      <name>[MULTI_TOOL]</name>
-      <tool>ILINK</tool>
-    </forcedrebuild>
+    <file>
+      <name>$PROJ_DIR$\board\keymap.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 310</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 311</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 89 38 207 30 214 69 284 9 14 41 76 312</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 312 214 207 14 51 89 69 30 284 38 76 41 9</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c_software.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 315</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 316</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 214 159 258 14 51 69 284 121 220 263 257 336 41 38 76 210 224 243 262 226 254 323 197 89 30 217 9 266 261 264 259 252 235 304 198 200 207 234 216 236</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 304 51 89 69 30 284 38 76 41 159 323 198 14 9 121 210 214 207 220 200 217 224 234 264 243 236 216 336 197 266 263 261 262 258 259 226 252 257 235 254</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\iicsensor.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 340</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 214 252 327 266 197 121 51 284 264 201 325 14 217 41 89 9 261 259 235 220 242 202 116 323 200 69 30 210 224 243 263 262 258 226 257 254 198 38 76 207 234 216 236 213</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 198 14 51 89 69 30 284 38 76 41 9 121 210 214 207 220 200 217 224 234 264 243 236 216 242 213 201 202 197 266 263 261 262 258 259 226 252 257 235 254 116 325 323 327</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\bh1750.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 339</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 328</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 38 214 197 200 89 76 51 264 201 323 9 69 216 210 242 202 116 325 14 121 217 41 220 207 234 236 213 198 30 284 224 243 266 263 261 262 258 259 226 252 257 235 254</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 198 14 51 89 69 30 284 38 76 41 9 121 210 214 207 220 200 217 224 234 264 243 236 216 242 213 201 202 197 266 263 261 262 258 259 226 252 257 235 254 116 323 325</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\bmp280.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 337</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 76 89 51 264 197 200 38 214 201 323 9 216 210 198 242 202 116 334 14 121 217 69 220 207 234 236 213 41 30 284 224 243 266 263 261 262 258 259 226 252 257 235 254</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 198 14 51 89 69 30 284 38 76 41 9 121 210 214 207 220 200 217 224 234 264 243 236 216 242 213 201 202 197 266 263 261 262 258 259 226 252 257 235 254 116 323 334</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\delay.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 338</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 331</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 51 89 38 207 30 214 69 284 9 14 41 76 336</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 336 214 207 14 51 89 69 30 284 38 76 41 9</file>
+        </tool>
+      </inputs>
+    </file>
     <forcedrebuild>
       <name>$PROJ_DIR$\board\esp8266.c</name>
       <tool>ICCARM</tool>
