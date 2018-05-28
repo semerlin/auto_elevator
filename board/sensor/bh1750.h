@@ -2,7 +2,7 @@
 #define _BH1750_H_
 
 #include "types.h"
-#include "i2c.h"
+#include "i2c_software.h"
 
 void bh1750Init(i2c *pi2c);
 void bh1750Start(i2c *pi2c);
