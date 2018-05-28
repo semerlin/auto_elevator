@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>3974821511</fileChecksum>
+  <fileChecksum>633464916</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -313,7 +313,11 @@
       <file>$TOOLKIT_DIR$\inc\c\string.h</file>
       <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_scb.c</file>
       <file>$PROJ_DIR$\Debug\Obj\mqtt.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\keymap.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\keymap.o</file>
+      <file>$PROJ_DIR$\board\keymap.h</file>
       <file>$PROJ_DIR$\..\VendoringMachine\board\mode.h</file>
+      <file>$PROJ_DIR$\board\keymap.c</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\board\motorctl.c</name>
@@ -723,10 +727,6 @@
         </tool>
       </outputs>
       <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 207 51 89 199 38 220 69 30 210 236 214 9 14 41 284 110 76</file>
-        </tool>
         <tool>
           <name>ICCARM</name>
           <file> 110 214 207 14 51 89 69 30 284 38 76 41 9 210 220 236 199</file>
@@ -1645,13 +1645,22 @@
         </tool>
       </inputs>
     </file>
+    <file>
+      <name>$PROJ_DIR$\board\keymap.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 307</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 308</file>
+        </tool>
+      </outputs>
+    </file>
     <forcedrebuild>
       <name>[MULTI_TOOL]</name>
       <tool>ILINK</tool>
-    </forcedrebuild>
-    <forcedrebuild>
-      <name>$PROJ_DIR$\board\motorctl.c</name>
-      <tool>ICCARM</tool>
     </forcedrebuild>
     <forcedrebuild>
       <name>$PROJ_DIR$\board\esp8266.c</name>
@@ -1663,10 +1672,6 @@
     </forcedrebuild>
     <forcedrebuild>
       <name>$PROJ_DIR$\board\led_net.c</name>
-      <tool>ICCARM</tool>
-    </forcedrebuild>
-    <forcedrebuild>
-      <name>$PROJ_DIR$\board\license.c</name>
       <tool>ICCARM</tool>
     </forcedrebuild>
     <forcedrebuild>

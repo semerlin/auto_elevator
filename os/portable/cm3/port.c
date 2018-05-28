@@ -1,5 +1,5 @@
 /**
-* This file is part of the vendoring machine project.
+* This file is part of the auto-elevator project.
 *
 * Copyright 2018, Huang Yang <elious.huang@gmail.com>. All rights reserved.
 *
