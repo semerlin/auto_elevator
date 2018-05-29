@@ -5,17 +5,19 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _KEYMAP_H_
-  #define _KEYMAP_H_
+#ifndef _FLOOR_CTL_H_
+  #define _FLOOR_CTL_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-bool keymap_init(void);
-uint8_t keymap_convert(int floor);
-uint8_t keymap_open(void);
-void keymap_update(const char *data);
+bool floor_init(void);
+void floor_enter(char floor);
+void floor_hold_open(char floor);
+void floor_decrease();
+void floor_increase();
+void floor_set_first();
 
 END_DECLS
 

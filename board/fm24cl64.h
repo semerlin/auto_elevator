@@ -12,7 +12,9 @@
 
 BEGIN_DECLS
 
-
+bool fm_init(void);
+bool fm_write(uint16_t addr, const uint8_t *data, uint16_t len);
+bool fm_read(uint16_t addr, uint8_t *data, uint16_t len);
 
 
 END_DECLS

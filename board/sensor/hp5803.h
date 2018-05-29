@@ -5,18 +5,15 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _KEYMAP_H_
-  #define _KEYMAP_H_
+#ifndef _HP5803_H_
+  #define _HP5803_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-bool keymap_init(void);
-uint8_t keymap_convert(int floor);
-uint8_t keymap_open(void);
-void keymap_update(const char *data);
+bool hp5803_init(void);
 
 END_DECLS
 
-#endif
+#endif /* _APPLICATION_H_ */

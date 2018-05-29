@@ -5,16 +5,15 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _FLASH_H_
-  #define _FLASH_H_
+#ifndef _KEYCTL_H_
+  #define _KEYCTL_H_
 
 #include "types.h"
 
-bool flash_first_start(void);
-void flash_restore(void);
-void flash_get_ssid_pwd(char *ssid, char *pwd);
-void flash_set_ssid_pwd(const char *ssid, const char *pwd);
+BEGIN_DECLS
 
+bool keyctl_init(void);
 
-#endif
+END_DECLS
 
+#endif /* _KEYCTL_H_ */

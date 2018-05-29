@@ -25,6 +25,8 @@ void i2c_release(i2c *pi2c);
 void i2c_set_slaveaddr(i2c *pi2c, uint8_t address);
 bool i2c_write(i2c *pi2c, const uint8_t *data, uint32_t length);
 bool i2c_read(i2c *pi2c, uint8_t *data, uint32_t length);
+bool i2c_addr_write(i2c *pi2c, const uint8_t *addr, uint8_t addr_len,
+        const uint8_t *data, uint32_t data_len);
 
 END_DECLS
 

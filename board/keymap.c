@@ -6,12 +6,21 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #include "keymap.h"
+#include "assert.h"
+#include "trace.h"
+#include "parameter.h"
 
-#define FLOOR_NUM    18
 
+#undef __TRACE_MODULE
+#define __TRACE_MODULE  "[KEYMAP]"
+
+/* total floor number */
+#define FLOOR_NUM    15
+
+/* keymap structure */
 typedef struct
 {
-    int floor;
+    char floor;
     uint8_t key;
 }keymap;
 
@@ -33,11 +42,9 @@ static keymap keymaps[FLOOR_NUM] =
     {10, 12},
     {11, 13},
     {12, 14},
-    {13, 15},
-    {14, 16},
-    {15, 17},
 };
 
+static uint8_t key_open = 15;
 
 /**
  * @brief initialize keymap
@@ -45,6 +52,13 @@ static keymap keymaps[FLOOR_NUM] =
  */
 bool keymap_init(void)
 {
+    TRACE("initialize keymap...\r\n");
+    uint8_t data[36];
+    if (is_param_setted())
+    {
+        param_get_keymap(data);
+        keymap_update((const char *)data);
+    }
     return TRUE;
 }
 
@@ -66,5 +80,27 @@ uint8_t keymap_convert(int floor)
     return 0xff;
 }
 
+/**
+ * @brief get open evelator key
+ * @return open key
+ */
+uint8_t keymap_open(void)
+{
+    return key_open;
+}
+
+/**
+ * @brief update key map
+ * @param data - new key map
+ */
+void keymap_update(const char *data)
+{
+    for (int i = 0; i < FLOOR_NUM; ++i)
+    {
+        keymaps[i].floor = data[i * 2];
+        keymaps[i].key = data[i * 2 + 1];
+    }
+    key_open = (uint8_t)(data[FLOOR_NUM * 2]);
+}
 
 

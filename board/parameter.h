@@ -5,18 +5,21 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _KEYMAP_H_
-  #define _KEYMAP_H_
+#ifndef _PARAMETER_H_
+  #define _PARAMETER_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-bool keymap_init(void);
-uint8_t keymap_convert(int floor);
-uint8_t keymap_open(void);
-void keymap_update(const char *data);
+bool patam_init(void);
+bool is_param_setted(void);
+bool param_get_keymap(uint8_t *map);
+bool param_get_pwd(uint8_t *pwd);
+bool param_update_keymap(uint8_t *map);
+bool param_update_pwd(uint8_t *pwd);
 
 END_DECLS
+
 
 #endif

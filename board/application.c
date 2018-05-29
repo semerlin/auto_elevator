@@ -13,7 +13,6 @@
 #include "motorctl.h"
 #include "led_motor.h"
 #include "license.h"
-#include "flash.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[init]"

@@ -172,7 +172,9 @@ i2c *i2c_request(i2c_port port)
     assert_param(port < port_count);
     i2c *pi2c = pvPortMalloc(sizeof(i2c) / sizeof(char));
     if(pi2c == NULL)
+    {
         return NULL;
+    }
     pi2c->port = port;
     pi2c->slave_addr = 0xff;
     if(port == i2c1)
@@ -212,12 +214,9 @@ void i2c_set_slaveaddr(i2c *pi2c, uint8_t address)
 
 /**
 * @brief write data to iic bus
-* @param i2c handler
-* @param data to write
-* @param data length
-* @warnig length cann't be zero, if length is zero, I2C1_EV_IRQHandler will be
-*         stuck in I2C_EVENT_MASTER_BYTE_TRANSMITTING event and 
-*         I2C_EVENT_MASTER_BYTE_TRANSMITTED will never reached
+* @param pi2c - i2c handler
+* @param datra - data to write
+* @param length - data length
 */
 bool i2c_write(i2c *pi2c, const uint8_t *data, uint32_t length)
 {
@@ -227,14 +226,20 @@ bool i2c_write(i2c *pi2c, const uint8_t *data, uint32_t length)
     /* send address */
     _i2c_write(pi2c, pi2c->slave_addr << 1);
     if(i2c_waitack(pi2c) != 0)
+    {
+        i2c_stop(pi2c);
         return FALSE;
+    }
     /* send data */
     const uint8_t *pData = data;
     while(length--)
     {
         _i2c_write(pi2c, *pData);
         if(i2c_waitack(pi2c) != 0)
+        {
+            i2c_stop(pi2c);
             return FALSE;
+        }
         pData++;
     }
     /* stop transfer */
@@ -242,6 +247,61 @@ bool i2c_write(i2c *pi2c, const uint8_t *data, uint32_t length)
     
     return TRUE;
 }
+
+/**
+* @brief write data to iic bus, support address write
+* @param pi2c - i2c handler
+* @param addr - address to write
+* @param addr_len - address length
+* @param data - data to write
+* @param data_len - data length
+*/
+
+bool i2c_addr_write(i2c *pi2c, const uint8_t *addr, uint8_t addr_len,
+        const uint8_t *data, uint32_t data_len)
+{
+    assert_param(pi2c != NULL);
+    /* start transfer */
+    i2c_start(pi2c);
+    /* send address */
+    _i2c_write(pi2c, pi2c->slave_addr << 1);
+    if (i2c_waitack(pi2c) != 0)
+    {
+        i2c_stop(pi2c);
+        return FALSE;
+    }
+    /* send address */
+    const uint8_t *pData = addr;
+    while (addr_len --)
+    {
+        _i2c_write(pi2c, *pData);
+        if (0 != i2c_waitack(pi2c))
+        {
+            i2c_stop(pi2c);
+            return FALSE;
+        }
+        pData++;
+    }
+    /* send data */
+    pData = data;
+    while(data_len--)
+    {
+        _i2c_write(pi2c, *pData);
+        if(0 != i2c_waitack(pi2c))
+        {
+            i2c_stop(pi2c);
+            return FALSE;
+        }
+        pData++;
+    }
+    /* stop transfer */
+    i2c_stop(pi2c);
+    
+    return TRUE;
+
+}
+
+
 
 /**
  * @brief read data from i2c bus
@@ -257,11 +317,16 @@ bool i2c_read(i2c *pi2c, uint8_t *data, uint32_t length)
     /* send address */
     _i2c_write(pi2c, (pi2c->slave_addr << 1) | 0x01);
     if(i2c_waitack(pi2c) != 0)
+    {
+        i2c_stop(pi2c);
         return FALSE;
+    }
     /* read data */
     uint8_t *pData = data;
     if(length == 0)
+    {
         i2c_stop(pi2c);
+    }
     else
     {
         length -= 1;

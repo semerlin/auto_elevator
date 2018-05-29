@@ -2097,24 +2097,18 @@
   <group>
     <name>board</name>
     <group>
-      <name>sensor</name>
+      <name>sensot</name>
       <file>
-        <name>$PROJ_DIR$\board\sensor\bh1750.c</name>
+        <name>$PROJ_DIR$\board\sensor\hp5803.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\board\sensor\bh1750.h</name>
+        <name>$PROJ_DIR$\board\sensor\hp5803.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\board\sensor\delay.c</name>
+        <name>$PROJ_DIR$\board\sensor\lis3dh.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\board\sensor\delay.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\board\sensor\iicsensor.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\board\sensor\iicsensor.h</name>
+        <name>$PROJ_DIR$\board\sensor\lis3dh.h</name>
       </file>
     </group>
     <file>
@@ -2136,10 +2130,16 @@
       <name>$PROJ_DIR$\board\dbgserial.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\flash.c</name>
+      <name>$PROJ_DIR$\board\floor.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\flash.h</name>
+      <name>$PROJ_DIR$\board\floor.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\fm24cl64.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\fm24cl64.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\FreeRTOSConfig.h</name>
@@ -2152,6 +2152,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\i2c_software.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\keyctl.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\keymap.c</name>
@@ -2179,6 +2182,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\motorctl.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\parameter.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\parameter.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\pinconfig.c</name>
