@@ -5,7 +5,7 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#include "led_status.h"
+#include "ledstatus.h"
 #include "assert.h"
 #include "trace.h"
 #include "cm3_core.h"
@@ -13,6 +13,8 @@
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledstatus]"
+
+#define LED_NUM   16
 
 /**
  * @brief shift register transition
@@ -51,14 +53,14 @@ static __INLINE void st_reset(void)
  * @brief send data to 74hc595
  * @param data - data to send
  */
-static void hc166_readdata(void)
+static uint16_t hc166_readdata(void)
 {
     uint16_t recvdata = 0;
     /* parallel load */
     st_reset();
     sh_transition();
     /* read highest data */
-    if (is_pin_set("LED_DATA"))
+    if (is_pinset("LED_DATA"))
     {
         recvdata |= 0x01;
     }
@@ -68,12 +70,14 @@ static void hc166_readdata(void)
     for (int i = 0; i < LED_NUM - 1; ++i)
     {
         sh_transition();
-        if (is_pin_set("LED_DATA"))
+        if (is_pinset("LED_DATA"))
         {
             recvdata |= 0x01;
         }
         recvdata <<= 1;
     }
+    
+    return recvdata;
 }
 
 /**

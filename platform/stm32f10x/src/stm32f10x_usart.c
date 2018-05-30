@@ -163,7 +163,7 @@ void USART_Setup(USART_Group group, const USART_Config *config)
 
 void USART_StructInit(USART_Config *config)
 {   
-    config->baudRate = 115200;
+    config->baudRate = 9600;
     config->wordLength = USART_WordLength_8;
     config->parity = USART_Parity_None;
     config->stopBits = USART_StopBits_1;

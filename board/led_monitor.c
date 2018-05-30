@@ -11,6 +11,9 @@
 #include "trace.h"
 #include "ledstatus.h"
 #include "keymap.h"
+#include "floor.h"
+#include "parameter.h"
+#include "global.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
@@ -37,10 +40,6 @@ static pwd_node pwds[4] =
     {0, 0}
 };
 
-/* led state */ 
-#define LED_STATE_NORMAL     0
-#define LED_STATE_PWD        1
-static uint8_t led_state = LED_STATE_NORMAL;
 #define LED_PWD_CHECK_TIME 3000
 
 /**

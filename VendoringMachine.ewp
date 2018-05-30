@@ -89,7 +89,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F103x8	ST STM32F103x8</state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -149,7 +149,7 @@
         </option>
         <option>
           <name>GFPUDeviceSlave</name>
-          <state>STM32F103x8	ST STM32F103x8</state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>FPU2</name>
@@ -1955,6 +1955,12 @@
       <name>$PROJ_DIR$\board\dbgserial.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\delay.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\delay.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\floor.c</name>
     </file>
     <file>
@@ -1982,16 +1988,25 @@
       <name>$PROJ_DIR$\board\keyctl.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\keyctl.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\keymap.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\keymap.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\led_motor.c</name>
+      <name>$PROJ_DIR$\board\led_monitor.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\led_motor.h</name>
+      <name>$PROJ_DIR$\board\led_monitor.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\ledstatus.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\ledstatus.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\license.c</name>
@@ -2001,12 +2016,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\motorctl.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\motorctl.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\parameter.c</name>
@@ -2019,6 +2028,18 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\pinconfig.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\robot.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\robot.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\serial.c</name>
@@ -2037,6 +2058,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\stm32f10x_vector.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\switch_monitor.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\switch_monitor.h</name>
     </file>
   </group>
   <group>

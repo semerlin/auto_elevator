@@ -20,6 +20,7 @@
  */
 bool robot_init(void)
 {
+    return TRUE;
 }
 
 

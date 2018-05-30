@@ -19,14 +19,21 @@
 #define SET_FLAG   "INIT"
 #define SET_LEN    4
 
-#define MAP_ADDR   (SET_ADDR + SET_LEN)
-#define MAP_LEN    31
+#define MAP_ADDR       (SET_ADDR + SET_LEN)
+#define MAP_LEN        31
+static uint8_t param_map[32];
 
-#define ID_ADDR    (MAP_ADDR + MAP_LEN)
-#define ID_LEN     1
+#define ID_CTL_ADDR    (MAP_ADDR + MAP_LEN)
+#define ID_CTL_LEN     1
+static uint8_t param_id_ctl;
 
-#define PWD_ADDR   (ID_ADDR + ID_LEN)
-#define PWD_LEN    4
+#define ID_ELEV_ADDR    (ID_CTL_ADDR + ID_CTL_LEN)
+#define ID_ELEV_LEN     1
+static uint8_t param_id_elev;
+
+#define PWD_ADDR        (ID_ELEV_ADDR + ID_ELEV_LEN)
+#define PWD_LEN         4
+static uint8_t param_pwd[5];
 
 bool param_setted = FALSE;
 
@@ -42,6 +49,13 @@ bool param_init(void)
         uint8_t status[SET_LEN];
         fm_read(SET_ADDR, status, SET_LEN);
         param_setted = (0 == strncmp((const char *)status, SET_FLAG, 4));
+        if (param_setted)
+        {
+            fm_read(MAP_ADDR, param_map, MAP_LEN);
+            fm_read(ID_CTL_ADDR, &param_id_ctl, ID_CTL_LEN);
+            fm_read(ID_ELEV_ADDR, &param_id_elev, ID_ELEV_LEN);
+            fm_read(PWD_ADDR, param_pwd, PWD_LEN);
+        }
         return TRUE;
     }
 
@@ -61,27 +75,42 @@ bool is_param_setted(void)
  * @brief get key map
  * @param map - key map
  */
-bool param_get_keymap(uint8_t *map)
+void param_get_keymap(uint8_t *map)
 {
-    return fm_read(MAP_ADDR, map, MAP_LEN);
+    for (int i = 0; i < MAP_LEN; ++i)
+    {
+        map[i] = param_map[i];
+    }
 }
 
 /**
  * @brief get password
  * @param pwd - password
  */
-bool param_get_pwd(uint8_t *pwd)
+void param_get_pwd(uint8_t *pwd)
 {
-    return fm_read(PWD_ADDR, pwd, PWD_LEN);
+    for (int i = 0; i < PWD_LEN; ++i)
+    {
+        pwd[i] = param_pwd[i];
+    }
 }
 
 /**
- * @brief get board id
+ * @brief get control id
  * @param id - id
  */
-bool param_get_id(uint8_t *id)
+uint8_t param_get_id_ctl(void)
 {
-    return fm_read(ID_ADDR, id, ID_LEN);
+    return param_id_ctl;
+}
+
+/**
+ * @brief get elevator id
+ * @param id - id
+ */
+uint8_t param_get_id_elev(void)
+{
+    return param_id_elev;
 }
 
 /**
@@ -91,17 +120,45 @@ bool param_get_id(uint8_t *id)
  */
 bool param_update_keymap(uint8_t *map)
 {
-    return fm_write(MAP_ADDR, map, MAP_LEN);
+    if (0 != strncmp((const char *)param_map, (const char *)map, MAP_LEN))
+    {
+        strncpy((char *)param_map, (const char *)map, MAP_LEN);
+        return fm_write(MAP_ADDR, map, MAP_LEN);
+    }
+
+    return TRUE;
 }
 
 /**
  * @brief update board id
  * @param id - board id
  */
-bool param_update_id(uint8_t id)
+bool param_update_id_ctl(uint8_t id)
 {
-    return fm_write(ID_ADDR, &id, ID_LEN);
+    if (param_id_ctl != id)
+    {
+        param_id_ctl = id;
+        return fm_write(ID_CTL_ADDR, &id, ID_CTL_LEN);
+    }
+
+    return TRUE;
 }
+
+/**
+ * @brief update board id
+ * @param id - board id
+ */
+bool param_update_id_elev(uint8_t id)
+{
+    if (param_id_elev != id)
+    {
+        param_id_elev = id;
+        return fm_write(ID_ELEV_ADDR, &id, ID_ELEV_LEN);
+    }
+
+    return TRUE;
+}
+
 
 /**
  * @brief update password
@@ -110,7 +167,13 @@ bool param_update_id(uint8_t id)
  */
 bool param_update_pwd(uint8_t *pwd)
 {
-    return fm_write(PWD_ADDR, pwd, PWD_LEN);
+    if (0 != strncmp(param_pwd, pwd, PWD_LEN))
+    {
+        strncpy(param_pwd, pwd, PWD_LEN);
+        return fm_write(PWD_ADDR, pwd, PWD_LEN);
+    }
+
+    return TRUE;
 }
 
 

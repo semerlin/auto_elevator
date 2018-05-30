@@ -47,7 +47,9 @@ PIN_CONFIG pins[] =
     {"SWITCH2", GPIOB, 13, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"SWITCH3", GPIOB, 14, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"SWITCH4", GPIOB, 15, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
-
+    {"WLAN_TX", GPIOA, 9, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
+    {"WLAN_RX", GPIOA, 10, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+ 
 #if 0
     {"CON_L1", GPIOC, 9, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
     {"CON_L2", GPIOC, 8, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
@@ -68,8 +70,6 @@ PIN_CONFIG pins[] =
     {"CH9_DET", GPIOB, 0, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"CH10_DET", GPIOB, 1, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"MOT_DET", GPIOC, 3, GPIO_Speed_2MHz, GPIO_Mode_IPD},
-    {"DEBUG_TX", GPIOA, 9, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
-    {"DEBUG_RX", GPIOA, 10, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"WIFI_TX", GPIOA, 2, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"WIFI_RX", GPIOA, 3, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"WIFI_RST", GPIOC, 14, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},

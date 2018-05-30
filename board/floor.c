@@ -25,6 +25,8 @@ static uint8_t floor_state_prev = FLOOR_ARRIVE;
 
 bool floor_init(void)
 {
+    floor_state_prev = FLOOR_ARRIVE;
+    return TRUE;
 }
 
 static void floor_enter(char floor)
@@ -60,13 +62,13 @@ void floor_decrease(void)
         floor --;
     }
     TRACE("decrease floor: %d", floor);
-    floor_state_prev = ELEV_DOWN;
+    floor_state_prev = FLOOR_DOWN;
 }
 
 /**
  * @brief increase current floor
  */
-void floor_increase(void);
+void floor_increase(void)
 {
     floor ++;
     if (0 == floor)
@@ -74,7 +76,7 @@ void floor_increase(void);
         floor ++;
     }
     TRACE("increase floor: %d", floor);
-    floor_state_prev = ELEV_UP;
+    floor_state_prev = FLOOR_UP;
 }
 
 /**

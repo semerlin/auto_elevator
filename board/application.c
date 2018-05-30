@@ -10,12 +10,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "trace.h"
-#include "motorctl.h"
-#include "led_motor.h"
 #include "license.h"
 
 #undef __TRACE_MODULE
-#define __TRACE_MODULE  "[init]"
+#define __TRACE_MODULE  "[app]"
 
 #define VERSION  ("v0.0.0.1_alpha")
 
@@ -28,7 +26,6 @@ static void vInitSystem(void *pvParameters)
 {
     TRACE("startup application...\r\n");
     TRACE("version = %s\r\n", VERSION);
-    led_motor_init();
     
     vTaskDelete(NULL);
 }

@@ -67,7 +67,7 @@ bool keymap_init(void)
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-uint8_t keymap_floor_to_key(char floor);
+uint8_t keymap_floor_to_key(char floor)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {
@@ -85,7 +85,7 @@ uint8_t keymap_floor_to_key(char floor);
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-char keymap_key_to_floor(uint8_t key);
+char keymap_key_to_floor(uint8_t key)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {

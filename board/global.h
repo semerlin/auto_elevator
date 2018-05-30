@@ -13,12 +13,18 @@
 /* task priority definition */
 #define LICENSE_PRIORITY             (tskIDLE_PRIORITY + 1)
 #define INIT_SYSTEM_PRIORITY         (tskIDLE_PRIORITY + 1)
-#define LED_MONITOR_PRIORITY         (tskIDLE_PRIORITY + 3)
+#define LED_MONITOR_PRIORITY         (tskIDLE_PRIORITY + 2)
+#define SWITCH_MONITOR_PRIORITY      (tskIDLE_PRIORITY + 3)
+#define PROTOCOL_PRIORITY            (tskIDLE_PRIORITY + 4)
+
 
 /* task stack definition */
 #define LICENSE_STACK_SIZE           (configMINIMAL_STACK_SIZE)
 #define INIT_SYSTEM_STACK_SIZE       (configMINIMAL_STACK_SIZE)
 #define LED_MONITOR_STACK_SIZE       (configMINIMAL_STACK_SIZE)
+#define SWITCH_MONITOR_STACK_SIZE    (configMINIMAL_STACK_SIZE)
+#define PROTOCOL_STACK_SIZE          (configMINIMAL_STACK_SIZE)
+
 
 /* interrupt priority */
 #define USART1_PRIORITY        (13)
