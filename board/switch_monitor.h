@@ -5,20 +5,16 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _KEYCTL_H_
-  #define _KEYCTL_H_
+#ifndef _SWITCH_MONITOR_H_
+  #define _SWITCH_MONITOR_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-void keyctl_init(void);
-void keyctl_press(uint8_t num);
-void keyctl_release(uint8_t num);
-void key_release_all(void);
+bool switch_monitor_init(void);
 
 END_DECLS
 
-
-#endif /* _LED_MOTOR_H_ */
+#endif /* _SWITCH_MONITOR_H_ */
 

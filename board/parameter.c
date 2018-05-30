@@ -19,10 +19,13 @@
 #define SET_FLAG   "INIT"
 #define SET_LEN    4
 
-#define MAP_ADDR   SET_ADDR + SET_LEN
+#define MAP_ADDR   (SET_ADDR + SET_LEN)
 #define MAP_LEN    31
 
-#define PWD_ADDR   MAP_ADDR + MAP_LEN
+#define ID_ADDR    (MAP_ADDR + MAP_LEN)
+#define ID_LEN     1
+
+#define PWD_ADDR   (ID_ADDR + ID_LEN)
 #define PWD_LEN    4
 
 bool param_setted = FALSE;
@@ -64,12 +67,21 @@ bool param_get_keymap(uint8_t *map)
 }
 
 /**
- * @param get password
+ * @brief get password
  * @param pwd - password
  */
 bool param_get_pwd(uint8_t *pwd)
 {
     return fm_read(PWD_ADDR, pwd, PWD_LEN);
+}
+
+/**
+ * @brief get board id
+ * @param id - id
+ */
+bool param_get_id(uint8_t *id)
+{
+    return fm_read(ID_ADDR, id, ID_LEN);
 }
 
 /**
@@ -80,6 +92,15 @@ bool param_get_pwd(uint8_t *pwd)
 bool param_update_keymap(uint8_t *map)
 {
     return fm_write(MAP_ADDR, map, MAP_LEN);
+}
+
+/**
+ * @brief update board id
+ * @param id - board id
+ */
+bool param_update_id(uint8_t id)
+{
+    return fm_write(ID_ADDR, &id, ID_LEN);
 }
 
 /**

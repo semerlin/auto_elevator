@@ -37,6 +37,18 @@ typedef struct
 /* pin arrays */
 PIN_CONFIG pins[] = 
 {
+    {"KEY_DATA", GPIOC, 10, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"KEY_ST", GPIOC, 11, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"KEY_SH", GPIOC, 12, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"LED_DATA", GPIOA, 2, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"LED_ST", GPIOA, 0, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"LED_SH", GPIOA, 1, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"SWITCH1", GPIOB, 12, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"SWITCH2", GPIOB, 13, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"SWITCH3", GPIOB, 14, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"SWITCH4", GPIOB, 15, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+
+#if 0
     {"CON_L1", GPIOC, 9, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
     {"CON_L2", GPIOC, 8, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
     {"CON_L3", GPIOC, 7, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
@@ -72,9 +84,7 @@ PIN_CONFIG pins[] =
     {"SWITCH1", GPIOB, 7, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"SWITCH2", GPIOB, 8, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"MODE_SET", GPIOB, 6, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
-    {"LED_DATA", GPIOC, 0, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"LED_ST", GPIOC, 1, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"LED_SH", GPIOC, 2, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+#endif
 };
 
 /* clock arrays */

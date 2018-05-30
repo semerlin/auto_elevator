@@ -5,17 +5,14 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _KEYCTL_H_
-  #define _KEYCTL_H_
+#ifndef _LEDSTATUS_H_
+  #define _LEDSTATUS_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-void keyctl_init(void);
-void keyctl_press(uint8_t num);
-void keyctl_release(uint8_t num);
-void key_release_all(void);
+uint16_t ledstatus_get(void);
 
 END_DECLS
 

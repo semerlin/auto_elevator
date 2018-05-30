@@ -5,21 +5,17 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _LED_MOTOR_H_
-  #define _LED_MOTOR_H_
+#ifndef _ROBOT_H_
+  #define _ROBOT_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-void led_motor_init(void);
-void led_motor_turn_on(uint8_t num);
-void led_motor_turn_off(uint8_t num);
-void led_motor_all_on(void);
-void led_motor_all_off(void);
+bool robot_init(void);
 
 END_DECLS
 
 
-#endif /* _LED_MOTOR_H_ */
+#endif /* _ROBOT_H_ */
 

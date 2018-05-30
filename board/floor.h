@@ -13,11 +13,12 @@
 BEGIN_DECLS
 
 bool floor_init(void);
-void floor_enter(char floor);
+void floor_arrived(char floor);
 void floor_hold_open(char floor);
+uint8_t floor_prev_state(void);
 void floor_decrease();
 void floor_increase();
-void floor_set_first();
+void floor_set_first(void);
 
 END_DECLS
 
