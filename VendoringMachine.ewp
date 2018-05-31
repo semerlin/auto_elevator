@@ -732,7 +732,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103x8.icf</state>
+          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103xC.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1961,10 +1961,10 @@
       <name>$PROJ_DIR$\board\delay.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\floor.c</name>
+      <name>$PROJ_DIR$\board\elevator.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\floor.h</name>
+      <name>$PROJ_DIR$\board\elevator.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\fm24cl64.c</name>

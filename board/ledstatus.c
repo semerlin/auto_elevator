@@ -89,3 +89,67 @@ uint16_t ledstatus_get(void)
     return hc166_readdata();
 }
 
+/**
+ * @brief check floor led status
+ * @param floor - specified floor
+ * @return floor led on/off status
+ */
+bool is_ledon(uint8_t floor)
+{
+    if (floor > LED_NUM)
+    {
+        return FALSE;
+    }
+    uint16_t status = hc166_readdata();
+    return (0 != (status & (1 << (floor - 1))));
+}
+
+/**
+ * @brief check down floor led status
+ * @param floor - specified floor
+ * @return floor led on/off status
+ */
+bool is_down_ledon(uint8_t floor)
+{
+    if (floor > LED_NUM)
+    {
+        return FALSE;
+    }
+    uint16_t status = hc166_readdata();
+    uint16_t floor_bit = (1 << (floor - 1));
+    floor_bit -= 1;
+    return (0 != (status & floor_bit));
+}
+
+/**
+ * @brief check up floor led status
+ * @param floor - specified floor
+ * @return floor led on/off status
+ */
+bool is_up_ledon(uint8_t floor)
+{
+    if (floor > LED_NUM)
+    {
+        return FALSE;
+    }
+    uint16_t status = hc166_readdata();
+    uint16_t floor_bit = (1 << (floor - 1));
+    floor_bit |= (floor_bit - 1);
+    return (0 != (status & ~floor_bit));
+}
+
+/**
+ * @brief check floor led status except floor specified
+ * @param floor - specified floor
+ * @return led status
+ */
+bool is_ledon_except(uint8_t floor)
+{
+    if (floor > LED_NUM)
+    {
+        return FALSE;
+    }
+    uint16_t status = hc166_readdata();
+    uint16_t floor_bit = (1 << (floor - 1));
+    return (0 != (status & ~floor_bit));
+}

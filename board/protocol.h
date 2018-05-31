@@ -12,7 +12,11 @@
 
 BEGIN_DECLS
 
+typedef void (*process_cb)(const uint8_t *data, uint8_t len);
+
 bool protocol_init(void);
+void notify_arrive(uint8_t floor);
+void register_arrive_cb(process_cb cb);
 
 
 END_DECLS

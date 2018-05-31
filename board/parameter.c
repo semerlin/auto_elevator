@@ -19,11 +19,17 @@
 #define SET_FLAG   "INIT"
 #define SET_LEN    4
 
+#ifdef _CFG_KEYMAP
 #define MAP_ADDR       (SET_ADDR + SET_LEN)
 #define MAP_LEN        31
 static uint8_t param_map[32];
+#endif
 
+#ifdef _CFG_KEYMAP
 #define ID_CTL_ADDR    (MAP_ADDR + MAP_LEN)
+#else
+#define ID_CTL_ADDR    (SET_ADDR + SET_LEN)
+#endif
 #define ID_CTL_LEN     1
 static uint8_t param_id_ctl;
 
@@ -51,7 +57,9 @@ bool param_init(void)
         param_setted = (0 == strncmp((const char *)status, SET_FLAG, 4));
         if (param_setted)
         {
+            #ifdef _CFG_KEYMAP
             fm_read(MAP_ADDR, param_map, MAP_LEN);
+            #endif
             fm_read(ID_CTL_ADDR, &param_id_ctl, ID_CTL_LEN);
             fm_read(ID_ELEV_ADDR, &param_id_elev, ID_ELEV_LEN);
             fm_read(PWD_ADDR, param_pwd, PWD_LEN);
@@ -71,6 +79,7 @@ bool is_param_setted(void)
     return param_setted;
 }
 
+#ifdef _CFG_KEYMAP
 /**
  * @brief get key map
  * @param map - key map
@@ -82,6 +91,22 @@ void param_get_keymap(uint8_t *map)
         map[i] = param_map[i];
     }
 }
+/**
+ * @brief update key map
+ * @param map - key map
+ * @return update status
+ */
+bool param_update_keymap(uint8_t *map)
+{
+    if (0 != strncmp((const char *)param_map, (const char *)map, MAP_LEN))
+    {
+        strncpy((char *)param_map, (const char *)map, MAP_LEN);
+        return fm_write(MAP_ADDR, map, MAP_LEN);
+    }
+
+    return TRUE;
+}
+#endif
 
 /**
  * @brief get password
@@ -114,22 +139,6 @@ uint8_t param_get_id_elev(void)
 }
 
 /**
- * @brief update key map
- * @param map - key map
- * @return update status
- */
-bool param_update_keymap(uint8_t *map)
-{
-    if (0 != strncmp((const char *)param_map, (const char *)map, MAP_LEN))
-    {
-        strncpy((char *)param_map, (const char *)map, MAP_LEN);
-        return fm_write(MAP_ADDR, map, MAP_LEN);
-    }
-
-    return TRUE;
-}
-
-/**
  * @brief update board id
  * @param id - board id
  */
@@ -159,7 +168,6 @@ bool param_update_id_elev(uint8_t id)
     return TRUE;
 }
 
-
 /**
  * @brief update password
  * @param pwd - password 
@@ -167,9 +175,9 @@ bool param_update_id_elev(uint8_t id)
  */
 bool param_update_pwd(uint8_t *pwd)
 {
-    if (0 != strncmp(param_pwd, pwd, PWD_LEN))
+    if (0 != strncmp((const char *)param_pwd, (const char *)pwd, PWD_LEN))
     {
-        strncpy(param_pwd, pwd, PWD_LEN);
+        strncpy((char *)param_pwd, (const char *)pwd, PWD_LEN);
         return fm_write(PWD_ADDR, pwd, PWD_LEN);
     }
 

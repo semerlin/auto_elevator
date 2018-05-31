@@ -13,7 +13,7 @@
 #include "keymap.h"
 #include "global.h"
 #include "pinconfig.h"
-#include "floor.h"
+#include "elevator.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
@@ -79,11 +79,11 @@ static void vSwitchMonitor(void *pvParameters)
             /* elevator state changed */
             if ((0x01 == switch_prev) && (0x03 == switch_cur))
             {
-                floor_increase();
+                elev_increase();
             }
             else if ((0x02 == switch_prev) && (0x03 == switch_cur))
             {
-                floor_decrease();
+                elev_decrease();
             }
 
             switch_prev = switch_cur;

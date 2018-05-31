@@ -13,6 +13,10 @@
 BEGIN_DECLS
 
 uint16_t ledstatus_get(void);
+bool is_ledon(uint8_t floor);
+bool is_down_ledon(uint8_t floor);
+bool is_up_ledon(uint8_t floor);
+bool is_ledon_except(uint8_t floor);
 
 END_DECLS
 

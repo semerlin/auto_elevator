@@ -12,6 +12,9 @@
 #include "serial.h"
 #include "global.h"
 #include "parameter.h"
+#include "elevator.h"
+#include "ledstatus.h"
+#include "robot.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
@@ -28,10 +31,29 @@
 #define PROTOCOL_CONVERT_2_ORIGIN   0x02
 #define PROTOCOL_CONVERT_3_ORIGIN   0x03
 
+typedef union
+{
+    uint8_t status;
+    struct
+    {
+        uint8_t dir : 2;
+        uint8_t led : 2;
+        uint8_t door : 1;
+        uint8_t reserve : 1;
+        uint8_t state : 2;
+    }_status;
+}elev_status;
+
 /* serial handle */
 static serial *g_serial = NULL;
+process_cb arrive_cb = NULL;
 
-static void process_apply_elev(const uint8_t *data, uint8_t len);
+static void process_elev_apply(const uint8_t *data, uint8_t len);
+static void process_elev_release(const uint8_t *data, uint8_t len);
+static void process_elev_checkin(const uint8_t *data, uint8_t len);
+static void process_elev_inquire(const uint8_t *data, uint8_t len);
+static void process_elev_door(const uint8_t *data, uint8_t len);
+static void process_elev_arrive(const uint8_t *data, uint8_t len);
 
 /* process handle */
 typedef struct
@@ -42,7 +64,12 @@ typedef struct
 
 cmd_handle cmd_handles[] = 
 {
-    {50, process_apply_elev},
+    {50, process_elev_apply},
+    {52, process_elev_release},
+    {30, process_elev_checkin},
+    {32, process_elev_inquire},
+    {34, process_elev_door},
+    {40, process_elev_arrive},
 };
 
 /**
@@ -206,13 +233,200 @@ static void vProtocol(void *pvParameters)
  * @param data - data to process
  * @param len - data length
  */
-static void process_apply_elev(const uint8_t *data, uint8_t len)
+static void process_elev_apply(const uint8_t *data, uint8_t len)
 {
     if ((data[0] == param_get_id_ctl()) &&
         (data[2] == param_get_id_elev()))
     {
-        uint8_t robot_addr = data[1];
+        uint8_t payload[8];
+        payload[0] = param_get_id_ctl();
+        payload[1] = param_get_id_elev();
+        payload[2] = data[1];
+        payload[3] = 51;
+        payload[4] = elev_floor();
+        payload[5] = data[4];
+        
+        elev_status status;
+        status._status.dir = elev_state_run();
+        status._status.led = (is_ledon(data[5]) ? 0x02 : 0x01);
+        status._status.door = 0x01;
+        status._status.reserve = 0x00;
+        status._status.state = elev_state_work();
+        payload[6] = status.status;
+        
+        send_data(payload, 7);
+        elevator_set_state_work(work_robot);
     }
+}
+
+/**
+ * @brief process elevator release message
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_release(const uint8_t *data, uint8_t len)
+{
+    if ((data[0] == param_get_id_ctl()) &&
+        (data[2] == param_get_id_elev()))
+    {
+        uint8_t payload[7];
+        payload[0] = param_get_id_ctl();
+        payload[1] = param_get_id_elev();
+        payload[2] = data[1];
+        payload[3] = 53;
+        payload[4] = data[4];
+        payload[5] = 0x00;
+        
+        send_data(payload, 6);
+        elevator_set_state_work(work_idle);
+        robot_checkin_reset(data[1]);
+    }
+}
+
+/**
+ * @brief process elevator checkin message
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_checkin(const uint8_t *data, uint8_t len)
+{
+    if ((data[0] == param_get_id_ctl()) &&
+        (data[2] == param_get_id_elev()))
+    {
+        uint8_t payload[7];
+        payload[0] = param_get_id_ctl();
+        payload[1] = param_get_id_elev();
+        payload[2] = data[1];
+        payload[3] = 31;
+        payload[4] = data[4];
+        payload[5] = data[5];
+        
+        send_data(payload, 6);
+        robot_checkin_set(data[1], data[4]);
+    }
+}
+
+/**
+ * @brief process elevator inquire message
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_inquire(const uint8_t *data, uint8_t len)
+{
+    if ((data[0] == param_get_id_ctl()) &&
+        (data[2] == param_get_id_elev()))
+    {
+        uint8_t payload[8];
+        payload[0] = param_get_id_ctl();
+        payload[1] = param_get_id_elev();
+        payload[2] = data[1];
+        payload[3] = 33;
+        payload[4] = elev_floor();
+        payload[5] = robot_checkin_get(data[1]);
+        
+        elev_status status;
+        status._status.dir = elev_state_run();
+        status._status.led = (is_ledon(data[5]) ? 0x02 : 0x01);
+        status._status.door = 0x01;
+        status._status.reserve = 0x00;
+        status._status.state = elev_state_work();
+        payload[6] = status.status;
+        
+        send_data(payload, 7);
+    }
+}
+
+/**
+ * @brief process elevator door message
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_door(const uint8_t *data, uint8_t len)
+{
+    if ((data[0] == param_get_id_ctl()) &&
+        (data[2] == param_get_id_elev()))
+    {
+        uint8_t payload[6];
+        payload[0] = param_get_id_ctl();
+        payload[1] = param_get_id_elev();
+        payload[2] = data[1];
+        payload[3] = 35;
+        if (0x00 == data[4])
+        {
+            /* open */
+            payload[4] = 0x00;
+        }
+        else 
+        {
+            /* release */
+            payload[4] = 0x01;
+        }
+        
+        send_data(payload, 5);
+        
+        if (0x00 == data[4])
+        {
+            /* open */
+            elev_hold_open(TRUE);
+        }
+        else 
+        {
+            /* release */
+            payload[4] = 0x01;
+            elev_hold_open(FALSE);
+        }
+    }
+}
+
+/**
+ * @brief process elevator door message
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_arrive(const uint8_t *data, uint8_t len)
+{
+    if ((data[0] == param_get_id_ctl()) &&
+        (data[2] == param_get_id_elev()))
+    {
+        if (NULL != arrive_cb)
+        {
+            arrive_cb(data, len);
+        }
+    }
+}
+
+
+/**
+ * @brief process elevator door message
+ * @param data - data to process
+ * @param len - data length
+ */
+void notify_arrive(uint8_t floor)
+{
+    uint8_t payload[7];
+    payload[0] = param_get_id_ctl();
+    payload[1] = param_get_id_elev();
+    payload[2] = robot_id_get(floor);
+    payload[3] = 39;
+    payload[4] = elev_floor();
+    elev_status status;
+    status._status.dir = elev_state_run();
+    status._status.led = (is_ledon(payload[2]) ? 0x02 : 0x01);
+    status._status.door = 0x01;
+    status._status.reserve = 0x00;
+    status._status.state = elev_state_work();
+    payload[5] = status.status;
+    
+    send_data(payload, 6);
+}
+
+/**
+ * @brief register arrive message callback
+ * @param cb - callback
+ */
+void register_arrive_cb(process_cb cb)
+{
+    arrive_cb = cb;
 }
 
 /**

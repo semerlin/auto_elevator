@@ -20,31 +20,31 @@
 /* keymap structure */
 typedef struct
 {
-    char floor;
+    uint8_t floor;
     uint8_t key;
 }keymap;
 
 /* key-floor map */
 static keymap keymaps[FLOOR_NUM] = 
 {
-    {-3, 0},
-    {-2, 1},
-    {-1, 2},
-    {1, 3},
-    {2, 4},
-    {3, 5},
-    {4, 6},
-    {5, 7},
-    {6, 8},
-    {7, 9},
-    {8, 10},
-    {9, 11},
-    {10, 12},
-    {11, 13},
-    {12, 14},
+    {1, 1},
+    {2, 2},
+    {3, 3},
+    {4, 4},
+    {5, 5},
+    {6, 6},
+    {7, 7},
+    {8, 8},
+    {9, 9},
+    {10, 10},
+    {11, 11},
+    {12, 12},
+    {13, 13},
+    {14, 14},
+    {15, 15},
 };
 
-static uint8_t key_open = 15;
+static uint8_t key_open = 0;
 
 /**
  * @brief initialize keymap
@@ -53,12 +53,14 @@ static uint8_t key_open = 15;
 bool keymap_init(void)
 {
     TRACE("initialize keymap...\r\n");
+#if 0
     uint8_t data[36];
     if (is_param_setted())
     {
         param_get_keymap(data);
-        keymap_update((const char *)data);
+        keymap_update(data);
     }
+#endif
     return TRUE;
 }
 
@@ -67,7 +69,7 @@ bool keymap_init(void)
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-uint8_t keymap_floor_to_key(char floor)
+uint8_t keymap_floor_to_key(uint8_t floor)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {
@@ -85,7 +87,7 @@ uint8_t keymap_floor_to_key(char floor)
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-char keymap_key_to_floor(uint8_t key)
+uint8_t keymap_key_to_floor(uint8_t key)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {
@@ -111,14 +113,14 @@ uint8_t keymap_open(void)
  * @brief update key map
  * @param data - new key map
  */
-void keymap_update(const char *data)
+void keymap_update(const uint8_t *data)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {
         keymaps[i].floor = data[i * 2];
         keymaps[i].key = data[i * 2 + 1];
     }
-    key_open = (uint8_t)(data[FLOOR_NUM * 2]);
+    key_open = data[FLOOR_NUM * 2];
 }
 
 

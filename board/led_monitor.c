@@ -11,7 +11,7 @@
 #include "trace.h"
 #include "ledstatus.h"
 #include "keymap.h"
-#include "floor.h"
+#include "elevator.h"
 #include "parameter.h"
 #include "global.h"
 
@@ -95,7 +95,7 @@ static void push_pwd_node(const pwd_node *node)
                     return ;
                 }
             }
-            floor_set_first();
+            elev_set_first();
         }
     }
 }
@@ -128,7 +128,7 @@ static void vLedMonitor(void *pvParameters)
                     if (is_floor_arrive(led_status, per_changed_bit))
                     {
                         /* notify floor arrived */
-                        floor_arrived(floor);
+                        elev_arrived(floor);
                     }
                     else
                     {
