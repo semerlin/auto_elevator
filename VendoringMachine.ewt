@@ -2124,6 +2124,12 @@
       <name>$PROJ_DIR$\board\board.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\crc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\crc.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\dbgserial.c</name>
     </file>
     <file>
@@ -2140,6 +2146,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\elevator.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floormap.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floormap.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\fm24cl64.c</name>
@@ -2178,10 +2190,10 @@
       <name>$PROJ_DIR$\board\led_monitor.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\ledstatus.c</name>
+      <name>$PROJ_DIR$\board\led_status.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\ledstatus.h</name>
+      <name>$PROJ_DIR$\board\led_status.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\license.c</name>

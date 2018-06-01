@@ -5,20 +5,16 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _KEYCTL_H_
-  #define _KEYCTL_H_
+#ifndef _FLOORMAP_H_
+  #define _FLOORMAP_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
-void keyctl_init(void);
-void keyctl_press(uint8_t num);
-void keyctl_release(uint8_t num);
-void keyctl_release_all(void);
+uint8_t floormap_dis_to_phy(char floor);
+char floormap_phy_to_dis(uint8_t floor);
 
 END_DECLS
 
-
-#endif /* _LED_MOTOR_H_ */
-
+#endif  /* _FLOORMAP_H_ */

@@ -6,20 +6,53 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #include "elevator.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #include "trace.h"
-#include "ledstatus.h"
+#include "led_status.h"
 #include "protocol.h"
+#include "keymap.h"
+#include "keyctl.h"
+#include "robot.h"
+#include "floormap.h"
+#include "global.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[elev]"
 
 
 /* elevator current floor */
-static uint8_t floor = 1;
+static char floor = 1;
+
+static bool hold_door = FALSE;
+static uint8_t hold_cnt = 0;
 
 /* elevator state */
 static elev_run_state run_state = run_stop;
 static elev_work_state work_state = work_idle;
+
+/**
+ * @brief elevator task
+ * @param pvParameters - task parameters
+ */
+static void vElev(void *pvParameters)
+{
+    for (;;)
+    {
+        if (hold_door)
+        {
+            hold_cnt ++;
+            if (hold_cnt > 30)
+            {
+                hold_door = FALSE;
+                hold_cnt = 0;
+                keyctl_release(keymap_open());
+            }
+        }
+        
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
 
 /**
  * @brief initialize elevator
@@ -27,6 +60,8 @@ static elev_work_state work_state = work_idle;
  */
 bool elev_init(void)
 {
+    xTaskCreate(vElev, "protocol", ELEV_STACK_SIZE, NULL,
+                    ELEV_PRIORITY, NULL);
     return TRUE;
 }
 
@@ -34,20 +69,24 @@ bool elev_init(void)
  * @brief elevator going floor
  * @param floor - going floor
  */
-static void elev_go(uint8_t floor)
+void elev_go(char floor)
 {
+    uint8_t key = keymap_floor_to_key(floor);
+    keyctl_press(key);
 }
 
 /**
  * @brief indicate elevator arrive
  * @param floor - arrive floor
  */
-void elev_arrived(uint8_t floor)
+void elev_arrived(char floor)
 {
     if (work_robot == work_state)
     {
-        /* 增加是否登记楼层判断，只申请了电梯可以不发送 */
-        notify_arrive(floor);
+        if (robot_is_checkin(floormap_dis_to_phy(floor)))
+        {
+            notify_arrive(floor);
+        }
     }
 }
 
@@ -57,6 +96,19 @@ void elev_arrived(uint8_t floor)
  */
 void elev_hold_open(bool flag)
 {
+    uint8_t key = keymap_open();
+    if (key)
+    {
+        hold_cnt = 0;
+        hold_door = TRUE;
+        keyctl_press(key);
+    }
+    else
+    {
+        hold_door = FALSE;
+        hold_cnt = 0;
+        keyctl_release(key);
+    }
 }
 
 /**
@@ -65,12 +117,16 @@ void elev_hold_open(bool flag)
 void elev_decrease(void)
 {
     floor --;
-    TRACE("decrease floor: %d", elev_floor);
-    if (is_down_ledon(floor))
+    if (0 == floor)
+    {
+        floor --;
+    }
+    TRACE("decrease floor: %d", floor);
+    if (is_down_led_on(floor))
     {
         run_state = run_down;
     }
-    else if (is_up_ledon(floor))
+    else if (is_up_led_on(floor))
     {
         run_state = run_up;
     }
@@ -86,12 +142,16 @@ void elev_decrease(void)
 void elev_increase(void)
 {
     floor ++;
-    TRACE("increase floor: %d", elev_floor);
-    if (is_up_ledon(floor))
+    if (0 == floor)
+    {
+        floor ++;
+    }
+    TRACE("increase floor: %d", floor);
+    if (is_up_led_on(floor))
     {
         run_state = run_up;
     }
-    else if (is_down_ledon(floor))
+    else if (is_down_led_on(floor))
     {
         run_state = run_down;
     }
@@ -122,7 +182,7 @@ elev_run_state elev_state_run(void)
  * @brief get elevator current state
  * @return elevator current state
  */
-elev_work_state elevator_state_work(void)
+elev_work_state elev_state_work(void)
 {
     return work_state;
 }
@@ -140,7 +200,7 @@ void elevator_set_state_work(elev_work_state state)
  * @brief get elevator current floor
  * @return elevator current floor
  */
-uint8_t elev_floor(void)
+char elev_floor(void)
 {
     return floor;
 }

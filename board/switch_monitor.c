@@ -9,8 +9,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "trace.h"
-#include "ledstatus.h"
-#include "keymap.h"
 #include "global.h"
 #include "pinconfig.h"
 #include "elevator.h"

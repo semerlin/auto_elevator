@@ -119,7 +119,7 @@
         <option>
           <name>GeneralMisraRules04</name>
           <version>0</version>
-          <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+          <state>111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</state>
         </option>
         <option>
           <name>RTConfigPath2</name>
@@ -283,7 +283,7 @@
         </option>
         <option>
           <name>CCDiagWarnAreErr</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCCompilerRuntimeInfo</name>
@@ -1949,6 +1949,12 @@
       <name>$PROJ_DIR$\board\board.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\crc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\crc.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\dbgserial.c</name>
     </file>
     <file>
@@ -1965,6 +1971,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\elevator.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floormap.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floormap.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\fm24cl64.c</name>
@@ -2003,10 +2015,10 @@
       <name>$PROJ_DIR$\board\led_monitor.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\ledstatus.c</name>
+      <name>$PROJ_DIR$\board\led_status.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\ledstatus.h</name>
+      <name>$PROJ_DIR$\board\led_status.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\license.c</name>

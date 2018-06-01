@@ -29,16 +29,16 @@ typedef enum
 
 
 bool elev_init(void);
-void elev_arrived(uint8_t floor);
+void elev_arrived(char floor);
+void elev_go(char floor);
 void elev_hold_open(bool flag);
-uint8_t elev_floor(void);
+char elev_floor(void);
 void elev_decrease(void);
 void elev_increase(void);
-void elev_set_first(void);
+void elev_set_first_floor(void);
 elev_run_state elev_state_run(void);
 elev_work_state elev_state_work(void);
 void elevator_set_state_work(elev_work_state state);
-uint8_t elev_floor(void);
 
 END_DECLS
 

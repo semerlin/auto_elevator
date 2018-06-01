@@ -14,14 +14,12 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-/* serial output mutex */
-SemaphoreHandle_t xSerialMutex = NULL;
-
 /**
  * @brief init debug serial port
  */
 void dbg_serial_setup(void)
 {
+#if 0
     USART_Config config;
     USART_StructInit(&config);
 
@@ -29,9 +27,8 @@ void dbg_serial_setup(void)
     USART_Setup(USART1, &config);
     USART_EnableInt(USART1, USART_IT_RXNE, FALSE);
     USART_EnableInt(USART1, USART_IT_TXE, FALSE);
-    USART_Enable(USART1, TRUE);
-    
-    xSerialMutex = xSemaphoreCreateMutex();
+    USART_Enable(USART1, TRUE);  
+#endif
 }
 
 /**
@@ -40,7 +37,9 @@ void dbg_serial_setup(void)
  */
 void dbg_putchar(char data)
 {
+#if 0
     USART_WriteData_Wait(USART1, data);
+#endif
 }
 
 /**
@@ -50,9 +49,11 @@ void dbg_putchar(char data)
  */
 void dbg_putstring(const char *string, uint32_t length)
 {
+#if 0
     const char *pNext = string;
     while(length--)
         dbg_putchar(*pNext++);
+#endif
 }
 
 
@@ -79,11 +80,9 @@ void trace(const char *module, const char *fmt, ...)
     va_start(argptr, fmt);
     cnt = vsprintf(buf, fmt, argptr);
     va_end(argptr);
-    xSemaphoreTake(xSerialMutex, portMAX_DELAY);
     dbg_putstring(module, strlen(module));
     dbg_putchar(' ');
     dbg_putstring(buf, cnt);
-    xSemaphoreGive(xSerialMutex);
 }
 #endif
 

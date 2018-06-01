@@ -11,6 +11,13 @@
 #include "task.h"
 #include "trace.h"
 #include "license.h"
+#include "parameter.h"
+#include "keymap.h"
+#include "keyctl.h"
+#include "robot.h"
+#include "led_monitor.h"
+#include "protocol.h"
+#include "elevator.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
@@ -19,25 +26,27 @@
 
 
 /**
- * @brief initialize system
- * @param pvParameters - task parameter
- */
-static void vInitSystem(void *pvParameters)
-{
-    TRACE("startup application...\r\n");
-    TRACE("version = %s\r\n", VERSION);
-    
-    vTaskDelete(NULL);
-}
-
-/**
  * @brief start system
  */
 void ApplicationStartup()
 {
-    license_init();
-    xTaskCreate(vInitSystem, "Init", INIT_SYSTEM_STACK_SIZE, NULL, 
-                    INIT_SYSTEM_PRIORITY, NULL);
+    //license_init();
+    TRACE("version = %s\r\n", VERSION);
+    if (!param_init())
+    {
+        TRACE("startup application failed!\r\n");
+    }
+    
+    protocol_init();
+    
+    if (is_param_setted())
+    {
+        keymap_init();
+        keyctl_init();
+        robot_init();
+        led_monitor_init();
+        elev_init();
+    }
     
     /* Start the scheduler. */
     vTaskStartScheduler();

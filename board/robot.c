@@ -109,4 +109,22 @@ uint8_t robot_id_get(uint8_t floor)
     return 0xff;
 }
 
+/**
+ * @brief check if specified floor is checked in
+ * @param floor - specified floor
+ * @return check status
+ */
+bool robot_is_checkin(uint8_t floor)
+{
+    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
+    {
+        if (checkins[i].used && (floor == checkins[i].floor))
+        {
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
+}
+
 

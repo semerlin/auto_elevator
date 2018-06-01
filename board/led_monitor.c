@@ -9,7 +9,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "trace.h"
-#include "ledstatus.h"
+#include "led_status.h"
 #include "keymap.h"
 #include "elevator.h"
 #include "parameter.h"
@@ -95,7 +95,7 @@ static void push_pwd_node(const pwd_node *node)
                     return ;
                 }
             }
-            elev_set_first();
+            elev_set_first_floor();
         }
     }
 }
@@ -110,11 +110,11 @@ static void vLedMonitor(void *pvParameters)
     uint16_t changed_status = 0;
     uint16_t per_changed_bit = 0;
     char floor = 0;
-    led_status = ledstatus_get();
+    led_status = led_status_get();
     uint32_t timestamp = 0;
     for (;;)
     {
-        cur_status = ledstatus_get();
+        cur_status = led_status_get();
         changed_status = cur_status ^ led_status;
         if (0 != changed_status)
         {

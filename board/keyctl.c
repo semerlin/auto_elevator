@@ -94,7 +94,7 @@ void keyctl_press(uint8_t num)
  * @brief release key
  * @param num - key number(0-15)
  */
-void key_release(uint8_t num)
+void keyctl_release(uint8_t num)
 {
     assert_param(num < KEY_NUM);
     TRACE("release key: %d\r\n", num);
@@ -105,7 +105,7 @@ void key_release(uint8_t num)
 /**
  * @brief release all keys
  */
-void key_release_all(void)
+void keyctl_release_all(void)
 {
     TRACE("release all keys\r\n");
     key_status = 0xffff;

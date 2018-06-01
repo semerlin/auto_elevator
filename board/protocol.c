@@ -13,23 +13,37 @@
 #include "global.h"
 #include "parameter.h"
 #include "elevator.h"
-#include "ledstatus.h"
+#include "led_status.h"
 #include "robot.h"
+#include "floormap.h"
+#include "elevator.h"
+#include "crc.h"
+#include "keymap.h"
+#include "keyctl.h"
+#include "led_monitor.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
 
 /* protocol head and tail */
-#define PROTOCOL_HEAD    0x02
-#define PROTOCOL_TAIL    0x03
+#define HEAD    0x02
+#define TAIL    0x03
 
-#define PROTOCOL_CONVERT     0x04
-#define PROTOCOL_CONVERT_2   0x06
-#define PROTOCOL_CONVERT_3   0x07
+#define CONVERT     0x04
+#define CONVERT_2   0x06
+#define CONVERT_3   0x07
 
-#define PROTOCOL_CONVERT_ORIGIN     0x04
-#define PROTOCOL_CONVERT_2_ORIGIN   0x02
-#define PROTOCOL_CONVERT_3_ORIGIN   0x03
+#define CONVERT_ORIGIN     0x04
+#define CONVERT_2_ORIGIN   0x02
+#define CONVERT_3_ORIGIN   0x03
+
+#define DEFAULT_FLOOR   0xf7
+#define LED_ON          0x02
+#define LED_OFF         0x01
+#define DOOR_ON         0x01
+#define DOOR_OFF        0x00
+#define DOOR_HOLD       0x00
+#define DOOR_RELEASE    0x01
 
 typedef union
 {
@@ -102,7 +116,7 @@ static bool sum_check(const uint8_t *data, uint8_t len)
  * @param data - data to analyze
  * @param len - data length
  */
-static void unpacket_data(const uint8_t *data, uint8_t len)
+static void unpacket_robot_data(const uint8_t *data, uint8_t len)
 {
     if (sum_check(data, len))
     {
@@ -111,24 +125,24 @@ static void unpacket_data(const uint8_t *data, uint8_t len)
         data++;
         for (int i = 0; i < len - 4; ++i)
         {
-            if (PROTOCOL_CONVERT == data[i])
+            if (CONVERT == data[i])
             {
-                if (PROTOCOL_CONVERT_2 == data[i + 1])
+                if (CONVERT_2 == data[i + 1])
                 {
                     ++i;
-                    *pdata ++ = PROTOCOL_CONVERT_2_ORIGIN;
+                    *pdata ++ = CONVERT_2_ORIGIN;
                     continue;
                 }
-                else if (PROTOCOL_CONVERT_3 == data[i + 1])
+                else if (CONVERT_3 == data[i + 1])
                 {
                     ++i;
-                    *pdata ++ = PROTOCOL_CONVERT_3_ORIGIN;
+                    *pdata ++ = CONVERT_3_ORIGIN;
                     continue;
                 }
-                else if (PROTOCOL_CONVERT == data[i + 1])
+                else if (CONVERT == data[i + 1])
                 {
                     ++i;
-                    *pdata ++ = PROTOCOL_CONVERT_ORIGIN;
+                    *pdata ++ = CONVERT_ORIGIN;
                     continue;
                 }
             }
@@ -147,6 +161,69 @@ static void unpacket_data(const uint8_t *data, uint8_t len)
 }
 
 /**
+ * @brief replay to init
+ * @param flag - init status
+ */
+static void init_reply(bool flag)
+{
+    uint8_t rsp[7];
+    uint8_t status = (flag ? 0x00 : 0x01);
+    uint16_t crc = crc16(&status, 1);
+    rsp[0] = 0x55;
+    rsp[1] = 6;
+    rsp[2] = (uint8_t)((crc >> 8) & 0xff);
+    rsp[3] = (uint8_t)(crc & 0xff);
+    rsp[4] = status;
+    rsp[5] = 0xaa;
+    
+    serial_putstring(g_serial, (const char *)rsp, 6);
+}
+
+/**
+ * @brief analyze protocol data
+ * @param data - data to analyze
+ * @param len - data length
+ */
+static void unpacket_init_data(const uint8_t *data, uint8_t len)
+{
+    if (len >= 26)
+    {
+        /* check header */
+        if (0x55 == data[0])
+        {
+            /* check length and tail */
+            uint8_t pkt_len = data[1];
+            if ((pkt_len <= len) && (0xaa == data[pkt_len - 1]))
+            {
+                /* check crc value */
+                uint16_t recv_crc = data[2];
+                recv_crc <<= 8;
+                recv_crc |= data[3];
+                uint16_t calc_crc = 0;
+                calc_crc = crc16(data + 4, pkt_len - 5);
+                if (recv_crc == calc_crc)
+                {
+                    if(param_update_all(data + 4))
+                    {
+                        init_reply(TRUE);
+                        /* init other modules */
+                        keymap_init();
+                        keyctl_init();
+                        robot_init();
+                        led_monitor_init();
+                        elev_init();
+                    }
+                    else
+                    {
+                        init_reply(FALSE);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
  * @brief send protocol data
  * @param data - data to analyze
  * @param len - data length
@@ -155,24 +232,24 @@ static void send_data(const uint8_t *data, uint8_t len)
 {
     uint8_t buffer[36];
     uint8_t *pdata = buffer;
-    *pdata ++= PROTOCOL_HEAD;
+    *pdata ++= HEAD;
     uint16_t sum = 0;
     for (int i = 0; i < len; ++i)
     {
-        if (PROTOCOL_CONVERT_ORIGIN == data[i])
+        if (CONVERT_ORIGIN == data[i])
         {
-            *pdata ++ = PROTOCOL_CONVERT;
-            *pdata ++ = PROTOCOL_CONVERT;
+            *pdata ++ = CONVERT;
+            *pdata ++ = CONVERT;
         }
-        else if (PROTOCOL_CONVERT_2_ORIGIN == data[i])
+        else if (CONVERT_2_ORIGIN == data[i])
         {
-            *pdata ++ = PROTOCOL_CONVERT;
-            *pdata ++ = PROTOCOL_CONVERT_2;
+            *pdata ++ = CONVERT;
+            *pdata ++ = CONVERT_2;
         }
-        else if (PROTOCOL_CONVERT_3_ORIGIN == data[i])
+        else if (CONVERT_3_ORIGIN == data[i])
         {
-            *pdata ++ = PROTOCOL_CONVERT;
-            *pdata ++ = PROTOCOL_CONVERT_3;
+            *pdata ++ = CONVERT;
+            *pdata ++ = CONVERT_3;
         }
         else
         {
@@ -184,7 +261,7 @@ static void send_data(const uint8_t *data, uint8_t len)
     pdata[1] = sum % 10 + 0x30;
     sum /= 10;
     pdata[0] = sum % 10 + 0x30;
-    pdata[2] = PROTOCOL_TAIL;
+    pdata[2] = TAIL;
     pdata += 3;
 
     assert_param(NULL != g_serial);
@@ -214,14 +291,23 @@ static void vProtocol(void *pvParameters)
                 *pdata++ = (uint8_t)data;
             }
             len = (uint8_t)(pdata - recv_data);
-            if (len > 4)
+            if (is_param_setted())
             {
-                if ((PROTOCOL_HEAD == recv_data[0]) && 
-                    (PROTOCOL_TAIL == pdata[-1]))
+                /* process robot data */
+                if (len > 4)
                 {
-                    /* receive protocol data */
-                    unpacket_data(recv_data, len);
+                    if ((HEAD == recv_data[0]) && 
+                        (TAIL == pdata[-1]))
+                    {
+                        /* receive protocol data */
+                        unpacket_robot_data(recv_data, len);
+                    }
                 }
+            }
+            else
+            {
+                /* process init data */
+                unpacket_init_data(recv_data, len);
             }
             pdata = recv_data;
         }
@@ -243,13 +329,21 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
         payload[1] = param_get_id_elev();
         payload[2] = data[1];
         payload[3] = 51;
-        payload[4] = elev_floor();
+        payload[4] = floormap_dis_to_phy(elev_floor());
         payload[5] = data[4];
         
         elev_status status;
         status._status.dir = elev_state_run();
-        status._status.led = (is_ledon(data[5]) ? 0x02 : 0x01);
-        status._status.door = 0x01;
+        if (DEFAULT_FLOOR == data[5])
+        {
+            status._status.led = LED_OFF;
+        }
+        else
+        {
+            char dis_floor = floormap_phy_to_dis(data[5]);
+            status._status.led = (is_led_on(dis_floor) ? LED_ON : LED_OFF);
+        }
+        status._status.door = DOOR_ON;
         status._status.reserve = 0x00;
         status._status.state = elev_state_work();
         payload[6] = status.status;
@@ -302,7 +396,9 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
         payload[5] = data[5];
         
         send_data(payload, 6);
+        char dis_floor = floormap_phy_to_dis(data[4]);
         robot_checkin_set(data[1], data[4]);
+        elev_go(dis_floor);
     }
 }
 
@@ -321,13 +417,21 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
         payload[1] = param_get_id_elev();
         payload[2] = data[1];
         payload[3] = 33;
-        payload[4] = elev_floor();
+        payload[4] = floormap_dis_to_phy(elev_floor());
         payload[5] = robot_checkin_get(data[1]);
         
         elev_status status;
         status._status.dir = elev_state_run();
-        status._status.led = (is_ledon(data[5]) ? 0x02 : 0x01);
-        status._status.door = 0x01;
+        if (DEFAULT_FLOOR == payload[5])
+        {
+            status._status.led = LED_OFF;
+        }
+        else
+        {
+            char dis_floor = floormap_phy_to_dis(payload[5]);
+            status._status.led = (is_led_on(dis_floor) ? LED_ON : LED_OFF);
+        }
+        status._status.door = DOOR_ON;
         status._status.reserve = 0x00;
         status._status.state = elev_state_work();
         payload[6] = status.status;
@@ -351,20 +455,20 @@ static void process_elev_door(const uint8_t *data, uint8_t len)
         payload[1] = param_get_id_elev();
         payload[2] = data[1];
         payload[3] = 35;
-        if (0x00 == data[4])
+        if (DOOR_HOLD == data[4])
         {
             /* open */
-            payload[4] = 0x00;
+            payload[4] = DOOR_HOLD;
         }
         else 
         {
             /* release */
-            payload[4] = 0x01;
+            payload[4] = DOOR_RELEASE;
         }
         
         send_data(payload, 5);
         
-        if (0x00 == data[4])
+        if (DOOR_HOLD == data[4])
         {
             /* open */
             elev_hold_open(TRUE);
@@ -372,7 +476,6 @@ static void process_elev_door(const uint8_t *data, uint8_t len)
         else 
         {
             /* release */
-            payload[4] = 0x01;
             elev_hold_open(FALSE);
         }
     }
@@ -401,18 +504,18 @@ static void process_elev_arrive(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-void notify_arrive(uint8_t floor)
+void notify_arrive(char floor)
 {
     uint8_t payload[7];
     payload[0] = param_get_id_ctl();
     payload[1] = param_get_id_elev();
     payload[2] = robot_id_get(floor);
     payload[3] = 39;
-    payload[4] = elev_floor();
+    payload[4] = floormap_dis_to_phy(elev_floor());
     elev_status status;
     status._status.dir = elev_state_run();
-    status._status.led = (is_ledon(payload[2]) ? 0x02 : 0x01);
-    status._status.door = 0x01;
+    status._status.led = (is_led_on(floor) ? LED_ON : LED_OFF);
+    status._status.door = DOOR_ON;
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[5] = status.status;

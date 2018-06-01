@@ -17,34 +17,16 @@
 /* total floor number */
 #define FLOOR_NUM    15
 
-/* keymap structure */
-typedef struct
-{
-    uint8_t floor;
-    uint8_t key;
-}keymap;
+/* key open fixed to 0 */
+static uint8_t key_open = 0;
 
-/* key-floor map */
-static keymap keymaps[FLOOR_NUM] = 
+/* key-display floor map */
+static char keymaps[FLOOR_NUM] = 
 {
-    {1, 1},
-    {2, 2},
-    {3, 3},
-    {4, 4},
-    {5, 5},
-    {6, 6},
-    {7, 7},
-    {8, 8},
-    {9, 9},
-    {10, 10},
-    {11, 11},
-    {12, 12},
-    {13, 13},
-    {14, 14},
-    {15, 15},
+    -3, -2, -1, 1, 2, 3, 4, 5,
+    6, 7, 8, 9, 10, 11, 12
 };
 
-static uint8_t key_open = 0;
 
 /**
  * @brief initialize keymap
@@ -53,14 +35,9 @@ static uint8_t key_open = 0;
 bool keymap_init(void)
 {
     TRACE("initialize keymap...\r\n");
-#if 0
-    uint8_t data[36];
-    if (is_param_setted())
-    {
-        param_get_keymap(data);
-        keymap_update(data);
-    }
-#endif
+    uint8_t data[16];
+    param_get_keymap(data);
+    keymap_update(data);
     return TRUE;
 }
 
@@ -69,13 +46,13 @@ bool keymap_init(void)
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-uint8_t keymap_floor_to_key(uint8_t floor)
+uint8_t keymap_floor_to_key(char floor)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {
-        if (floor == keymaps[i].floor)
+        if (floor == keymaps[i])
         {
-            return keymaps[i].key;
+            return i + 1;
         }
     }
     
@@ -87,17 +64,17 @@ uint8_t keymap_floor_to_key(uint8_t floor)
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-uint8_t keymap_key_to_floor(uint8_t key)
+char keymap_key_to_floor(uint8_t key)
 {
-    for (int i = 0; i < FLOOR_NUM; ++i)
+    key -= 1;
+    if (key < FLOOR_NUM)
     {
-        if (key == keymaps[i].key)
-        {
-            return keymaps[i].floor;
-        }
+        return keymaps[key];
     }
-    
-    return INVALID_FLOOR;
+    else
+    {    
+        return INVALID_FLOOR;
+    }
 }
 
 /**
@@ -117,10 +94,8 @@ void keymap_update(const uint8_t *data)
 {
     for (int i = 0; i < FLOOR_NUM; ++i)
     {
-        keymaps[i].floor = data[i * 2];
-        keymaps[i].key = data[i * 2 + 1];
+        keymaps[i] = data[i];
     }
-    key_open = data[FLOOR_NUM * 2];
 }
 
 

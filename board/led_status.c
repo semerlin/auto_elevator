@@ -5,11 +5,12 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#include "ledstatus.h"
+#include "led_status.h"
 #include "assert.h"
 #include "trace.h"
 #include "cm3_core.h"
 #include "pinconfig.h"
+#include "keymap.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledstatus]"
@@ -50,6 +51,15 @@ static __INLINE void st_reset(void)
 }
 
 /**
+ * @brief clear open led
+ * @param status - led status
+ */
+static __INLINE void clear_open_led(uint16_t status)
+{
+    status &= ~0x01;
+}
+
+/**
  * @brief send data to 74hc595
  * @param data - data to send
  */
@@ -84,7 +94,7 @@ static uint16_t hc166_readdata(void)
  * @brief get led status
  * @return led status
  */
-uint16_t ledstatus_get(void)
+uint16_t led_status_get(void)
 {
     return hc166_readdata();
 }
@@ -94,14 +104,23 @@ uint16_t ledstatus_get(void)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_ledon(uint8_t floor)
+bool is_led_on(char floor)
 {
     if (floor > LED_NUM)
     {
         return FALSE;
     }
     uint16_t status = hc166_readdata();
-    return (0 != (status & (1 << (floor - 1))));
+    clear_open_led(status);
+    uint8_t key = keymap_floor_to_key(floor);
+    if (INVALID_KEY != key)
+    {
+        return (0 != (status & (1 << key)));
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 /**
@@ -109,16 +128,25 @@ bool is_ledon(uint8_t floor)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_down_ledon(uint8_t floor)
+bool is_down_ledon(char floor)
 {
     if (floor > LED_NUM)
     {
         return FALSE;
     }
     uint16_t status = hc166_readdata();
-    uint16_t floor_bit = (1 << (floor - 1));
-    floor_bit -= 1;
-    return (0 != (status & floor_bit));
+    clear_open_led(status);
+    uint8_t key = keymap_floor_to_key(floor);
+    if (INVALID_KEY != key)
+    {
+        uint16_t floor_bit = (1 << key);
+        floor_bit -= 1;
+        return (0 != (status & floor_bit));
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 /**
@@ -126,16 +154,25 @@ bool is_down_ledon(uint8_t floor)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_up_ledon(uint8_t floor)
+bool is_up_ledon(char floor)
 {
     if (floor > LED_NUM)
     {
         return FALSE;
     }
     uint16_t status = hc166_readdata();
-    uint16_t floor_bit = (1 << (floor - 1));
-    floor_bit |= (floor_bit - 1);
-    return (0 != (status & ~floor_bit));
+    clear_open_led(status);
+    uint8_t key = keymap_floor_to_key(floor);
+    if (INVALID_KEY != key)
+    {
+        uint16_t floor_bit = (1 << key);
+        floor_bit |= (floor_bit - 1);
+        return (0 != (status & ~floor_bit));
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 /**
@@ -143,13 +180,22 @@ bool is_up_ledon(uint8_t floor)
  * @param floor - specified floor
  * @return led status
  */
-bool is_ledon_except(uint8_t floor)
+bool is_ledon_except(char floor)
 {
     if (floor > LED_NUM)
     {
         return FALSE;
     }
     uint16_t status = hc166_readdata();
-    uint16_t floor_bit = (1 << (floor - 1));
-    return (0 != (status & ~floor_bit));
+    clear_open_led(status);
+    uint8_t key = keymap_floor_to_key(floor);
+    if (INVALID_KEY != key)
+    {
+        uint16_t floor_bit = (1 << key);
+        return (0 != (status & ~floor_bit));
+    }
+    else
+    {
+        return FALSE;
+    }
 }
