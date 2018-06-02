@@ -8,6 +8,7 @@
 #include "elevator.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 #include "queue.h"
 #include "trace.h"
 #include "led_status.h"
@@ -35,6 +36,10 @@ static elev_work_state work_state = work_idle;
 
 static xQueueHandle xQueueFloor = NULL;
 #define FLOOR_QUEUE_LEN   5
+
+static xQueueHandle xArriveQueue = NULL;
+static xSemaphoreHandle xNotifySemaphore = NULL;
+#define MAX_CHECK_CNT 5
 
 /**
  * @brief elevator task
@@ -68,7 +73,7 @@ static void vElevControl(void *pvParameters)
     uint8_t key = 0;
     for (;;)
     {
-        if(pdPASS == xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
+        if(xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
         {
             keyctl_press(key);
             vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -83,14 +88,23 @@ static void vElevControl(void *pvParameters)
  */
 static void vElevArrive(void *pvParameters)
 {
-    uint8_t key = 0;
+    uint8_t err_cnt = 0;
+    char floor = 0;
     for (;;)
     {
-        if(pdPASS == xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
+        err_cnt = 0;
+        if (xQueueReceive(xArriveQueue, &floor, portMAX_DELAY))
         {
-            keyctl_press(key);
-            vTaskDelay(500 / portTICK_PERIOD_MS);
-            keyctl_release(key);
+            while (pdTRUE != xSemaphoreTake(xNotifySemaphore, 
+                                         500 / portTICK_PERIOD_MS))
+            {
+                err_cnt ++;
+                if (err_cnt > MAX_CHECK_CNT)
+                {
+                    break;
+                }
+                notify_arrive(floor);
+            }
         }
     }
 }
@@ -102,6 +116,7 @@ static void vElevArrive(void *pvParameters)
  */
 void arrive_hook(const uint8_t *data, uint8_t len)
 {
+    xSemaphoreGive(xNotifySemaphore);
 }
 
 /**
@@ -112,13 +127,15 @@ bool elev_init(void)
 {
     TRACE("initialize elevator...\r\n");
     xQueueFloor = xQueueCreate(FLOOR_QUEUE_LEN, 1);
+    xArriveQueue = xQueueCreate(1, 1);
+    xNotifySemaphore = xSemaphoreCreateBinary();
+    register_arrive_cb(arrive_hook);
     xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
                     ELEV_PRIORITY, NULL);
     xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
                     ELEV_PRIORITY, NULL);
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
                     ELEV_PRIORITY, NULL);
-    register_arrive_cb(arrive_hook);
     return TRUE;
 }
 
@@ -152,6 +169,7 @@ void elev_arrived(char floor)
             {
                 TRACE("floor arrive: %d\r\n", floor);
                 notify_arrive(floor);
+                xQueueOverwrite(xArriveQueue, &floor);
             }
         }
     }
