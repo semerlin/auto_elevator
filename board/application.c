@@ -34,7 +34,7 @@ void ApplicationStartup()
 {
     TRACE("startup application...\r\n");
     TRACE("version = %s\r\n", VERSION);
-    license_init();
+    //license_init();
     if (!param_init())
     {
         TRACE("startup application failed!\r\n");

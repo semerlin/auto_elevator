@@ -78,6 +78,33 @@ static void vElevControl(void *pvParameters)
 }
 
 /**
+ * @brief elevator task
+ * @param pvParameters - task parameters
+ */
+static void vElevArrive(void *pvParameters)
+{
+    uint8_t key = 0;
+    for (;;)
+    {
+        if(pdPASS == xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
+        {
+            keyctl_press(key);
+            vTaskDelay(500 / portTICK_PERIOD_MS);
+            keyctl_release(key);
+        }
+    }
+}
+
+/**
+ * @brief arrive notify callback
+ * @brief data - data received
+ * @param len - data length
+ */
+void arrive_hook(const uint8_t *data, uint8_t len)
+{
+}
+
+/**
  * @brief initialize elevator
  * @return init status
  */
@@ -89,6 +116,9 @@ bool elev_init(void)
                     ELEV_PRIORITY, NULL);
     xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
                     ELEV_PRIORITY, NULL);
+    xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
+                    ELEV_PRIORITY, NULL);
+    register_arrive_cb(arrive_hook);
     return TRUE;
 }
 
