@@ -231,9 +231,16 @@ static void unpacket_init_data(const uint8_t *data, uint8_t len)
  * @param data - message to dump
  * @param len - data length
  */
-static void dump_message(const uint8_t *data, uint8_t len)
+static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
 {
-    TRACE("send data: ");
+    if (dir)
+    {
+        TRACE("send data: ");
+    }
+    else
+    {
+        TRACE("recv data: ");
+    }
     for (int i = 0; i < len; ++i)
     {
         dbg_putchar(data[i]);
@@ -287,7 +294,7 @@ static void send_data(const uint8_t *data, uint8_t len)
     assert_param(NULL != g_serial);
     uint8_t datalen = (uint8_t)(pdata - buffer);
 #ifdef __ENABLE_TRACE
-    dump_message(buffer, datalen);
+    dump_message(1, buffer, datalen);
 #endif
     serial_putstring(g_serial, (const char *)buffer, pdata - buffer);
 }
@@ -315,6 +322,9 @@ static void vProtocol(void *pvParameters)
                 *pdata++ = (uint8_t)data;
             }
             len = (uint8_t)(pdata - recv_data);
+#ifdef __ENABLE_TRACE
+            dump_message(0, recv_data, len);
+#endif
             if (is_param_setted())
             {
                 /* process robot data */

@@ -24,7 +24,7 @@
 
 
 /* elevator current floor */
-static char floor = 1;
+static char elev_cur_floor = 1;
 
 static bool hold_door = FALSE;
 static uint8_t hold_cnt = 0;
@@ -113,8 +113,16 @@ void elev_arrived(char floor)
     {
         if (robot_is_checkin(floormap_dis_to_phy(floor)))
         {
-            TRACE("floor arrive: %d\r\n", floor);
-            notify_arrive(floor);
+            if (elev_cur_floor != floor)
+            {
+                TRACE("set floor: %d\r\n", floor);
+                elev_go(floor);
+            }
+            else
+            {
+                TRACE("floor arrive: %d\r\n", floor);
+                notify_arrive(floor);
+            }
         }
     }
 }
@@ -151,17 +159,17 @@ void elev_hold_open(bool flag)
  */
 void elev_decrease(void)
 {
-    floor --;
-    if (0 == floor)
+    elev_cur_floor --;
+    if (0 == elev_cur_floor)
     {
-        floor --;
+        elev_cur_floor --;
     }
-    TRACE("decrease floor: %d\r\n", floor);
-    if (is_down_led_on(floor))
+    TRACE("decrease floor: %d\r\n", elev_cur_floor);
+    if (is_down_led_on(elev_cur_floor))
     {
         run_state = run_down;
     }
-    else if (is_up_led_on(floor))
+    else if (is_up_led_on(elev_cur_floor))
     {
         run_state = run_up;
     }
@@ -176,17 +184,17 @@ void elev_decrease(void)
  */
 void elev_increase(void)
 {
-    floor ++;
-    if (0 == floor)
+    elev_cur_floor ++;
+    if (0 == elev_cur_floor)
     {
-        floor ++;
+        elev_cur_floor ++;
     }
-    TRACE("increase floor: %d\r\n", floor);
-    if (is_up_led_on(floor))
+    TRACE("increase floor: %d\r\n", elev_cur_floor);
+    if (is_up_led_on(elev_cur_floor))
     {
         run_state = run_up;
     }
-    else if (is_down_led_on(floor))
+    else if (is_down_led_on(elev_cur_floor))
     {
         run_state = run_down;
     }
@@ -202,7 +210,7 @@ void elev_increase(void)
 void elev_set_first_floor(void)
 {
     TRACE("set first floor\r\n");
-    floor = 1;
+    elev_cur_floor = 1;
 }
 
 /**
@@ -238,7 +246,7 @@ void elevator_set_state_work(elev_work_state state)
  */
 char elev_floor(void)
 {
-    return floor;
+    return elev_cur_floor;
 }
 
 
