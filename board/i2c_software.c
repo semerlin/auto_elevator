@@ -36,12 +36,12 @@ static __INLINE void SDA_L(i2c *pi2c)
 
 static __INLINE void SCL_H(i2c *pi2c)
 {
-    GPIO_SetPin(pi2c->sclpin_group, pi2c->sclpin_group);
+    GPIO_SetPin(pi2c->sclpin_group, pi2c->sclpin_port);
 }
 
 static __INLINE void SCL_L(i2c * pi2c)
 {
-    GPIO_ResetPin(pi2c->sclpin_group, pi2c->sclpin_group);
+    GPIO_ResetPin(pi2c->sclpin_group, pi2c->sclpin_port);
 }
 
 static __INLINE uint8_t SDA_VAL(i2c *pi2c)
@@ -300,8 +300,6 @@ bool i2c_addr_write(i2c *pi2c, const uint8_t *addr, uint8_t addr_len,
     return TRUE;
 
 }
-
-
 
 /**
  * @brief read data from i2c bus

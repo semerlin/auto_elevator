@@ -12,7 +12,15 @@
 
 BEGIN_DECLS
 
+typedef enum
+{
+    switch_arrive,
+    switch_run,
+}switch_status;
+
+
 bool switch_monitor_init(void);
+switch_status switch_get_status(void);
 
 END_DECLS
 

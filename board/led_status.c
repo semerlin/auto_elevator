@@ -56,7 +56,7 @@ static __INLINE void st_reset(void)
  */
 static __INLINE void clear_open_led(uint16_t status)
 {
-    status &= ~0x01;
+    status |= 0x01;
 }
 
 /**
@@ -74,17 +74,16 @@ static uint16_t hc166_readdata(void)
     {
         recvdata |= 0x01;
     }
-    recvdata <<= 1;
     /* read left data */
     st_set();
     for (int i = 0; i < LED_NUM - 1; ++i)
     {
         sh_transition();
+        recvdata <<= 1;
         if (is_pinset("LED_DATA"))
         {
             recvdata |= 0x01;
-        }
-        recvdata <<= 1;
+        } 
     }
     
     return recvdata;
@@ -115,7 +114,7 @@ bool is_led_on(char floor)
     uint8_t key = keymap_floor_to_key(floor);
     if (INVALID_KEY != key)
     {
-        return (0 != (status & (1 << key)));
+        return (0 == (status & (1 << key)));
     }
     else
     {
@@ -128,7 +127,7 @@ bool is_led_on(char floor)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_down_ledon(char floor)
+bool is_down_led_on(char floor)
 {
     if (floor > LED_NUM)
     {
@@ -139,9 +138,23 @@ bool is_down_ledon(char floor)
     uint8_t key = keymap_floor_to_key(floor);
     if (INVALID_KEY != key)
     {
-        uint16_t floor_bit = (1 << key);
-        floor_bit -= 1;
-        return (0 != (status & floor_bit));
+        uint16_t floor_bit = 0;
+        if (0 == key)
+        {
+            return FALSE;
+        }
+        key--;
+        while (key > 0)
+        {
+            floor_bit = (1 << key);
+            if (0 == (status & floor_bit))
+            {
+                return TRUE;
+            }
+            key--;
+        }
+
+        return FALSE;
     }
     else
     {
@@ -154,7 +167,7 @@ bool is_down_ledon(char floor)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_up_ledon(char floor)
+bool is_up_led_on(char floor)
 {
     if (floor > LED_NUM)
     {
@@ -165,9 +178,19 @@ bool is_up_ledon(char floor)
     uint8_t key = keymap_floor_to_key(floor);
     if (INVALID_KEY != key)
     {
-        uint16_t floor_bit = (1 << key);
-        floor_bit |= (floor_bit - 1);
-        return (0 != (status & ~floor_bit));
+        uint16_t floor_bit = 0;
+        key++;
+        while (key < LED_NUM)
+        {
+            floor_bit = (1 << key);
+            if (0 == (status & floor_bit))
+            {
+                return TRUE;
+            }
+            key++;
+        }
+
+        return FALSE;
     }
     else
     {
@@ -180,7 +203,7 @@ bool is_up_ledon(char floor)
  * @param floor - specified floor
  * @return led status
  */
-bool is_ledon_except(char floor)
+bool is_led_on_except(char floor)
 {
     if (floor > LED_NUM)
     {

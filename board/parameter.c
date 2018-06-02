@@ -37,6 +37,14 @@ static uint8_t param_pwd[5];
 
 bool param_setted = FALSE;
 
+/**
+ * @brief reset parameter
+ */
+void reset_param(void)
+{
+    uint8_t status[SET_LEN] = {0, 0, 0, 0};
+    fm_write(SET_ADDR, status, SET_LEN);
+}
 
 /**
  * @brief initialize parameter module
@@ -44,13 +52,19 @@ bool param_setted = FALSE;
  */
 bool param_init(void)
 {
+    TRACE("initialize fm...\r\n");
     if (fm_init())
     {
+        //reset_param();
         uint8_t status[SET_LEN];
-        fm_read(SET_ADDR, status, SET_LEN);
+        if (!fm_read(SET_ADDR, status, SET_LEN))
+        {
+            return FALSE;
+        }
         param_setted = (0 == strncmp((const char *)status, SET_FLAG, 4));
         if (param_setted)
         {
+            TRACE("parameter setted, update it\r\n");
             if (!fm_read(MAP_ADDR, param_map, MAP_LEN))
             {
                 return FALSE;
@@ -67,6 +81,10 @@ bool param_init(void)
             {
                 return FALSE;
             }
+        }
+        else
+        {
+            TRACE("parameter not setted\r\n");
         }
         return TRUE;
     }
@@ -101,6 +119,7 @@ void param_get_keymap(uint8_t *map)
  */
 bool param_update_keymap(const uint8_t *map)
 {
+    TRACE("update key map\r\n");
     if (0 != strncmp((const char *)param_map, (const char *)map, MAP_LEN))
     {
         strncpy((char *)param_map, (const char *)map, MAP_LEN);
@@ -146,6 +165,7 @@ uint8_t param_get_id_elev(void)
  */
 bool param_update_id_ctl(uint8_t id)
 {
+    TRACE("update control id\r\n");
     if (param_id_ctl != id)
     {
         param_id_ctl = id;
@@ -161,6 +181,7 @@ bool param_update_id_ctl(uint8_t id)
  */
 bool param_update_id_elev(uint8_t id)
 {
+    TRACE("update elevator id\r\n");
     if (param_id_elev != id)
     {
         param_id_elev = id;
@@ -177,6 +198,7 @@ bool param_update_id_elev(uint8_t id)
  */
 bool param_update_pwd(const uint8_t *pwd)
 {
+    TRACE("update password\r\n");
     if (0 != strncmp((const char *)param_pwd, (const char *)pwd, PWD_LEN))
     {
         strncpy((char *)param_pwd, (const char *)pwd, PWD_LEN);
@@ -197,19 +219,19 @@ bool param_update_all(const uint8_t *data)
     {
         return FALSE;
     }
-    if (!param_update_keymap(data + MAP_ADDR))
+    if (!param_update_keymap(data))
     {
         return FALSE;
     }
-    if (!param_update_id_ctl(*(data + ID_CTL_ADDR)))
+    if (!param_update_id_ctl(*(data + ID_CTL_ADDR - SET_LEN)))
     {
         return FALSE;
     }
-    if (!param_update_id_elev(*(data + ID_ELEV_ADDR)))
+    if (!param_update_id_elev(*(data + ID_ELEV_ADDR - SET_LEN)))
     {
         return FALSE;
     }
-    if (!param_update_pwd(data + PWD_ADDR))
+    if (!param_update_pwd(data + PWD_ADDR - SET_LEN))
     {
         return FALSE;
     }

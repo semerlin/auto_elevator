@@ -10,6 +10,8 @@
 #include "global.h"
 #include "trace.h"
 #include "serial.h"
+#include "parameter.h"
+#include "stm32f10x_cfg.h"
 
 
 #undef __TRACE_MODULE
@@ -26,10 +28,12 @@ static void vLicense(void *pvParameters)
     for (;;)
     {
         g_count++;
-        if (g_count >= 3600 * 24)
+        if (g_count >= 3600 * 24 * 10)
         {
             /* license expired */
             TRACE("license expired!\r\n");
+            reset_param();
+            SCB_SystemReset();
             break;
         }
         vTaskDelay(1000 / portTICK_PERIOD_MS);

@@ -15,12 +15,11 @@
 
 typedef struct
 {
-    bool used;
     uint8_t id;
     uint8_t floor;
 }robot_checkin;
 
-robot_checkin checkins[5];
+robot_checkin checkin;
 
 #define DEFAULT_CHECKIN   0xf7
 
@@ -30,12 +29,9 @@ robot_checkin checkins[5];
  */
 void robot_init(void)
 {
-    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
-    {
-        checkins[i].used = FALSE;
-        checkins[i].id = 0;
-        checkins[i].floor = 0;
-    }
+    TRACE("initialize robot...\r\n");
+    checkin.id = 0;
+    checkin.floor = DEFAULT_CHECKIN;
 }
 
 /**
@@ -44,18 +40,9 @@ void robot_init(void)
  */
 bool robot_checkin_set(uint8_t id, uint8_t floor)
 {
-    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
-    {
-        if (!checkins[i].used)
-        {
-            checkins[i].used = TRUE;
-            checkins[i].id = id;
-            checkins[i].floor = floor;
-            return TRUE;
-        }
-    }
-    
-    return FALSE;
+    checkin.id = id;
+    checkin.floor = floor;
+    return TRUE;
 }
 
 /**
@@ -63,16 +50,8 @@ bool robot_checkin_set(uint8_t id, uint8_t floor)
  */
 void robot_checkin_reset(uint8_t id)
 {
-    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
-    {
-        if (checkins[i].used && (id == checkins[i].id))
-        {
-            checkins[i].used = FALSE;
-            checkins[i].id = id;
-            checkins[i].floor = DEFAULT_CHECKIN;
-            break;
-        }
-    }    
+    checkin.id = 0;
+    checkin.floor = DEFAULT_CHECKIN;   
 }
 
 /**
@@ -81,12 +60,9 @@ void robot_checkin_reset(uint8_t id)
  */
 uint8_t robot_checkin_get(uint8_t id)
 {
-    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
+    if (id == checkin.id)
     {
-        if (checkins[i].used && (id == checkins[i].id))
-        {
-            return checkins[i].floor;
-        }
+        return checkin.floor;
     }
     
     return DEFAULT_CHECKIN;
@@ -98,12 +74,9 @@ uint8_t robot_checkin_get(uint8_t id)
  */
 uint8_t robot_id_get(uint8_t floor)
 {
-    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
+    if (floor == checkin.floor)
     {
-        if (checkins[i].used && (floor == checkins[i].floor))
-        {
-            return checkins[i].id;
-        }
+        return checkin.id;
     }
     
     return 0xff;
@@ -116,15 +89,7 @@ uint8_t robot_id_get(uint8_t floor)
  */
 bool robot_is_checkin(uint8_t floor)
 {
-    for (int i = 0; i < sizeof(checkins) / sizeof(checkins[0]); ++i)
-    {
-        if (checkins[i].used && (floor == checkins[i].floor))
-        {
-            return TRUE;
-        }
-    }
-    
-    return FALSE;
+    return (floor == checkin.floor);
 }
 
 

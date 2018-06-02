@@ -40,7 +40,7 @@ static pwd_node pwds[4] =
     {0, 0}
 };
 
-#define LED_PWD_CHECK_TIME 3000
+#define LED_PWD_CHECK_TIME 30000
 
 /**
  * @brief check if floor arrived, 1->0 means arrive
@@ -48,7 +48,7 @@ static pwd_node pwds[4] =
  */
 static bool __INLINE is_floor_arrive(uint16_t origin, uint16_t new)
 {
-    return (0 != (origin & new));
+    return (0 == (origin & new));
 }
 
 /**
@@ -127,18 +127,20 @@ static void vLedMonitor(void *pvParameters)
                 {
                     if (is_floor_arrive(led_status, per_changed_bit))
                     {
+                        TRACE("floor led off: %d\r\n", floor);
                         /* notify floor arrived */
                         elev_arrived(floor);
                     }
                     else
                     {
+                        TRACE("floor led on: %d\r\n", floor);
                         /* push password */
                         pwd_node node = {(uint8_t)floor, timestamp};
                         push_pwd_node(&node);
                     }
                 }
                 changed_status &= changed_status - 1;
-            }while (0 != per_changed_bit);
+            }while (0 != changed_status);
             led_status = cur_status;
         }
         vTaskDelay(LED_MONITOR_INTERVAL);
@@ -152,6 +154,7 @@ static void vLedMonitor(void *pvParameters)
  */
 bool led_monitor_init(void)
 {
+    TRACE("initialize led monitor...\r\n");
     param_get_pwd(led_pwd);
     xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL, 
                     LED_MONITOR_PRIORITY, NULL);

@@ -21,9 +21,10 @@
 #include "keymap.h"
 #include "keyctl.h"
 #include "led_monitor.h"
+#include "switch_monitor.h"
 
 #undef __TRACE_MODULE
-#define __TRACE_MODULE  "[ledmtl]"
+#define __TRACE_MODULE  "[ptl]"
 
 /* protocol head and tail */
 #define HEAD    0x02
@@ -152,7 +153,7 @@ static void unpacket_robot_data(const uint8_t *data, uint8_t len)
 
         for (int i = 0; i < sizeof(cmd_handles) / sizeof(cmd_handles[0]); ++i)
         {
-            if (payload[4] == cmd_handles[i].cmd)
+            if (payload[3] == cmd_handles[i].cmd)
             {
                 cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
             }
@@ -210,6 +211,7 @@ static void unpacket_init_data(const uint8_t *data, uint8_t len)
                         keymap_init();
                         keyctl_init();
                         robot_init();
+                        switch_monitor_init();
                         led_monitor_init();
                         elev_init();
                     }
@@ -265,7 +267,7 @@ static void send_data(const uint8_t *data, uint8_t len)
     pdata += 3;
 
     assert_param(NULL != g_serial);
-    serial_putstring(g_serial, (const char *)pdata, pdata - buffer);
+    serial_putstring(g_serial, (const char *)buffer, pdata - buffer);
 }
 
 
@@ -509,7 +511,7 @@ void notify_arrive(char floor)
     uint8_t payload[7];
     payload[0] = param_get_id_ctl();
     payload[1] = param_get_id_elev();
-    payload[2] = robot_id_get(floor);
+    payload[2] = robot_id_get(floormap_dis_to_phy(floor));
     payload[3] = 39;
     payload[4] = floormap_dis_to_phy(elev_floor());
     elev_status status;
@@ -538,6 +540,7 @@ void register_arrive_cb(process_cb cb)
  */
 bool protocol_init(void)
 {
+    TRACE("initizlize protocol...\r\n");
     g_serial = serial_request(COM1);
     if (NULL == g_serial)
     {

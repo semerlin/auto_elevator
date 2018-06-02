@@ -2096,21 +2096,6 @@
   </configuration>
   <group>
     <name>board</name>
-    <group>
-      <name>sensot</name>
-      <file>
-        <name>$PROJ_DIR$\board\sensor\hp5803.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\board\sensor\hp5803.h</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\board\sensor\lis3dh.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\board\sensor\lis3dh.h</name>
-      </file>
-    </group>
     <file>
       <name>$PROJ_DIR$\board\application.c</name>
     </file>

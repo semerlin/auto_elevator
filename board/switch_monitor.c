@@ -12,6 +12,7 @@
 #include "global.h"
 #include "pinconfig.h"
 #include "elevator.h"
+#include "led_status.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
@@ -22,6 +23,8 @@
 #define SWITCH_MONITOR_INTERVAL    (100 / portTICK_PERIOD_MS)
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
+
+static switch_status cur_status = switch_arrive;
 
 #if 0
 static xSemaphoreHandle xMotorWorking = NULL;
@@ -62,6 +65,15 @@ static uint8_t switch_val(void)
 }
 
 /**
+ * @brief get switch current status
+ * @return current switch status
+ */
+switch_status switch_get_status(void)
+{
+    return cur_status;
+}
+
+/**
  * @brief switch monitor task
  * @param pvParameters - task parameter
  */
@@ -72,6 +84,15 @@ static void vSwitchMonitor(void *pvParameters)
     for (;;)
     {
         switch_cur = switch_val();
+        if (0x03 == switch_cur)
+        {
+            cur_status = switch_arrive;
+        }
+        else
+        {
+            cur_status = switch_run;
+        }
+        
         if (switch_cur != switch_prev)
         {
             /* elevator state changed */
@@ -96,6 +117,7 @@ static void vSwitchMonitor(void *pvParameters)
  */
 bool switch_monitor_init(void)
 {
+    TRACE("initialize switch monitor...\r\n");
     xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL, 
                     SWITCH_MONITOR_PRIORITY, NULL);
 

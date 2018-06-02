@@ -80,9 +80,11 @@ void trace(const char *module, const char *fmt, ...)
     va_start(argptr, fmt);
     cnt = vsprintf(buf, fmt, argptr);
     va_end(argptr);
-    dbg_putstring(module, strlen(module));
+    printf("%s ", module);
+    /*dbg_putstring(module, strlen(module));
     dbg_putchar(' ');
-    dbg_putstring(buf, cnt);
+    dbg_putstring(buf, cnt);*/
+    printf("%s", buf);
 }
 #endif
 

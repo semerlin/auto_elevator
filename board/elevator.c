@@ -8,6 +8,7 @@
 #include "elevator.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
 #include "trace.h"
 #include "led_status.h"
 #include "protocol.h"
@@ -16,6 +17,7 @@
 #include "robot.h"
 #include "floormap.h"
 #include "global.h"
+#include "switch_monitor.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[elev]"
@@ -31,11 +33,14 @@ static uint8_t hold_cnt = 0;
 static elev_run_state run_state = run_stop;
 static elev_work_state work_state = work_idle;
 
+static xQueueHandle xQueueFloor = NULL;
+#define FLOOR_QUEUE_LEN   5
+
 /**
  * @brief elevator task
  * @param pvParameters - task parameters
  */
-static void vElev(void *pvParameters)
+static void vElevHold(void *pvParameters)
 {
     for (;;)
     {
@@ -55,12 +60,34 @@ static void vElev(void *pvParameters)
 }
 
 /**
+ * @brief elevator task
+ * @param pvParameters - task parameters
+ */
+static void vElevControl(void *pvParameters)
+{
+    uint8_t key = 0;
+    for (;;)
+    {
+        if(pdPASS == xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
+        {
+            keyctl_press(key);
+            vTaskDelay(500 / portTICK_PERIOD_MS);
+            keyctl_release(key);
+        }
+    }
+}
+
+/**
  * @brief initialize elevator
  * @return init status
  */
 bool elev_init(void)
 {
-    xTaskCreate(vElev, "protocol", ELEV_STACK_SIZE, NULL,
+    TRACE("initialize elevator...\r\n");
+    xQueueFloor = xQueueCreate(FLOOR_QUEUE_LEN, 1);
+    xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
+                    ELEV_PRIORITY, NULL);
+    xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
                     ELEV_PRIORITY, NULL);
     return TRUE;
 }
@@ -71,8 +98,9 @@ bool elev_init(void)
  */
 void elev_go(char floor)
 {
+    TRACE("elevator go floor: %d\r\n", floor);
     uint8_t key = keymap_floor_to_key(floor);
-    keyctl_press(key);
+    xQueueSend(xQueueFloor, &key, 100 / portTICK_PERIOD_MS);
 }
 
 /**
@@ -85,6 +113,7 @@ void elev_arrived(char floor)
     {
         if (robot_is_checkin(floormap_dis_to_phy(floor)))
         {
+            TRACE("floor arrive: %d\r\n", floor);
             notify_arrive(floor);
         }
     }
@@ -97,11 +126,14 @@ void elev_arrived(char floor)
 void elev_hold_open(bool flag)
 {
     uint8_t key = keymap_open();
-    if (key)
+    if (flag)
     {
-        hold_cnt = 0;
-        hold_door = TRUE;
-        keyctl_press(key);
+        if (switch_arrive == switch_get_status())
+        {
+            hold_cnt = 0;
+            hold_door = TRUE;
+            keyctl_press(key);
+        }
     }
     else
     {
@@ -121,7 +153,7 @@ void elev_decrease(void)
     {
         floor --;
     }
-    TRACE("decrease floor: %d", floor);
+    TRACE("decrease floor: %d\r\n", floor);
     if (is_down_led_on(floor))
     {
         run_state = run_down;
@@ -146,7 +178,7 @@ void elev_increase(void)
     {
         floor ++;
     }
-    TRACE("increase floor: %d", floor);
+    TRACE("increase floor: %d\r\n", floor);
     if (is_up_led_on(floor))
     {
         run_state = run_up;
@@ -166,6 +198,7 @@ void elev_increase(void)
  */
 void elev_set_first_floor(void)
 {
+    TRACE("set first floor\r\n");
     floor = 1;
 }
 

@@ -9,6 +9,7 @@
 #include "i2c_software.h"
 #include "assert.h"
 #include "trace.h"
+#include "pinconfig.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[FM]"
@@ -18,6 +19,21 @@
 
 static i2c *fm_i2c = NULL;
 
+/**
+ * @brief set fm write protect
+ * @param flag - wp enable or disable
+ */
+static __INLINE void fm_wp(bool flag)
+{
+    if (flag)
+    {
+        pin_set("FM_WP");
+    }
+    else
+    {
+        pin_reset("FM_WP");
+    }
+}
 /**
  * @brief initialize fm device
  * @return init status
@@ -48,7 +64,11 @@ bool fm_write(uint16_t addr, const uint8_t *data, uint16_t len)
     uint8_t addr_data[2];
     addr_data[0] = (uint8_t)((addr >> 8) & 0xff);
     addr_data[1] = (uint8_t)(addr & 0xff);
-    return i2c_addr_write(fm_i2c, addr_data, 2, data, len);
+    fm_wp(FALSE);
+    bool ret = i2c_addr_write(fm_i2c, addr_data, 2, data, len);
+    fm_wp(TRUE);
+    
+    return ret;
 }
 
 /**

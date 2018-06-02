@@ -17,6 +17,7 @@ BEGIN_DECLS
  * @return init status
  */
 bool param_init(void);
+void reset_param(void);
 bool is_param_setted(void);
 void param_set_inited(void);
 void param_get_pwd(uint8_t *pwd);

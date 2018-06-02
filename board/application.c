@@ -18,6 +18,8 @@
 #include "led_monitor.h"
 #include "protocol.h"
 #include "elevator.h"
+#include "switch_monitor.h"
+#include "led_status.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
@@ -30,8 +32,9 @@
  */
 void ApplicationStartup()
 {
-    //license_init();
+    TRACE("startup application...\r\n");
     TRACE("version = %s\r\n", VERSION);
+    license_init();
     if (!param_init())
     {
         TRACE("startup application failed!\r\n");
@@ -44,10 +47,11 @@ void ApplicationStartup()
         keymap_init();
         keyctl_init();
         robot_init();
+        switch_monitor_init();
         led_monitor_init();
         elev_init();
     }
-    
+
     /* Start the scheduler. */
     vTaskStartScheduler();
 }

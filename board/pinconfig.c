@@ -45,11 +45,16 @@ PIN_CONFIG pins[] =
     {"LED_SH", GPIOA, 1, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
     {"SWITCH1", GPIOB, 12, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"SWITCH2", GPIOB, 13, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
-    {"SWITCH3", GPIOB, 14, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
-    {"SWITCH4", GPIOB, 15, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"MODE_SWITCH", GPIOB, 14, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"DIS_CALC", GPIOB, 15, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"WLAN_TX", GPIOA, 9, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"WLAN_RX", GPIOA, 10, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
- 
+    {"FM_WP", GPIOB, 5, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"i2c1_scl", GPIOB, 6, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
+    {"i2c1_sda", GPIOB, 7, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
+    {"DEBUG_TX", GPIOB, 10, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
+    {"DEBUG_RX", GPIOB, 11, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    
 #if 0
     {"CON_L1", GPIOC, 9, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
     {"CON_L2", GPIOC, 8, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
@@ -96,8 +101,6 @@ PIN_CLOCK pin_clocks[] =
     {APB2, RCC_APB2_RESET_IOPB, RCC_APB2_ENABLE_IOPB},
     {APB2, RCC_APB2_RESET_IOPC, RCC_APB2_ENABLE_IOPC},
     {APB2, RCC_APB2_RESET_USART1, RCC_APB2_ENABLE_USART1},
-    {APB1, RCC_APB1_RESET_USART2, RCC_APB1_ENABLE_USART2},
-    {APB1, RCC_APB1_RESET_USART3, RCC_APB1_ENABLE_USART3},
 };
 
 /**
@@ -146,7 +149,7 @@ void pin_init(void)
         }
     }
     
-    GPIO_PinRemap(SWJ_JTAG_DISABLE, TRUE);
+    //GPIO_PinRemap(SWJ_JTAG_DISABLE, TRUE);
     /* config pins */
     len = sizeof(pins) / sizeof(PIN_CONFIG);
     for(uint32_t i = 0; i < len; ++i)

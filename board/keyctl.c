@@ -17,7 +17,7 @@
 #define KEY_NUM 16 
 
 /* led status */
-static uint16_t key_status = 0xffff;
+static uint16_t key_status = 0x0000;
 
 
 /**
@@ -56,11 +56,11 @@ static void hc595_senddata(uint16_t data)
     {
         if (0 != (data & 0x8000))
         {
-            pin_reset("KEY_DATA");
+            pin_set("KEY_DATA");
         }
         else
         {
-            pin_set("KEY_DATA");
+            pin_reset("KEY_DATA");
         }
         data <<= 1;
         sh_transition();
@@ -74,7 +74,7 @@ static void hc595_senddata(uint16_t data)
 void keyctl_init(void)
 {
     TRACE("initialieze key control...\r\n");
-    key_status = 0xffff;
+    key_status = 0x0000;
     hc595_senddata(key_status);
 }
 
@@ -86,7 +86,7 @@ void keyctl_press(uint8_t num)
 {
     assert_param(num < KEY_NUM);
     TRACE("press key: %d\r\n", num);
-    key_status &= ~(1 << num);
+    key_status |= (1 << num);
     hc595_senddata(key_status);
 }
 
@@ -98,7 +98,7 @@ void keyctl_release(uint8_t num)
 {
     assert_param(num < KEY_NUM);
     TRACE("release key: %d\r\n", num);
-    key_status |= (1 << num);
+    key_status &= ~(1 << num);
     hc595_senddata(key_status);
 }
 
@@ -108,7 +108,7 @@ void keyctl_release(uint8_t num)
 void keyctl_release_all(void)
 {
     TRACE("release all keys\r\n");
-    key_status = 0xffff;
+    key_status = 0x0000;
     hc595_senddata(key_status);
 }
 
