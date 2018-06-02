@@ -40,7 +40,7 @@ static pwd_node pwds[4] =
     {0, 0}
 };
 
-#define LED_PWD_CHECK_TIME 30000
+#define LED_PWD_CHECK_TIME 3000
 
 /**
  * @brief check if floor arrived, 1->0 means arrive

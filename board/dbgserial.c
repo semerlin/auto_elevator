@@ -19,16 +19,14 @@
  */
 void dbg_serial_setup(void)
 {
-#if 0
     USART_Config config;
     USART_StructInit(&config);
 
     config.rxEnable = FALSE;
-    USART_Setup(USART1, &config);
-    USART_EnableInt(USART1, USART_IT_RXNE, FALSE);
-    USART_EnableInt(USART1, USART_IT_TXE, FALSE);
-    USART_Enable(USART1, TRUE);  
-#endif
+    USART_Setup(USART3, &config);
+    USART_EnableInt(USART3, USART_IT_RXNE, FALSE);
+    USART_EnableInt(USART3, USART_IT_TXE, FALSE);
+    USART_Enable(USART3, TRUE);  
 }
 
 /**
@@ -37,9 +35,7 @@ void dbg_serial_setup(void)
  */
 void dbg_putchar(char data)
 {
-#if 0
-    USART_WriteData_Wait(USART1, data);
-#endif
+    USART_WriteData_Wait(USART3, data);
 }
 
 /**
@@ -49,11 +45,9 @@ void dbg_putchar(char data)
  */
 void dbg_putstring(const char *string, uint32_t length)
 {
-#if 0
     const char *pNext = string;
     while(length--)
         dbg_putchar(*pNext++);
-#endif
 }
 
 
@@ -80,11 +74,9 @@ void trace(const char *module, const char *fmt, ...)
     va_start(argptr, fmt);
     cnt = vsprintf(buf, fmt, argptr);
     va_end(argptr);
-    printf("%s ", module);
-    /*dbg_putstring(module, strlen(module));
+    dbg_putstring(module, strlen(module));
     dbg_putchar(' ');
-    dbg_putstring(buf, cnt);*/
-    printf("%s", buf);
+    dbg_putstring(buf, cnt);
 }
 #endif
 

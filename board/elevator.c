@@ -47,7 +47,7 @@ static void vElevHold(void *pvParameters)
         if (hold_door)
         {
             hold_cnt ++;
-            if (hold_cnt > 30)
+            if (hold_cnt > 15)
             {
                 hold_door = FALSE;
                 hold_cnt = 0;
@@ -137,9 +137,12 @@ void elev_hold_open(bool flag)
     }
     else
     {
-        hold_door = FALSE;
-        hold_cnt = 0;
-        keyctl_release(key);
+        if (hold_door)
+        {
+            hold_door = FALSE;
+            hold_cnt = 0;
+            keyctl_release(key);
+        }
     }
 }
 

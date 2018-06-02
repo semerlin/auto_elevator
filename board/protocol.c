@@ -22,6 +22,7 @@
 #include "keyctl.h"
 #include "led_monitor.h"
 #include "switch_monitor.h"
+#include "dbgserial.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
@@ -226,6 +227,23 @@ static void unpacket_init_data(const uint8_t *data, uint8_t len)
 }
 
 /**
+ * @brief dump message
+ * @param data - message to dump
+ * @param len - data length
+ */
+static void dump_message(const uint8_t *data, uint8_t len)
+{
+    TRACE("send data: ");
+    for (int i = 0; i < len; ++i)
+    {
+        dbg_putchar(data[i]);
+        dbg_putchar(' ');
+    }
+    dbg_putchar('\r');
+    dbg_putchar('\n');
+}
+
+/**
  * @brief send protocol data
  * @param data - data to analyze
  * @param len - data length
@@ -267,6 +285,10 @@ static void send_data(const uint8_t *data, uint8_t len)
     pdata += 3;
 
     assert_param(NULL != g_serial);
+    uint8_t datalen = (uint8_t)(pdata - buffer);
+#ifdef __ENABLE_TRACE
+    dump_message(buffer, datalen);
+#endif
     serial_putstring(g_serial, (const char *)buffer, pdata - buffer);
 }
 
@@ -376,6 +398,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
         send_data(payload, 6);
         elevator_set_state_work(work_idle);
         robot_checkin_reset(data[1]);
+        elev_hold_open(FALSE);
     }
 }
 
