@@ -20,11 +20,12 @@
 
 /* switch 0->1 means arrive，1->0 means leave */
 
-#define SWITCH_MONITOR_INTERVAL    (100 / portTICK_PERIOD_MS)
+#define SWITCH_MONITOR_INTERVAL    (5 / portTICK_PERIOD_MS)
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
 static switch_status cur_status = switch_arrive;
+
 
 #if 0
 static xSemaphoreHandle xMotorWorking = NULL;
@@ -74,6 +75,40 @@ switch_status switch_get_status(void)
 }
 
 /**
+ * @brief filter switch value
+ * @return switch value
+ */
+uint8_t filter_switch_val(void)
+{
+    uint8_t switch_map[4] = {0x00, 0x01, 0x02, 0x03};
+    uint8_t switch_cnt[4] = {0, 0, 0, 0};
+    uint8_t max = 0;
+    
+    for (int i = 0; i < 5; ++i)
+    {
+        switch_cnt[switch_val()] += 1;
+    }
+    
+    for (int i = 0; i < 4; ++i)
+    {
+        if (max < switch_cnt[i])
+        {
+            max = switch_cnt[i];
+        }
+    }
+    
+    for (int i = 0; i < 4; ++i)
+    {
+        if (switch_cnt[i] == max)
+        {
+            return switch_map[i];
+        }
+    }
+    
+    return 0;
+}
+
+/**
  * @brief switch monitor task
  * @param pvParameters - task parameter
  */
@@ -83,7 +118,7 @@ static void vSwitchMonitor(void *pvParameters)
     uint8_t switch_cur = switch_prev;
     for (;;)
     {
-        switch_cur = switch_val();
+        switch_cur = filter_switch_val();
         if (0x03 == switch_cur)
         {
             cur_status = switch_arrive;
