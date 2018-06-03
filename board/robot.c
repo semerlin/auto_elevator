@@ -21,7 +21,7 @@ typedef struct
 
 robot_checkin checkin;
 
-#define DEFAULT_CHECKIN   0xf7
+
 
 
 /**
@@ -66,6 +66,11 @@ uint8_t robot_checkin_get(uint8_t id)
     }
     
     return DEFAULT_CHECKIN;
+}
+
+uint8_t robot_checkin_cur()
+{
+    return checkin.floor;
 }
 
 /**

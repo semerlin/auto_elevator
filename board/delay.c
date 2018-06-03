@@ -10,14 +10,6 @@
 
 
 /**
-* @brief init delay system
-*/
-void delayInit(void)
-{
-}
-
-
-/**
  * @brief delay us
  * @param us to delay
  */

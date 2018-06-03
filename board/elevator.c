@@ -150,6 +150,11 @@ void elev_go(char floor)
     xQueueSend(xQueueFloor, &key, 100 / portTICK_PERIOD_MS);
 }
 
+void elev_key_reset()
+{
+    xQueueReset(xQueueFloor);
+}
+
 /**
  * @brief indicate elevator arrive
  * @param floor - arrive floor
@@ -160,12 +165,7 @@ void elev_arrived(char floor)
     {
         if (robot_is_checkin(floormap_dis_to_phy(floor)))
         {
-            if (elev_cur_floor != floor)
-            {
-                TRACE("set floor: %d\r\n", floor);
-                elev_go(floor);
-            }
-            else
+            if (elev_cur_floor == floor)
             {
                 TRACE("floor arrive: %d\r\n", floor);
                 notify_arrive(floor);

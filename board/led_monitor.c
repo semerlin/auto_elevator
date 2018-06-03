@@ -14,12 +14,16 @@
 #include "elevator.h"
 #include "parameter.h"
 #include "global.h"
+#include "floormap.h"
+#include "elevator.h"
+#include "robot.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
 
 #define LED_INTERVAL            (200)
 #define LED_MONITOR_INTERVAL    (LED_INTERVAL / portTICK_PERIOD_MS)
+#define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
 
 static uint16_t led_status = 0;
 
@@ -40,7 +44,7 @@ static pwd_node pwds[4] =
     {0, 0}
 };
 
-#define LED_PWD_CHECK_TIME 3000
+#define LED_PWD_CHECK_TIME 6000
 
 /**
  * @brief check if floor arrived, 1->0 means arrive
@@ -104,6 +108,32 @@ static void push_pwd_node(const pwd_node *node)
  * @brief led monitor task
  * @param pvParameters - task parameter
  */
+static void vLedWorkMonitor(void *pvParameters)
+{
+    char floor = 0;
+    for (;;)
+    {
+        /* check elevator status */
+        if (work_robot == elev_state_work())
+        {
+            if (DEFAULT_CHECKIN != robot_checkin_cur())
+            {
+                floor = floormap_phy_to_dis(robot_checkin_cur());
+                if (!is_led_on(floor) && (floor != elev_floor()))
+                {
+                    elev_go(floor);
+                }
+            }
+        }
+        
+        vTaskDelay(LED_WORK_MONITOR_INTERVAL);      
+    }
+}
+
+/**
+ * @brief led monitor task
+ * @param pvParameters - task parameter
+ */
 static void vLedMonitor(void *pvParameters)
 {
     uint16_t cur_status = 0;
@@ -144,6 +174,7 @@ static void vLedMonitor(void *pvParameters)
             led_status = cur_status;
         }
         vTaskDelay(LED_MONITOR_INTERVAL);
+        
         timestamp ++;
     }
 }
@@ -157,6 +188,8 @@ bool led_monitor_init(void)
     TRACE("initialize led monitor...\r\n");
     param_get_pwd(led_pwd);
     xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL, 
+                    LED_MONITOR_PRIORITY, NULL);
+    xTaskCreate(vLedWorkMonitor, "ledworkmonitor", LED_MONITOR_STACK_SIZE, NULL, 
                     LED_MONITOR_PRIORITY, NULL);
 
     return TRUE;

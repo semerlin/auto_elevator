@@ -226,6 +226,9 @@ static void unpacket_init_data(const uint8_t *data, uint8_t len)
     }
 }
 
+static uint8_t char_map[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', 
+'9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
 /**
  * @brief dump message
  * @param data - message to dump
@@ -243,7 +246,8 @@ static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
     }
     for (int i = 0; i < len; ++i)
     {
-        dbg_putchar(data[i]);
+        dbg_putchar(char_map[data[i] >> 4]);
+        dbg_putchar(char_map[data[i] & 0x0f]);
         dbg_putchar(' ');
     }
     dbg_putchar('\r');
@@ -397,6 +401,11 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
     if ((data[0] == param_get_id_ctl()) &&
         (data[2] == param_get_id_elev()))
     {
+        elev_hold_open(FALSE);
+        robot_checkin_reset(data[1]);
+        elevator_set_state_work(work_idle);
+        elev_key_reset();
+        
         uint8_t payload[7];
         payload[0] = param_get_id_ctl();
         payload[1] = param_get_id_elev();
@@ -404,11 +413,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
         payload[3] = 53;
         payload[4] = data[4];
         payload[5] = 0x00;
-        
-        send_data(payload, 6);
-        elevator_set_state_work(work_idle);
-        robot_checkin_reset(data[1]);
-        elev_hold_open(FALSE);
+        send_data(payload, 6);       
     }
 }
 

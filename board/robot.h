@@ -12,12 +12,15 @@
 
 BEGIN_DECLS
 
+#define DEFAULT_CHECKIN   0xf7
+
 void robot_init(void);
 bool robot_checkin_set(uint8_t id, uint8_t floor);
 void robot_checkin_reset(uint8_t id);
 uint8_t robot_checkin_get(uint8_t id);
 uint8_t robot_id_get(uint8_t floor);
 bool robot_is_checkin(uint8_t floor);
+uint8_t robot_checkin_cur();
 
 END_DECLS
 

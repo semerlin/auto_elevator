@@ -39,6 +39,7 @@ void elev_set_first_floor(void);
 elev_run_state elev_state_run(void);
 elev_work_state elev_state_work(void);
 void elevator_set_state_work(elev_work_state state);
+void elev_key_reset();
 
 END_DECLS
 
