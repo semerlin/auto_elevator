@@ -613,7 +613,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>VendoringMachine.hex</state>
+          <state>AutoElevator.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -668,7 +668,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>VendoringMachine.out</state>
+          <state>AutoElevator.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

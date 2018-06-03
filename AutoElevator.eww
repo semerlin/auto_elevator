@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\VendoringMachine.ewp</path>
+    <path>$WS_DIR$\AutoElevator.ewp</path>
   </project>
   <batchBuild/>
 </workspace>
