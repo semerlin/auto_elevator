@@ -400,12 +400,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
 {
     if ((data[0] == param_get_id_ctl()) &&
         (data[2] == param_get_id_elev()))
-    {
-        elev_hold_open(FALSE);
-        robot_checkin_reset(data[1]);
-        elevator_set_state_work(work_idle);
-        elev_key_reset();
-        
+    {   
         uint8_t payload[7];
         payload[0] = param_get_id_ctl();
         payload[1] = param_get_id_elev();
@@ -413,7 +408,11 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
         payload[3] = 53;
         payload[4] = data[4];
         payload[5] = 0x00;
-        send_data(payload, 6);       
+        send_data(payload, 6);
+        
+        elev_hold_open(FALSE);
+        robot_checkin_reset(data[1]);
+        elevator_set_state_work(work_idle);
     }
 }
 

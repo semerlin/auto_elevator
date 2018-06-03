@@ -19,31 +19,11 @@
 
 
 /* switch 0->1 means arrive，1->0 means leave */
-
 #define SWITCH_MONITOR_INTERVAL    (5 / portTICK_PERIOD_MS)
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
 static switch_status cur_status = switch_arrive;
-
-
-#if 0
-static xSemaphoreHandle xMotorWorking = NULL;
-
-/**
- * motor working detect interrupt handler
- */
-void EXTI3_IRQHandler(void)
-{
-    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-    uint8_t pin_num = 0;
-    get_pininfo(MOTOR_DET_PIN_NAME, NULL, &pin_num);
-    xSemaphoreGiveFromISR(xMotorWorking, &xHigherPriorityTaskWoken);
-    /* check if there is any higher priority task need to wakeup */
-    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
-    EXTI_ClrPending(pin_num);
-}
-#endif
 
 /**
  * @brief get switch value
@@ -155,17 +135,5 @@ bool switch_monitor_init(void)
     TRACE("initialize switch monitor...\r\n");
     xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL, 
                     SWITCH_MONITOR_PRIORITY, NULL);
-
-#if 0
-    /* set pin interrupt */
-    uint8_t pin_group = 0, pin_num = 0;
-    get_pininfo(MOTOR_DET_PIN_NAME, &pin_group, &pin_num);
-    EXTI_ClrPending(pin_num);
-    GPIO_EXTIConfig((GPIO_Group)pin_group, pin_num);
-    EXTI_SetTrigger(pin_num, Trigger_Rising);
-    NVIC_Config nvicConfig = {EXTI3_IRQChannel, USART1_PRIORITY, 0, TRUE};
-    NVIC_Init(&nvicConfig);
-    EXTI_EnableLine_INT(pin_num, TRUE);
-#endif
     return TRUE;
 }

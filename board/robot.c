@@ -68,6 +68,10 @@ uint8_t robot_checkin_get(uint8_t id)
     return DEFAULT_CHECKIN;
 }
 
+/**
+ * @brief get current robot checkin floor
+ * @return current robot checkin floor
+ */
 uint8_t robot_checkin_cur()
 {
     return checkin.floor;

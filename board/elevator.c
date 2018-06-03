@@ -34,8 +34,8 @@ static uint8_t hold_cnt = 0;
 static elev_run_state run_state = run_stop;
 static elev_work_state work_state = work_idle;
 
+/* key press queue */
 static xQueueHandle xQueueFloor = NULL;
-#define FLOOR_QUEUE_LEN   5
 
 static xQueueHandle xArriveQueue = NULL;
 static xSemaphoreHandle xNotifySemaphore = NULL;
@@ -126,7 +126,7 @@ void arrive_hook(const uint8_t *data, uint8_t len)
 bool elev_init(void)
 {
     TRACE("initialize elevator...\r\n");
-    xQueueFloor = xQueueCreate(FLOOR_QUEUE_LEN, 1);
+    xQueueFloor = xQueueCreate(1, 1);
     xArriveQueue = xQueueCreate(1, 1);
     xNotifySemaphore = xSemaphoreCreateBinary();
     register_arrive_cb(arrive_hook);
@@ -147,12 +147,7 @@ void elev_go(char floor)
 {
     TRACE("elevator go floor: %d\r\n", floor);
     uint8_t key = keymap_floor_to_key(floor);
-    xQueueSend(xQueueFloor, &key, 100 / portTICK_PERIOD_MS);
-}
-
-void elev_key_reset()
-{
-    xQueueReset(xQueueFloor);
+    xQueueOverwrite(xQueueFloor, &key);
 }
 
 /**

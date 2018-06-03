@@ -24,7 +24,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
 
-#define VERSION  ("v0.0.0.1_alpha")
+#define VERSION  ("v1.0.0.0_beta")
 
 
 /**
