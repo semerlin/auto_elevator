@@ -318,14 +318,22 @@ static void vProtocol(void *pvParameters)
     uint8_t len = 0;
     for (;;)
     {
+        len = 0;
+        pdata = recv_data;
         if (serial_getchar(pserial, &data, portMAX_DELAY))
         {
             *pdata++ = (uint8_t)data;
+            len ++;
             while (serial_getchar(pserial, &data, xDelay))
             {
                 *pdata++ = (uint8_t)data;
+                len ++;
+                if (len > 34)
+                {
+                    /* TODO: add process */
+                    break;
+                }
             }
-            len = (uint8_t)(pdata - recv_data);
 #ifdef __ENABLE_TRACE
             dump_message(0, recv_data, len);
 #endif
@@ -347,7 +355,6 @@ static void vProtocol(void *pvParameters)
                 /* process init data */
                 unpacket_init_data(recv_data, len);
             }
-            pdata = recv_data;
         }
     }
 }
