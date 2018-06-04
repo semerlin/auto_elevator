@@ -22,17 +22,8 @@
 #define _MODULE_SCB
 #define _MODULE_NVIC
 #define _MODULE_SYSTICK
-#define _MODULE_ADC
-#define _MODULE_SPI
-#define _MODULE_I2C
-#define _MODULE_EXTI
-#define _MODULE_SIG
 
 /**********************************************************/
-#ifdef _MODULE_CRC
-  #include "stm32f10x_crc.h" 
-#endif
-
 #ifdef _MODULE_FLASH
   #include "stm32f10x_flash.h" 
 #endif
@@ -59,26 +50,6 @@
 
 #ifdef _MODULE_SYSTICK
   #include "stm32f10x_systick.h"
-#endif
-
-#ifdef _MODULE_ADC
-  #include "stm32f10x_adc.h"
-#endif
-
-#ifdef _MODULE_SPI
-  #include "stm32f10x_spi.h"
-#endif
-
-#ifdef _MODULE_I2C
-  #include "stm32f10x_i2c.h"
-#endif
-
-#ifdef _MODULE_EXTI
-  #include "stm32f10x_exti.h"
-#endif
-
-#ifdef _MODULE_EXTI
-  #include "stm32f10x_sig.h"
 #endif
 
 
