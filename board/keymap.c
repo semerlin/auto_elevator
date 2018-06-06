@@ -27,6 +27,22 @@ static char keymaps[FLOOR_NUM] =
     6, 7, 8, 9, 10, 11, 12
 };
 
+/**
+ * @brief update key map
+ * @param data - new key map
+ */
+static void keymap_update(char floor)
+{
+    for (int i = 0; i < FLOOR_NUM; ++i)
+    {
+        if (0 == floor)
+        {
+            floor ++;
+        }
+        keymaps[i] = floor;
+        floor ++;   
+    }
+}
 
 /**
  * @brief initialize keymap
@@ -35,9 +51,9 @@ static char keymaps[FLOOR_NUM] =
 bool keymap_init(void)
 {
     TRACE("initialize keymap...\r\n");
-    uint8_t data[16];
-    param_get_keymap(data);
-    keymap_update(data);
+    char floor = -3;
+    floor = param_get_floormap();
+    keymap_update(floor);
     return TRUE;
 }
 
@@ -85,17 +101,4 @@ uint8_t keymap_open(void)
 {
     return key_open;
 }
-
-/**
- * @brief update key map
- * @param data - new key map
- */
-void keymap_update(const uint8_t *data)
-{
-    for (int i = 0; i < FLOOR_NUM; ++i)
-    {
-        keymaps[i] = data[i];
-    }
-}
-
 

@@ -19,11 +19,11 @@
 #define SET_FLAG   "INIT"
 #define SET_LEN    4
 
-#define MAP_ADDR       (SET_ADDR + SET_LEN)
-#define MAP_LEN        15
-static uint8_t param_map[16];
+#define FLOORMAP_ADDR       (SET_ADDR + SET_LEN)
+#define FLOORMAP_LEN        1
+static uint8_t param_floormap;
 
-#define ID_CTL_ADDR    (MAP_ADDR + MAP_LEN)
+#define ID_CTL_ADDR    (FLOORMAP_ADDR + FLOORMAP_LEN)
 #define ID_CTL_LEN     1
 static uint8_t param_id_ctl;
 
@@ -65,7 +65,7 @@ bool param_init(void)
         if (param_setted)
         {
             TRACE("parameter setted, update it\r\n");
-            if (!fm_read(MAP_ADDR, param_map, MAP_LEN))
+            if (!fm_read(FLOORMAP_ADDR, &param_floormap, FLOORMAP_LEN))
             {
                 return FALSE;
             }
@@ -105,25 +105,22 @@ bool is_param_setted(void)
  * @brief get key map
  * @param map - key map
  */
-void param_get_keymap(uint8_t *map)
+char param_get_floormap(void)
 {
-    for (int i = 0; i < MAP_LEN; ++i)
-    {
-        map[i] = param_map[i];
-    }
+    return (char )param_floormap;
 }
 /**
  * @brief update key map
  * @param map - key map
  * @return update status
  */
-bool param_update_keymap(const uint8_t *map)
+bool param_update_floormap(char floor)
 {
-    TRACE("update key map\r\n");
-    if (0 != strncmp((const char *)param_map, (const char *)map, MAP_LEN))
+    TRACE("update floor map\r\n");
+    if ((uint8_t)floor != param_floormap)
     {
-        strncpy((char *)param_map, (const char *)map, MAP_LEN);
-        return fm_write(MAP_ADDR, map, MAP_LEN);
+        param_floormap = (uint8_t)floor;
+        return fm_write(FLOORMAP_ADDR, &param_floormap, FLOORMAP_LEN);
     }
 
     return TRUE;
@@ -219,7 +216,7 @@ bool param_update_all(const uint8_t *data)
     {
         return FALSE;
     }
-    if (!param_update_keymap(data))
+    if (!param_update_floormap(*data))
     {
         return FALSE;
     }

@@ -19,7 +19,6 @@ bool keymap_init(void);
 uint8_t keymap_floor_to_key(char floor);
 char keymap_key_to_floor(uint8_t key);
 uint8_t keymap_open(void);
-void keymap_update(const uint8_t *data);
 
 END_DECLS
 

@@ -198,14 +198,14 @@ static void unpacket_init_data(const uint8_t *data, uint8_t len)
             if ((pkt_len <= len) && (0xaa == data[pkt_len - 1]))
             {
                 /* check crc value */
-                uint16_t recv_crc = data[2];
+                uint16_t recv_crc = data[len - 3];
                 recv_crc <<= 8;
-                recv_crc |= data[3];
+                recv_crc |= data[len - 2];
                 uint16_t calc_crc = 0;
-                calc_crc = crc16(data + 4, pkt_len - 5);
+                calc_crc = crc16(data + 2, pkt_len - 5);
                 if (recv_crc == calc_crc)
                 {
-                    if(param_update_all(data + 4))
+                    if(param_update_all(data + 2))
                     {
                         init_reply(TRUE);
                         /* init other modules */
