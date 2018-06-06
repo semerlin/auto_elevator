@@ -173,9 +173,9 @@ static void init_reply(bool flag)
     uint16_t crc = crc16(&status, 1);
     rsp[0] = 0x55;
     rsp[1] = 6;
-    rsp[2] = (uint8_t)((crc >> 8) & 0xff);
-    rsp[3] = (uint8_t)(crc & 0xff);
-    rsp[4] = status;
+    rsp[2] = status;
+    rsp[3] = (uint8_t)((crc >> 8) & 0xff);
+    rsp[4] = (uint8_t)(crc & 0xff);
     rsp[5] = 0xaa;
     
     serial_putstring(g_serial, (const char *)rsp, 6);
