@@ -226,6 +226,7 @@ static void unpacket_init_data(const uint8_t *data, uint8_t len)
     }
 }
 
+/* characteristic map for dump message */
 static uint8_t char_map[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', 
 '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
