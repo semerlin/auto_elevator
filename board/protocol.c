@@ -434,18 +434,21 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
     if ((data[0] == param_get_id_ctl()) &&
         (data[2] == param_get_id_elev()))
     {
-        uint8_t payload[7];
-        payload[0] = param_get_id_ctl();
-        payload[1] = param_get_id_elev();
-        payload[2] = data[1];
-        payload[3] = 31;
-        payload[4] = data[4];
-        payload[5] = data[5];
-        
-        send_data(payload, 6);
-        char dis_floor = floormap_phy_to_dis(data[4]);
-        robot_checkin_set(data[1], data[4]);
-        elev_go(dis_floor);
+        if(work_robot == elev_state_work())
+        {
+            uint8_t payload[7];
+            payload[0] = param_get_id_ctl();
+            payload[1] = param_get_id_elev();
+            payload[2] = data[1];
+            payload[3] = 31;
+            payload[4] = data[4];
+            payload[5] = data[5];
+            
+            send_data(payload, 6);
+            char dis_floor = floormap_phy_to_dis(data[4]);
+            robot_checkin_set(data[1], data[4]);
+            elev_go(dis_floor);
+        }
     }
 }
 
@@ -497,33 +500,36 @@ static void process_elev_door(const uint8_t *data, uint8_t len)
     if ((data[0] == param_get_id_ctl()) &&
         (data[2] == param_get_id_elev()))
     {
-        uint8_t payload[6];
-        payload[0] = param_get_id_ctl();
-        payload[1] = param_get_id_elev();
-        payload[2] = data[1];
-        payload[3] = 35;
-        if (DOOR_HOLD == data[4])
+        if(work_robot == elev_state_work())
         {
-            /* open */
-            payload[4] = DOOR_HOLD;
-        }
-        else 
-        {
-            /* release */
-            payload[4] = DOOR_RELEASE;
-        }
-        
-        send_data(payload, 5);
-        
-        if (DOOR_HOLD == data[4])
-        {
-            /* open */
-            elev_hold_open(TRUE);
-        }
-        else 
-        {
-            /* release */
-            elev_hold_open(FALSE);
+            uint8_t payload[6];
+            payload[0] = param_get_id_ctl();
+            payload[1] = param_get_id_elev();
+            payload[2] = data[1];
+            payload[3] = 35;
+            if (DOOR_HOLD == data[4])
+            {
+                /* open */
+                payload[4] = DOOR_HOLD;
+            }
+            else 
+            {
+                /* release */
+                payload[4] = DOOR_RELEASE;
+            }
+            
+            send_data(payload, 5);
+            
+            if (DOOR_HOLD == data[4])
+            {
+                /* open */
+                elev_hold_open(TRUE);
+            }
+            else 
+            {
+                /* release */
+                elev_hold_open(FALSE);
+            }
         }
     }
 }
