@@ -23,13 +23,17 @@
 #include "led_monitor.h"
 #include "switch_monitor.h"
 #include "dbgserial.h"
+#include "stm32f10x_cfg.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
 
 /* protocol head and tail */
-#define HEAD    0x02
-#define TAIL    0x03
+#define ROBOT_HEAD    0x02
+#define ROBOT_TAIL    0x03
+
+#define PARAM_HEAD    0x55
+#define PARAM_TAIL    0xaa
 
 #define CONVERT     0x04
 #define CONVERT_2   0x06
@@ -120,43 +124,47 @@ static bool sum_check(const uint8_t *data, uint8_t len)
  */
 static void unpacket_robot_data(const uint8_t *data, uint8_t len)
 {
-    if (sum_check(data, len))
+    /* check tail */
+    if (ROBOT_TAIL == data[len - 1])
     {
-        uint8_t payload[30];
-        uint8_t *pdata = payload;
-        data++;
-        for (int i = 0; i < len - 4; ++i)
+        if (sum_check(data, len))
         {
-            if (CONVERT == data[i])
+            uint8_t payload[30];
+            uint8_t *pdata = payload;
+            data++;
+            for (int i = 0; i < len - 4; ++i)
             {
-                if (CONVERT_2 == data[i + 1])
+                if (CONVERT == data[i])
                 {
-                    ++i;
-                    *pdata ++ = CONVERT_2_ORIGIN;
-                    continue;
+                    if (CONVERT_2 == data[i + 1])
+                    {
+                        ++i;
+                        *pdata ++ = CONVERT_2_ORIGIN;
+                        continue;
+                    }
+                    else if (CONVERT_3 == data[i + 1])
+                    {
+                        ++i;
+                        *pdata ++ = CONVERT_3_ORIGIN;
+                        continue;
+                    }
+                    else if (CONVERT == data[i + 1])
+                    {
+                        ++i;
+                        *pdata ++ = CONVERT_ORIGIN;
+                        continue;
+                    }
                 }
-                else if (CONVERT_3 == data[i + 1])
-                {
-                    ++i;
-                    *pdata ++ = CONVERT_3_ORIGIN;
-                    continue;
-                }
-                else if (CONVERT == data[i + 1])
-                {
-                    ++i;
-                    *pdata ++ = CONVERT_ORIGIN;
-                    continue;
-                }
+
+                *pdata ++ = data[i];
             }
 
-            *pdata ++ = data[i];
-        }
-
-        for (int i = 0; i < sizeof(cmd_handles) / sizeof(cmd_handles[0]); ++i)
-        {
-            if (payload[3] == cmd_handles[i].cmd)
+            for (int i = 0; i < sizeof(cmd_handles) / sizeof(cmd_handles[0]); ++i)
             {
-                cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
+                if (payload[3] == cmd_handles[i].cmd)
+                {
+                    cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
+                }
             }
         }
     }
@@ -171,12 +179,12 @@ static void init_reply(bool flag)
     uint8_t rsp[7];
     uint8_t status = (flag ? 0x00 : 0x01);
     uint16_t crc = crc16(&status, 1);
-    rsp[0] = 0x55;
+    rsp[0] = PARAM_HEAD;
     rsp[1] = 6;
     rsp[2] = status;
     rsp[3] = (uint8_t)((crc >> 8) & 0xff);
     rsp[4] = (uint8_t)(crc & 0xff);
-    rsp[5] = 0xaa;
+    rsp[5] = PARAM_TAIL;
     
     serial_putstring(g_serial, (const char *)rsp, 6);
 }
@@ -186,41 +194,30 @@ static void init_reply(bool flag)
  * @param data - data to analyze
  * @param len - data length
  */
-static void unpacket_init_data(const uint8_t *data, uint8_t len)
+static void unpacket_param_data(const uint8_t *data, uint8_t len)
 {
-    if (len >= 26)
+    /* check length and tail */
+    uint8_t pkt_len = data[1];
+    if ((pkt_len <= len) && (PARAM_TAIL == data[pkt_len - 1]))
     {
-        /* check header */
-        if (0x55 == data[0])
+        /* check crc value */
+        uint16_t recv_crc = data[len - 3];
+        recv_crc <<= 8;
+        recv_crc |= data[len - 2];
+        uint16_t calc_crc = 0;
+        calc_crc = crc16(data + 2, pkt_len - 5);
+        if (recv_crc == calc_crc)
         {
-            /* check length and tail */
-            uint8_t pkt_len = data[1];
-            if ((pkt_len <= len) && (0xaa == data[pkt_len - 1]))
+            if(param_update_all(data + 2))
             {
-                /* check crc value */
-                uint16_t recv_crc = data[len - 3];
-                recv_crc <<= 8;
-                recv_crc |= data[len - 2];
-                uint16_t calc_crc = 0;
-                calc_crc = crc16(data + 2, pkt_len - 5);
-                if (recv_crc == calc_crc)
-                {
-                    if(param_update_all(data + 2))
-                    {
-                        init_reply(TRUE);
-                        /* init other modules */
-                        keymap_init();
-                        keyctl_init();
-                        robot_init();
-                        switch_monitor_init();
-                        led_monitor_init();
-                        elev_init();
-                    }
-                    else
-                    {
-                        init_reply(FALSE);
-                    }
-                }
+                init_reply(TRUE);
+                TRACE("rebooting...\r\n");
+                SCB_SystemReset();
+            }
+            else
+            {
+                init_reply(FALSE);
+                TRACE("initialize parameter failed!\r\n");
             }
         }
     }
@@ -264,7 +261,7 @@ static void send_data(const uint8_t *data, uint8_t len)
 {
     uint8_t buffer[36];
     uint8_t *pdata = buffer;
-    *pdata ++= HEAD;
+    *pdata ++= ROBOT_HEAD;
     uint16_t sum = 0;
     for (int i = 0; i < len; ++i)
     {
@@ -293,7 +290,7 @@ static void send_data(const uint8_t *data, uint8_t len)
     pdata[1] = sum % 10 + 0x30;
     sum /= 10;
     pdata[0] = sum % 10 + 0x30;
-    pdata[2] = TAIL;
+    pdata[2] = ROBOT_TAIL;
     pdata += 3;
 
     assert_param(NULL != g_serial);
@@ -343,18 +340,25 @@ static void vProtocol(void *pvParameters)
                 /* process robot data */
                 if (len > 4)
                 {
-                    if ((HEAD == recv_data[0]) && 
-                        (TAIL == pdata[-1]))
+                    if ((ROBOT_HEAD == recv_data[0]))
                     {
                         /* receive protocol data */
                         unpacket_robot_data(recv_data, len);
+                    }
+                    else if (PARAM_HEAD == recv_data[0])
+                    {
+                        /* process parameter data */
+                        unpacket_param_data(recv_data, len);
                     }
                 }
             }
             else
             {
-                /* process init data */
-                unpacket_init_data(recv_data, len);
+                if (PARAM_HEAD == recv_data[0])
+                {
+                    /* process parameter data */
+                    unpacket_param_data(recv_data, len);
+                }
             }
         }
     }

@@ -12,7 +12,7 @@
 
 
 #undef __TRACE_MODULE
-#define __TRACE_MODULE  "[KEYMAP]"
+#define __TRACE_MODULE  "[keymap]"
 
 /* total floor number */
 #define FLOOR_NUM    15
