@@ -28,7 +28,7 @@ static void vLicense(void *pvParameters)
     for (;;)
     {
         g_count++;
-        if (g_count >= 3600 * 24 * 10)
+        if (g_count >= 3600 * 24 * 20)
         {
             /* license expired */
             TRACE("license expired!\r\n");

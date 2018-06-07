@@ -16,7 +16,7 @@
 
 /* address and length */
 #define SET_ADDR   0
-#define SET_FLAG   "INIT"
+#define SET_FLAG   "AUTO"
 #define SET_LEN    4
 
 #define FLOORMAP_ADDR       (SET_ADDR + SET_LEN)
@@ -55,7 +55,6 @@ bool param_init(void)
     TRACE("initialize fm...\r\n");
     if (fm_init())
     {
-        //reset_param();
         uint8_t status[SET_LEN];
         if (!fm_read(SET_ADDR, status, SET_LEN))
         {
