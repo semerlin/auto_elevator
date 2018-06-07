@@ -12,10 +12,6 @@
 
 BEGIN_DECLS
 
-/**
- * @brief initialize parameter module
- * @return init status
- */
 bool param_init(void);
 void reset_param(void);
 bool is_param_setted(void);
@@ -29,9 +25,6 @@ bool param_update_id_ctl(uint8_t id);
 bool param_update_id_elev(uint8_t id);
 bool param_update_pwd(const uint8_t *pwd);
 bool param_update_all(const uint8_t *data);
-
-
-
 
 
 END_DECLS

@@ -26,7 +26,6 @@
 
 /* interrupt priority */
 #define USART1_PRIORITY        (13)
-#define EXTI3_PRIORITY         (14)
 
 #endif /* _GLOBAL_H_ */
 

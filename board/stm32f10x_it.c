@@ -1,10 +1,23 @@
-/**
-* This file is part of the auto-elevator project.
-*
-* Copyright 2018, Huang Yang <elious.huang@gmail.com>. All rights reserved.
-*
-* See the COPYING file for the terms of usage and distribution.
-*/
+/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+* File Name          : stm32f10x_it.c
+* Author             : MCD Application Team
+* Date First Issued  : 02/19/2007
+* Description        : This file contains the vector table for STM32F10x.
+*                      After Reset the Cortex-M3 processor is in Thread mode,
+*                      priority is Privileged, and the Stack is set to Main.
+********************************************************************************
+* History:
+* 04/02/2007: V0.2
+* 02/19/2007: V0.1
+********************************************************************************
+* THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
+
 #include "stm32f10x_it.h"
 #include "stm32f10x_cfg.h"
 
