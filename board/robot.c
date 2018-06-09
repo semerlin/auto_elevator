@@ -9,6 +9,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "trace.h"
+#include "global.h"
+#include "elevator.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[robot]"
@@ -21,8 +23,41 @@ typedef struct
 
 robot_checkin checkin;
 
+/* monitor flag */
+static bool robot_monitor = FALSE;
+
+#define RESET_TIME   (600)
 
 
+/**
+ * @brief led monitor task
+ * @param pvParameters - task parameter
+ */
+static void vRobotMonitor(void *pvParameters)
+{
+    uint32_t count = 0;
+    for (;;)
+    {
+        if (robot_monitor)
+        {
+            count ++;
+            if (count > RESET_TIME)
+            {
+                count = 0;
+                robot_monitor = FALSE;
+                elev_hold_open(FALSE);
+                robot_checkin_reset();
+                elevator_set_state_work(work_idle);
+            }
+        }
+        else
+        {
+            count = 0;
+        }
+        
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
 
 /**
  * @brief initialize robot
@@ -32,6 +67,8 @@ void robot_init(void)
     TRACE("initialize robot...\r\n");
     checkin.id = 0;
     checkin.floor = DEFAULT_CHECKIN;
+    xTaskCreate(vRobotMonitor, "robot", ROBOT_STACK_SIZE, NULL,
+                    ROBOT_PRIORITY, NULL);
 }
 
 /**
@@ -99,6 +136,22 @@ uint8_t robot_id_get(uint8_t floor)
 bool robot_is_checkin(uint8_t floor)
 {
     return (floor == checkin.floor);
+}
+
+/**
+ * @brief start monitor robot status
+ */
+void robot_monitor_start(void)
+{
+    robot_monitor = TRUE;
+}
+
+/**
+ * @brief stop robot monitor status
+ */
+void robot_monitor_stop(void)
+{
+    robot_monitor = FALSE;
 }
 
 

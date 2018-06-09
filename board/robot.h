@@ -20,7 +20,9 @@ void robot_checkin_reset(void);
 uint8_t robot_checkin_get(uint8_t id);
 uint8_t robot_id_get(uint8_t floor);
 bool robot_is_checkin(uint8_t floor);
-uint8_t robot_checkin_cur();
+uint8_t robot_checkin_cur(void);
+void robot_monitor_start(void);
+void robot_monitor_stop(void);
 
 END_DECLS
 

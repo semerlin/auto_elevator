@@ -16,6 +16,7 @@
 #define SWITCH_MONITOR_PRIORITY      (tskIDLE_PRIORITY + 3)
 #define PROTOCOL_PRIORITY            (tskIDLE_PRIORITY + 4)
 #define ELEV_PRIORITY                (tskIDLE_PRIORITY + 1)
+#define ROBOT_PRIORITY               (tskIDLE_PRIORITY + 1)
 
 /* task stack definition */
 #define LICENSE_STACK_SIZE           (configMINIMAL_STACK_SIZE)
@@ -23,6 +24,7 @@
 #define SWITCH_MONITOR_STACK_SIZE    (configMINIMAL_STACK_SIZE)
 #define PROTOCOL_STACK_SIZE          (configMINIMAL_STACK_SIZE)
 #define ELEV_STACK_SIZE              (configMINIMAL_STACK_SIZE)
+#define ROBOT_STACK_SIZE             (configMINIMAL_STACK_SIZE)
 
 /* interrupt priority */
 #define USART1_PRIORITY        (13)

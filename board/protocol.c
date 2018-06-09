@@ -163,6 +163,7 @@ static void unpacket_robot_data(const uint8_t *data, uint8_t len)
             {
                 if (payload[3] == cmd_handles[i].cmd)
                 {
+                    robot_monitor_stop();
                     cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
                 }
             }
