@@ -451,7 +451,16 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
             send_data(payload, 6);
             char dis_floor = floormap_phy_to_dis(data[4]);
             robot_checkin_set(data[1], data[4]);
-            elev_go(dis_floor);
+            if (dis_floor == elev_floor())
+            {
+                /* already arrive */
+                elev_arrived(dis_floor);
+            }
+            else
+            {
+                /* goto specified floor */
+                elev_go(dis_floor);
+            }
         }
     }
 }
