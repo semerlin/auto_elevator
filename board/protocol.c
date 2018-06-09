@@ -48,8 +48,6 @@
 #define LED_OFF         0x01
 #define DOOR_ON         0x01
 #define DOOR_OFF        0x00
-#define DOOR_HOLD       0x00
-#define DOOR_RELEASE    0x01
 
 typedef union
 {
@@ -72,7 +70,8 @@ static void process_elev_apply(const uint8_t *data, uint8_t len);
 static void process_elev_release(const uint8_t *data, uint8_t len);
 static void process_elev_checkin(const uint8_t *data, uint8_t len);
 static void process_elev_inquire(const uint8_t *data, uint8_t len);
-static void process_elev_door(const uint8_t *data, uint8_t len);
+static void process_elev_door_open(const uint8_t *data, uint8_t len);
+static void process_elev_door_close(const uint8_t *data, uint8_t len);
 static void process_elev_arrive(const uint8_t *data, uint8_t len);
 
 /* process handle */
@@ -88,7 +87,8 @@ cmd_handle cmd_handles[] =
     {52, process_elev_release},
     {30, process_elev_checkin},
     {32, process_elev_inquire},
-    {34, process_elev_door},
+    {34, process_elev_door_open},
+    {36, process_elev_door_close},
     {40, process_elev_arrive},
 };
 
@@ -495,11 +495,11 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
 }
 
 /**
- * @brief process elevator door message
+ * @brief process elevator door open message
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_door(const uint8_t *data, uint8_t len)
+static void process_elev_door_open(const uint8_t *data, uint8_t len)
 {
     if ((data[0] == param_get_id_ctl()) &&
         (data[2] == param_get_id_elev()))
@@ -511,29 +511,38 @@ static void process_elev_door(const uint8_t *data, uint8_t len)
             payload[1] = param_get_id_elev();
             payload[2] = data[1];
             payload[3] = 35;
-            if (DOOR_HOLD == data[4])
-            {
-                /* open */
-                payload[4] = DOOR_HOLD;
-            }
-            else 
-            {
-                /* release */
-                payload[4] = DOOR_RELEASE;
-            }
+         
+            send_data(payload, 4);
             
-            send_data(payload, 5);
+            /* open */
+            elev_hold_open(TRUE);
+        }
+    }
+}
+
+
+/**
+ * @brief process elevator door close message
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_door_close(const uint8_t *data, uint8_t len)
+{
+    if ((data[0] == param_get_id_ctl()) &&
+        (data[2] == param_get_id_elev()))
+    {
+        if(work_robot == elev_state_work())
+        {
+            uint8_t payload[6];
+            payload[0] = param_get_id_ctl();
+            payload[1] = param_get_id_elev();
+            payload[2] = data[1];
+            payload[3] = 37;
             
-            if (DOOR_HOLD == data[4])
-            {
-                /* open */
-                elev_hold_open(TRUE);
-            }
-            else 
-            {
-                /* release */
-                elev_hold_open(FALSE);
-            }
+            send_data(payload, 4);
+            
+            /* release */
+            elev_hold_open(FALSE);
         }
     }
 }
