@@ -101,6 +101,7 @@ static void vElevArrive(void *pvParameters)
                 err_cnt ++;
                 if (err_cnt > MAX_CHECK_CNT)
                 {
+                    robot_checkin_reset();
                     break;
                 }
                 notify_arrive(floor);

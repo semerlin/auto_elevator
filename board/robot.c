@@ -48,7 +48,7 @@ bool robot_checkin_set(uint8_t id, uint8_t floor)
 /**
  * @brief reset robot checkin floor
  */
-void robot_checkin_reset(uint8_t id)
+void robot_checkin_reset(void)
 {
     checkin.id = 0;
     checkin.floor = DEFAULT_CHECKIN;   

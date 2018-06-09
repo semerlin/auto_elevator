@@ -423,7 +423,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
         send_data(payload, 6);
         
         elev_hold_open(FALSE);
-        robot_checkin_reset(data[1]);
+        robot_checkin_reset();
         elevator_set_state_work(work_idle);
     }
 }
