@@ -116,9 +116,9 @@ static void vLedWorkMonitor(void *pvParameters)
         /* check elevator status */
         if (work_robot == elev_state_work())
         {
-            if (DEFAULT_CHECKIN != robot_checkin_cur())
+            if (DEFAULT_CHECKIN != robot_checkin_get())
             {
-                floor = floormap_phy_to_dis(robot_checkin_cur());
+                floor = floormap_phy_to_dis(robot_checkin_get());
                 if (!is_led_on(floor) && (floor != elev_floor()))
                 {
                     elev_go(floor);
