@@ -212,6 +212,10 @@ static void unpacket_robot_data(const uint8_t *data, uint8_t len)
                             {
                                 cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
                             }
+                            else
+                            {
+                                notify_busy(0xff);
+                            }
                         }
                     }
                 }
