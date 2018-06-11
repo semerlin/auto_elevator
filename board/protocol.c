@@ -277,10 +277,6 @@ static void unpacket_param_data(const uint8_t *data, uint8_t len)
     }
 }
 
-/* characteristic map for dump message */
-static uint8_t char_map[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', 
-'9', 'a', 'b', 'c', 'd', 'e', 'f'};
-
 /**
  * @brief dump message
  * @param data - message to dump
@@ -298,8 +294,8 @@ static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
     }
     for (int i = 0; i < len; ++i)
     {
-        dbg_putchar(char_map[data[i] >> 4]);
-        dbg_putchar(char_map[data[i] & 0x0f]);
+        dbg_putchar("0123456789abcdef"[data[i] >> 4]);
+        dbg_putchar("0123456789abcdef"[data[i] & 0x0f]);
         dbg_putchar(' ');
     }
     dbg_putchar('\r');
