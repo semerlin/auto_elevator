@@ -21,7 +21,9 @@ typedef struct
     uint8_t floor;
 }robot_info;
 
-robot_info robot;
+#define DEFAULT_ID    0xff
+
+static robot_info robot = {DEFAULT_ID, DEFAULT_CHECKIN};
 
 /* monitor flag */
 static bool robot_monitor = FALSE;
@@ -46,7 +48,7 @@ static void vRobotMonitor(void *pvParameters)
                 count = 0;
                 robot_monitor = FALSE;
                 elev_hold_open(FALSE);
-                robot_checkin_reset();
+                robot_id_reset();
                 elevator_set_state_work(work_idle);
             }
         }
@@ -65,7 +67,7 @@ static void vRobotMonitor(void *pvParameters)
 void robot_init(void)
 {
     TRACE("initialize robot...\r\n");
-    robot.id = 0;
+    robot.id = DEFAULT_ID;
     robot.floor = DEFAULT_CHECKIN;
     xTaskCreate(vRobotMonitor, "robot", ROBOT_STACK_SIZE, NULL,
                     ROBOT_PRIORITY, NULL);
@@ -94,7 +96,7 @@ uint8_t robot_id_get(void)
  */
 void robot_id_reset(void)
 {
-    robot.id = 0;
+    robot.id = DEFAULT_ID;
     robot.floor = DEFAULT_CHECKIN;
 }
 

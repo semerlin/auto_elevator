@@ -214,7 +214,7 @@ static void unpacket_robot_data(const uint8_t *data, uint8_t len)
                             }
                             else
                             {
-                                notify_busy(0xff);
+                                notify_busy(head.robot_id);
                             }
                         }
                     }
