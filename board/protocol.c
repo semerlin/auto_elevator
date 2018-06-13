@@ -319,22 +319,28 @@ static void send_data(const uint8_t *data, uint8_t len)
         {
             *pdata ++ = CONVERT;
             *pdata ++ = CONVERT;
+            sum += CONVERT;
+            sum += CONVERT;
         }
         else if (CONVERT_2_ORIGIN == data[i])
         {
             *pdata ++ = CONVERT;
             *pdata ++ = CONVERT_2;
+            sum += CONVERT;
+            sum += CONVERT_2;
         }
         else if (CONVERT_3_ORIGIN == data[i])
         {
             *pdata ++ = CONVERT;
             *pdata ++ = CONVERT_3;
+            sum += CONVERT;
+            sum += CONVERT_3;
         }
         else
         {
             *pdata ++ = data[i];
+            sum += data[i];
         }
-        sum += data[i];
     }
 
     pdata[1] = sum % 10 + 0x30;
