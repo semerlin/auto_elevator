@@ -193,11 +193,18 @@ static void unpacket_robot_data(const uint8_t *data, uint8_t len)
                         if(work_robot == elev_state_work())
                         {
                             /* check robot address */
-                            if ((head.robot_id == robot_id_get()) &&
-                                (CMD_APPLY != head.cmd))
+                            if (head.robot_id == robot_id_get())
                             {
-                                robot_monitor_stop();
-                                cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
+                                robot_monitor_reset();
+                                if (CMD_APPLY != head.cmd)
+                                {
+                                    cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
+                                }
+                                else
+                                {
+                                    /* notify busy */
+                                    notify_busy(head.robot_id);
+                                }
                             }
                             else
                             {
@@ -454,6 +461,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     send_data(payload, 7);
     robot_id_set(data[1]);
     elevator_set_state_work(work_robot);
+    robot_monitor_start();
 }
 
 /**
@@ -476,6 +484,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
     robot_id_reset();
     robot_checkin_reset();
     elevator_set_state_work(work_idle);
+    robot_monitor_stop();
 }
 
 /**

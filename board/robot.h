@@ -24,6 +24,7 @@ uint8_t robot_checkin_get(void);
 bool robot_is_checkin(uint8_t floor);
 void robot_monitor_start(void);
 void robot_monitor_stop(void);
+void robot_monitor_reset(void);
 
 END_DECLS
 

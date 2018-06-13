@@ -6,412 +6,413 @@
   <configuration>
     <name>Debug</name>
     <outputs>
-      <file>$PROJ_DIR$\board\led_monitor.h</file>
-      <file>$PROJ_DIR$\board\keymap.h</file>
+      <file>$PROJ_DIR$\board\stm32f10x_cfg.h</file>
+      <file>$PROJ_DIR$\board\stm32f10x_conf.h</file>
+      <file>$PROJ_DIR$\board\stm32f10x_it.c</file>
+      <file>$PROJ_DIR$\board\serial.h</file>
+      <file>$PROJ_DIR$\board\crc.h</file>
+      <file>$PROJ_DIR$\board\delay.h</file>
+      <file>$PROJ_DIR$\board\elevator.c</file>
+      <file>$PROJ_DIR$\board\board.c</file>
+      <file>$PROJ_DIR$\board\elevator.h</file>
+      <file>$PROJ_DIR$\board\floormap.c</file>
+      <file>$PROJ_DIR$\board\application.c</file>
+      <file>$PROJ_DIR$\board\board.h</file>
+      <file>$PROJ_DIR$\board\dbgserial.h</file>
+      <file>$PROJ_DIR$\board\crc.c</file>
+      <file>$PROJ_DIR$\board\delay.c</file>
+      <file>$PROJ_DIR$\board\application.h</file>
+      <file>$PROJ_DIR$\board\dbgserial.c</file>
+      <file>$PROJ_DIR$\board\i2c_software.h</file>
       <file>$PROJ_DIR$\board\led_monitor.c</file>
+      <file>$PROJ_DIR$\board\license.h</file>
+      <file>$PROJ_DIR$\board\keyctl.h</file>
+      <file>$PROJ_DIR$\board\parameter.c</file>
+      <file>$PROJ_DIR$\board\parameter.h</file>
       <file>$PROJ_DIR$\board\keymap.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\ir.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_exti.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\floor.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_net.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_exti.c</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\robot.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\switch_monitor.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\event_groups.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\serial.__cstat.et</file>
+      <file>$PROJ_DIR$\board\license.c</file>
+      <file>$PROJ_DIR$\board\protocol.c</file>
+      <file>$PROJ_DIR$\board\main.c</file>
+      <file>$PROJ_DIR$\board\floormap.h</file>
+      <file>$PROJ_DIR$\board\pinconfig.h</file>
+      <file>$PROJ_DIR$\board\protocol.h</file>
+      <file>$PROJ_DIR$\board\keymap.h</file>
+      <file>$PROJ_DIR$\board\FreeRTOSConfig.h</file>
+      <file>$PROJ_DIR$\board\robot.c</file>
+      <file>$PROJ_DIR$\board\i2c_software.c</file>
+      <file>$PROJ_DIR$\board\led_status.c</file>
+      <file>$PROJ_DIR$\board\robot.h</file>
+      <file>$PROJ_DIR$\board\pinconfig.c</file>
+      <file>$PROJ_DIR$\board\fm24cl64.c</file>
+      <file>$PROJ_DIR$\board\serial.c</file>
+      <file>$PROJ_DIR$\board\keyctl.c</file>
+      <file>$PROJ_DIR$\board\led_monitor.h</file>
+      <file>$PROJ_DIR$\board\fm24cl64.h</file>
+      <file>$PROJ_DIR$\board\led_status.h</file>
+      <file>$PROJ_DIR$\board\global.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\protocol.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\list.__cstat.et</file>
-      <file>$PROJ_DIR$\board\ir.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_i2c.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_it.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
       <file>$PROJ_DIR$\board\floor_ctl.c</file>
       <file>$PROJ_DIR$\Debug\Obj\m26.__cstat.et</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_i2c.h</file>
       <file>$PROJ_DIR$\Debug\Obj\delay.pbi</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_i2c.c</file>
+      <file>$PROJ_DIR$\board\ir.c</file>
       <file>$PROJ_DIR$\board\simple_http.h</file>
       <file>$PROJ_DIR$\Debug\Obj\esp8266.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_it.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\board.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_wwdg.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\serial.__cstat.et</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_i2c.h</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_sig.pbi</file>
-      <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_nvic.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\parameter.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\bh1750.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_wwdg.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\parameter.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\modeswitch.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\protocol.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\timers.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_nvic.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_wwdg.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\keyctl.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\croutine.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\motorctl.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\event_groups.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\board.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
       <file>$PROJ_DIR$\board\wifi\http.h</file>
+      <file>$PROJ_DIR$\board\motorctl.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\motorctl.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_flash.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\tasks.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_status.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_wwdg.pbi</file>
       <file>$PROJ_DIR$\board\ir.h</file>
-      <file>$PROJ_DIR$\board\wifi\http.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\timers.o</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_gpio.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_vector.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\i2c_software.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\wifi.__cstat.et</file>
-      <file>$PROJ_DIR$\board\sensor\iicsensor.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_flash.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\board.__cstat.et</file>
-      <file>$PROJ_DIR$\board\motorctl.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\tasks.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\croutine.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\croutine.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyctl.__cstat.et</file>
       <file>$PROJ_DIR$\board\flash.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_status.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_software.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\elevator.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\heap_2.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\dbgserial.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\board.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\croutine.__cstat.et</file>
+      <file>$PROJ_DIR$\board\wifi\http.c</file>
+      <file>$PROJ_DIR$\board\sensor\iicsensor.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_nvic.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\wifi.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\fm24cl64.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_iwdg.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_spi.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\esp8266.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_motor.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\iicsensor.o</file>
       <file>$PROJ_DIR$\Debug\Obj\fm24cl64.o</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_iwdg.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\event_groups.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\i2c_software.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\floormap.pbi</file>
       <file>$TOOLKIT_DIR$\config\linker\ST\stm32f103xC.icf</file>
+      <file>$PROJ_DIR$\Debug\Obj\mqtt.pbi</file>
+      <file>$PROJ_DIR$\board\wifi.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_iwdg.__cstat.et</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_iwdg.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_software.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\event_groups.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\mode.__cstat.et</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_spi.o</file>
       <file>$PROJ_DIR$\Debug\Obj\port.o</file>
       <file>$PROJ_DIR$\Debug\Obj\robot.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\esp8266.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\mode.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\license.o</file>
       <file>$PROJ_DIR$\board\esp8266.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_motor.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
       <file>$PROJ_DIR$\board\wifi\esp8266.c</file>
       <file>$PROJ_DIR$\Debug\Obj\queue.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\pinconfig.pbi</file>
       <file>$PROJ_DIR$\board\ledstatus.h</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_adc.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\iicsensor.o</file>
-      <file>$PROJ_DIR$\board\wifi.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\mqtt.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_vector.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\robot.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_gpio.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\timers.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_status.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_net.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_adc.pbi</file>
-      <file>$PROJ_DIR$\board\led_net.h</file>
-      <file>$PROJ_DIR$\board\i2c.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\list.pbi</file>
       <file>$PROJ_DIR$\board\wifi\simple_http.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\m26.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\lis3dh.__cstat.et</file>
-      <file>$PROJ_DIR$\board\sensor\hp5803.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\esp8266.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\queue.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_scb.o</file>
-      <file>$PROJ_DIR$\board\esp8266.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_vector.pbi</file>
       <file>$PROJ_DIR$\board\led_net.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\esp8266.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\lis3dh.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\queue.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\modeswitch.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\protocol.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\timers.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_adc.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\list.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\crc.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_net.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_status.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\robot.pbi</file>
+      <file>$PROJ_DIR$\board\led_net.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\m26.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\cm3_core.o</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_i2c.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\keymap.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\parameter.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_vector.o</file>
-      <file>$PROJ_DIR$\board\sensor\bmp280.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_flash.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\ir.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\license.pbi</file>
-      <file>$PROJ_DIR$\board\m26.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\iicsensor.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_sig.__cstat.et</file>
+      <file>$PROJ_DIR$\board\esp8266.h</file>
+      <file>$PROJ_DIR$\board\sensor\hp5803.c</file>
+      <file>$PROJ_DIR$\board\i2c.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_gpio.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\ledstatus.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_i2c.o</file>
+      <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\elevator.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyctl.o</file>
+      <file>$PROJ_DIR$\board\sensor\hp5803.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_hardware.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_nvic.o</file>
+      <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_flash.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_it.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\motorctl.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_hardware.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\AutoElevator.pbd</file>
+      <file>$PROJ_DIR$\Debug\Obj\simple_http.__cstat.et</file>
+      <file>$PROJ_DIR$\board\led_motor.c</file>
+      <file>$PROJ_DIR$\mqtt\mqtt.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\lis3dh.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\i2c_software.o</file>
+      <file>$PROJ_DIR$\board\motorctl.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_sig.o</file>
+      <file>$PROJ_DIR$\board\modeswitch.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_adc.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\application.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\i2c.pbi</file>
       <file>$PROJ_DIR$\board\wifi\m26.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\m26.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\protocol.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_flash.o</file>
       <file>$PROJ_DIR$\Debug\Obj\led_monitor.pbi</file>
       <file>$PROJ_DIR$\mqtt\mqtt.c</file>
       <file>$PROJ_DIR$\Debug\Obj\simple-http.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\crc.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_gpio.o</file>
       <file>$PROJ_DIR$\Debug\Obj\mqtt.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\m26.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\protocol.o</file>
       <file>$PROJ_DIR$\Debug\Obj\lis3dh.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_gpio.o</file>
       <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_sig.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\iicsensor.pbi</file>
       <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\keyctl.o</file>
-      <file>$PROJ_DIR$\board\led_motor.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\ledstatus.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_it.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\application.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\AutoElevator.pbd</file>
-      <file>$PROJ_DIR$\Debug\Obj\lis3dh.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\elevator.__cstat.et</file>
-      <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
-      <file>$PROJ_DIR$\Debug\Obj\simple_http.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_sig.o</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_adc.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\motorctl.__cstat.et</file>
-      <file>$PROJ_DIR$\board\modeswitch.h</file>
-      <file>$PROJ_DIR$\board\sensor\hp5803.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\i2c_hardware.o</file>
-      <file>$PROJ_DIR$\mqtt\mqtt.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\i2c_software.o</file>
-      <file>$PROJ_DIR$\board\motorctl.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_i2c.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
-      <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\i2c_hardware.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_flash.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\parameter.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_vector.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\keymap.pbi</file>
+      <file>$PROJ_DIR$\board\sensor\bmp280.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\license.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\ir.__cstat.et</file>
+      <file>$PROJ_DIR$\board\m26.h</file>
+      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
       <file>$PROJ_DIR$\Debug\Obj\wifi.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\http.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\bh1750.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\parameter.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.__cstat.et</file>
       <file>$PROJ_DIR$\board\flash.h</file>
       <file>$PROJ_DIR$\Debug\Obj\i2c.o</file>
       <file>$PROJ_DIR$\Debug\Obj\list.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_monitor.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\xencoding_limits.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\ledstatus.__cstat.et</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_crc.c</file>
-      <file>$PROJ_DIR$\board\floor.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\switch_monitor.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\fm24cl64.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\delay.o</file>
-      <file>$PROJ_DIR$\board\floor.c</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Threads.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\delay.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\hp5803.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_spi.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\bmp280.pbi</file>
       <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_spi.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_spi.c</file>
-      <file>$PROJ_DIR$\board\sensor\lis3dh.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_scb.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_monitor.o</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_crc.c</file>
+      <file>$TOOLKIT_DIR$\inc\c\xencoding_limits.h</file>
+      <file>$PROJ_DIR$\board\floor.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\delay.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\fm24cl64.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\hp5803.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_systick.o</file>
-      <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+      <file>$PROJ_DIR$\Debug\Obj\bh1750.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\ledstatus.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\parameter.o</file>
+      <file>$PROJ_DIR$\board\floor.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_spi.pbi</file>
+      <file>$PROJ_DIR$\board\sensor\lis3dh.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_spi.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\http.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Threads.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\bmp280.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\switch_monitor.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\floormap.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\port.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\heap_2.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\tasks.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\port.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\crc.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\keyctl.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\pinconfig.o</file>
+      <file>$PROJ_DIR$\board\wifi\esp8266.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_crc.__cstat.et</file>
+      <file>$PROJ_DIR$\board\sensor\lis3dh.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_crc.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_rcc.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_systick.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\license.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\led_net.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\port.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_crc.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\crc.o</file>
       <file>$PROJ_DIR$\Debug\Obj\mode.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\floormap.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_crc.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_scb.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\hp5803.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\tasks.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_crc.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\keyctl.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\port.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\pinconfig.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_rcc.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\flash.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_systick.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\dbgserial.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\heap_2.__cstat.et</file>
-      <file>$PROJ_DIR$\board\wifi\esp8266.h</file>
-      <file>$PROJ_DIR$\board\sensor\lis3dh.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_nvic.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_rcc.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_spi.__cstat.et</file>
-      <file>$PROJ_DIR$\board\mode.h</file>
-      <file>$PROJ_DIR$\board\wifi.c</file>
-      <file>$PROJ_DIR$\board\modeswitch.c</file>
-      <file>$TOOLKIT_DIR$\inc\c\string.h</file>
-      <file>$PROJ_DIR$\board\sensor\bh1750.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\portasm.o</file>
-      <file>$PROJ_DIR$\board\wifi\simple-http.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\croutine.o</file>
-      <file>$PROJ_DIR$\board\i2c.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\flash.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\serial.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_exti.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_crc.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_iwdg.o</file>
-      <file>$PROJ_DIR$\Debug\Exe\AutoElevator.out</file>
       <file>$PROJ_DIR$\board\ledstatus.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\serial.o</file>
       <file>$PROJ_DIR$\Debug\Obj\queue.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\simple-http.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\application.pbi</file>
       <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_exti.h</file>
       <file>$PROJ_DIR$\board\sensor\bmp280.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\portasm.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_spi.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Exe\AutoElevator.out</file>
+      <file>$PROJ_DIR$\board\mode.h</file>
+      <file>$PROJ_DIR$\board\sensor\bh1750.h</file>
       <file>$PROJ_DIR$\board\simple_http.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\simple-http.o</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_wwdg.h</file>
       <file>$PROJ_DIR$\board\wifi\wifi.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\application.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_wwdg.h</file>
+      <file>$PROJ_DIR$\board\wifi.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_rcc.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\croutine.o</file>
+      <file>$PROJ_DIR$\board\modeswitch.c</file>
+      <file>$PROJ_DIR$\board\wifi\simple-http.c</file>
+      <file>$PROJ_DIR$\board\i2c.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_exti.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.__cstat.et</file>
+      <file>$TOOLKIT_DIR$\inc\c\string.h</file>
       <file>$PROJ_DIR$\Debug\Obj\keymap.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\flash.pbi</file>
       <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
-      <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
       <file>$PROJ_DIR$\Debug\Obj\switch_monitor.o</file>
-      <file>$PROJ_DIR$\board\led_motor.h</file>
+      <file>$PROJ_DIR$\board\mode.c</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_status.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_it.__cstat.et</file>
+      <file>$PROJ_DIR$\board\wifi\simple_http.c</file>
       <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_wwdg.c</file>
+      <file>$PROJ_DIR$\board\led_motor.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\heap_2.o</file>
       <file>$PROJ_DIR$\Debug\Obj\board.pbi</file>
-      <file>$PROJ_DIR$\board\mode.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_sig.h</file>
       <file>$PROJ_DIR$\Debug\Obj\application.o</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_adc.__cstat.et</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_sig.h</file>
       <file>$PROJ_DIR$\Debug\Obj\floor_ctl.pbi</file>
-      <file>$PROJ_DIR$\board\wifi\simple_http.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_it.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\led_status.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_usart.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\mqtt.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_i2c.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\ir.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_usart.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_scb.pbi</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_crc.h</file>
-      <file>$PROJ_DIR$\board\sensor\delay.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\floor.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_rcc.o</file>
-      <file>$PROJ_DIR$\board\sensor\bh1750.c</file>
       <file>$PROJ_DIR$\Debug\Obj\http.o</file>
       <file>$PROJ_DIR$\Debug\Obj\wifi.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\elevator.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\ledstatus.o</file>
-      <file>$PROJ_DIR$\Debug\Obj\floor.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\pinconfig.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\timers.__cstat.et</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_exti.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\led_motor.pbi</file>
+      <file>$PROJ_DIR$\board\i2c_hardware.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\modeswitch.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\led_monitor.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\ir.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_usart.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_rcc.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\elevator.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\floor.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\hp5803.o</file>
       <file>$PROJ_DIR$\board\wifi\m26.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\modeswitch.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\timers.__cstat.et</file>
       <file>$PROJ_DIR$\board\m26.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_exti.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\pinconfig.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_usart.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\floor.pbi</file>
+      <file>$PROJ_DIR$\board\sensor\bh1750.c</file>
+      <file>$PROJ_DIR$\board\sensor\delay.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_scb.pbi</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_crc.h</file>
       <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_sig.c</file>
-      <file>$PROJ_DIR$\board\i2c_hardware.c</file>
-      <file>$PROJ_DIR$\board\led_status.c</file>
-      <file>$PROJ_DIR$\board\serial.h</file>
-      <file>$PROJ_DIR$\board\stm32f10x_vector.c</file>
-      <file>$PROJ_DIR$\os\include\deprecated_definitions.h</file>
-      <file>$PROJ_DIR$\board\stm32f10x_cfg.h</file>
-      <file>$PROJ_DIR$\board\stm32f10x_it.c</file>
-      <file>$PROJ_DIR$\os\include\list.h</file>
-      <file>$PROJ_DIR$\board\license.c</file>
-      <file>$PROJ_DIR$\board\switch_monitor.h</file>
-      <file>$PROJ_DIR$\common\trace.h</file>
-      <file>$PROJ_DIR$\board\pinconfig.h</file>
-      <file>$PROJ_DIR$\board\led_status.h</file>
-      <file>$PROJ_DIR$\board\protocol.h</file>
-      <file>$PROJ_DIR$\common\macros.h</file>
-      <file>$PROJ_DIR$\common\assert.h</file>
-      <file>$PROJ_DIR$\os\include\FreeRTOS.h</file>
-      <file>$PROJ_DIR$\board\main.c</file>
-      <file>$PROJ_DIR$\board\robot.h</file>
-      <file>$PROJ_DIR$\board\protocol.c</file>
-      <file>$PROJ_DIR$\board\serial.c</file>
-      <file>$PROJ_DIR$\board\parameter.c</file>
-      <file>$PROJ_DIR$\board\stm32f10x_conf.h</file>
-      <file>$PROJ_DIR$\board\robot.c</file>
-      <file>$PROJ_DIR$\os\include\croutine.h</file>
-      <file>$PROJ_DIR$\os\include\event_groups.h</file>
-      <file>$PROJ_DIR$\common\types.h</file>
-      <file>$PROJ_DIR$\board\switch_monitor.c</file>
-      <file>$PROJ_DIR$\board\parameter.h</file>
-      <file>$PROJ_DIR$\board\pinconfig.c</file>
-      <file>$PROJ_DIR$\board\license.h</file>
-      <file>$PROJ_DIR$\os\include\queue.h</file>
-      <file>$PROJ_DIR$\os\include\StackMacros.h</file>
-      <file>$PROJ_DIR$\os\portable\cm3\port.c</file>
-      <file>$PROJ_DIR$\os\queue.c</file>
-      <file>$PROJ_DIR$\os\tasks.c</file>
-      <file>$PROJ_DIR$\os\include\semphr.h</file>
-      <file>$PROJ_DIR$\os\portable\cm3\port.h</file>
-      <file>$PROJ_DIR$\platform\cm3\cm3_core.s</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_flash.h</file>
       <file>$PROJ_DIR$\Debug\Obj\serial.pbi</file>
-      <file>$PROJ_DIR$\os\include\task.h</file>
-      <file>$PROJ_DIR$\os\include\timers.h</file>
-      <file>$PROJ_DIR$\os\portable\cm3\heap_2.c</file>
-      <file>$PROJ_DIR$\os\portable\cm3\portmacro.h</file>
-      <file>$PROJ_DIR$\os\include\mpu_wrappers.h</file>
-      <file>$PROJ_DIR$\os\include\portable.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_gpio.h</file>
-      <file>$PROJ_DIR$\os\include\projdefs.h</file>
-      <file>$PROJ_DIR$\os\list.c</file>
-      <file>$PROJ_DIR$\os\portable\cm3\portasm.s</file>
-      <file>$PROJ_DIR$\os\croutine.c</file>
-      <file>$PROJ_DIR$\os\event_groups.c</file>
-      <file>$PROJ_DIR$\os\timers.c</file>
-      <file>$PROJ_DIR$\platform\cm3\cm3_core.h</file>
-      <file>$PROJ_DIR$\board\keyctl.h</file>
-      <file>$PROJ_DIR$\board\application.c</file>
-      <file>$PROJ_DIR$\board\elevator.c</file>
-      <file>$PROJ_DIR$\board\FreeRTOSConfig.h</file>
-      <file>$PROJ_DIR$\board\global.h</file>
-      <file>$PROJ_DIR$\board\board.c</file>
-      <file>$PROJ_DIR$\board\i2c_software.h</file>
-      <file>$PROJ_DIR$\board\floormap.h</file>
-      <file>$PROJ_DIR$\board\application.h</file>
-      <file>$PROJ_DIR$\board\board.h</file>
-      <file>$PROJ_DIR$\board\crc.c</file>
-      <file>$PROJ_DIR$\board\dbgserial.h</file>
-      <file>$PROJ_DIR$\board\elevator.h</file>
-      <file>$PROJ_DIR$\board\crc.h</file>
-      <file>$PROJ_DIR$\board\dbgserial.c</file>
-      <file>$PROJ_DIR$\board\delay.c</file>
-      <file>$PROJ_DIR$\board\delay.h</file>
-      <file>$PROJ_DIR$\board\floormap.c</file>
-      <file>$PROJ_DIR$\board\fm24cl64.c</file>
-      <file>$PROJ_DIR$\board\fm24cl64.h</file>
-      <file>$PROJ_DIR$\board\i2c_software.c</file>
-      <file>$PROJ_DIR$\board\keyctl.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_scb.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_gpio.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_usart.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_map.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_nvic.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_usart.pbi</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_rcc.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_nvic.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_rcc.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_it.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_systick.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_flash.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\simple_http.pbi</file>
       <file>$PROJ_DIR$\board\wifi\wifi.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_iwdg.h</file>
       <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_adc.c</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_systick.c</file>
       <file>$PROJ_DIR$\Debug\Obj\keymap.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\simple_http.pbi</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_iwdg.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_adc.c</file>
+      <file>$PROJ_DIR$\Debug\Exe\AutoElevator.hex</file>
       <file>$PROJ_DIR$\Debug\Obj\dbgserial.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\tasks.pbi</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_systick.__cstat.et</file>
       <file>$PROJ_DIR$\board\sensor\delay.h</file>
-      <file>$PROJ_DIR$\Debug\Exe\AutoElevator.hex</file>
       <file>$PROJ_DIR$\Debug\Obj\event_groups.o</file>
       <file>$PROJ_DIR$\Debug\Obj\simple_http.o</file>
-      <file>$TOOLKIT_DIR$\inc\c\ystdio.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\tasks.pbi</file>
       <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_usart.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_usart.pbi</file>
+      <file>$TOOLKIT_DIR$\inc\c\ystdio.h</file>
       <file>$PROJ_DIR$\Debug\Obj\floormap.o</file>
-      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_scb.c</file>
-      <file>$PROJ_DIR$\Debug\Obj\flash.pbi</file>
-      <file>$PROJ_DIR$\Debug\Obj\cm3_core.o</file>
       <file>$PROJ_DIR$\Debug\Obj\stm32f10x_iwdg.pbi</file>
+      <file>$PROJ_DIR$\os\include\event_groups.h</file>
+      <file>$PROJ_DIR$\os\include\mpu_prototypes.h</file>
+      <file>$PROJ_DIR$\board\stm32f10x_vector.c</file>
+      <file>$PROJ_DIR$\common\assert.h</file>
+      <file>$PROJ_DIR$\os\portable\cm3\port.c</file>
+      <file>$PROJ_DIR$\os\include\queue.h</file>
+      <file>$PROJ_DIR$\board\switch_monitor.c</file>
+      <file>$PROJ_DIR$\os\include\semphr.h</file>
+      <file>$PROJ_DIR$\os\include\StackMacros.h</file>
+      <file>$PROJ_DIR$\os\include\projdefs.h</file>
+      <file>$PROJ_DIR$\os\include\task.h</file>
+      <file>$PROJ_DIR$\board\switch_monitor.h</file>
+      <file>$PROJ_DIR$\os\include\croutine.h</file>
+      <file>$PROJ_DIR$\os\include\mpu_wrappers.h</file>
+      <file>$PROJ_DIR$\os\portable\cm3\port.h</file>
+      <file>$PROJ_DIR$\os\include\FreeRTOS.h</file>
+      <file>$PROJ_DIR$\os\include\timers.h</file>
+      <file>$PROJ_DIR$\os\portable\cm3\heap_2.c</file>
+      <file>$PROJ_DIR$\os\include\deprecated_definitions.h</file>
+      <file>$PROJ_DIR$\os\include\list.h</file>
+      <file>$PROJ_DIR$\os\portable\cm3\portasm.s</file>
+      <file>$PROJ_DIR$\os\portable\cm3\portmacro.h</file>
+      <file>$PROJ_DIR$\common\macros.h</file>
+      <file>$PROJ_DIR$\os\include\portable.h</file>
+      <file>$PROJ_DIR$\common\trace.h</file>
+      <file>$PROJ_DIR$\common\types.h</file>
+      <file>$PROJ_DIR$\os\croutine.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_usart.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_systick.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_usart.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_flash.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_nvic.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_gpio.c</file>
+      <file>$PROJ_DIR$\platform\cm3\cm3_core.h</file>
+      <file>$PROJ_DIR$\os\queue.c</file>
+      <file>$PROJ_DIR$\os\timers.c</file>
+      <file>$PROJ_DIR$\platform\cm3\cm3_core.s</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_map.h</file>
+      <file>$PROJ_DIR$\os\event_groups.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_flash.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_rcc.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_scb.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_systick.h</file>
+      <file>$PROJ_DIR$\os\list.c</file>
+      <file>$PROJ_DIR$\os\tasks.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_it.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_gpio.h</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_scb.c</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_nvic.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\dbgserial.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\switch_monitor.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\ir.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\floor.o</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_rcc.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\stm32f10x_exti.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\led_net.o</file>
+      <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+      <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\heap_2.pbi</file>
+      <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_exti.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\robot.o</file>
     </outputs>
     <file>
       <name>[ROOT_NODE]</name>
       <outputs>
         <tool>
           <name>ILINK</name>
-          <file> 221</file>
+          <file> 246</file>
         </tool>
       </outputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\led_monitor.c</name>
+      <name>$PROJ_DIR$\board\stm32f10x_it.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 124</file>
+          <name>ICCARM</name>
+          <file> 150</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 164</file>
+          <name>BICOMP</name>
+          <file> 46</file>
         </tool>
         <tool>
           <name>__cstat</name>
@@ -420,12 +421,255 @@
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 154 26 334 287 289 10 290 301 316 342 367 70 333 320 312 282 291 285 1 303 337 293 233 8 235 165 173 321 319 0 323 279 352 329</file>
+          <name>ICCARM</name>
+          <file> 371 0 329 351 348 383 142 47 266 110 382 197 211 309 263 350 356 366 372 353 367 357 368</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 382 350 383 142 263 309 351 0 329 356 366 372 353 367 357 368 348 47 266 197 110 371 211</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\elevator.c</name>
+      <outputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 0 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282 287 1 342 303 334 337 293</file>
+          <file> 83</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 292</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 143</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 8 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345 333 331 42 29 30 20 35 27 43 337</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 349 30 142 110 331 43 309 336 42 35 351 348 382 47 383 347 341 333 350 29 20 27 337 263 266 197 211 31 329 339 340 345 8 335 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\board.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 66</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 275</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 84</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 11 351 348 383 263 0 329 350 356 366 372 353 367 357 368 28 12</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 162 383 28 266 351 350 309 47 11 0 12 197 211 263 260 110 382 348 329 356 366 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floormap.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 324</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 96</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 214</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 27 351 348 383 142 47 266 110 382 197 211 309 263 329 350 30</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 309 348 142 351 211 350 383 47 329 263 266 197 110 382 27 30</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\application.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 276</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 241</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 164</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 0 329 351 348 383 142 47 266 110 382 197 211 309 263 350 356 366 372 353 367 357 368 43 341 31 335 349 344 347 340 359 339 336 345 19 22 30 20 35 40 29 8 337 42</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 340 47 383 339 20 263 350 8 197 211 142 351 349 341 22 40 42 266 31 329 347 43 336 19 30 35 29 337 356 366 372 353 367 357 368 348 309 110 382 335 344 359 0 345</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\crc.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 219</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 171</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 128</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 4 351 348 383 142 47 266 110 382 197 211 309 263</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 47 197 348 110 351 266 382 263 383 309 211 4</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\delay.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 199</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 50</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 190</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 5 351 348 383 142 47 266 110 382 197 211 309 263</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 47 197 348 110 351 266 382 263 383 309 211 5</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\dbgserial.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 233</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 315</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 375</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 177 323 0 329 351 348 383 263 350 356 366 372 353 367 357 368 12 43 341 31 335 349 344 347 340 359 339 333 331</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 353 329 347 323 351 12 142 110 366 357 309 47 331 177 341 382 356 372 367 368 348 31 0 43 333 162 266 197 211 350 263 383 349 339 340 260 335 344 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\led_monitor.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 195</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 168</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 288</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 40 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345 42 30 8 22 43 27 35</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 47 43 42 348 382 329 351 336 8 309 110 31 339 340 345 341 350 30 22 27 35 263 383 266 197 211 349 347 40 335 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\parameter.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 205</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 60</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 181</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 22 351 348 383 263 329 350 41</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 266 142 47 351 41 162 329 309 197 211 22 350 263 260 110 382 348 383</file>
         </tool>
       </inputs>
     </file>
@@ -433,527 +677,120 @@
       <name>$PROJ_DIR$\board\keymap.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 110</file>
+          <name>ICCARM</name>
+          <file> 310</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 370</file>
+          <name>BICOMP</name>
+          <file> 183</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 232</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 8 301 26 285 289 367 173 290 233 235 165 70 10 1 303</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 1 301 289 8 154 26 235 70 10 165 173 367 233 290 285 303</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_exti.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 267</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 219</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 5</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\ir.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 252</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 4</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 115</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 20 173 26 154 301 285 165 358 286 233 323 356 316 280 8 235 354 144 242 291 334 237 289 367 70 10 333 321 279 312 314 322 352 362 178 224 44 290 319 320 329 282</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_i2c.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 251</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 152</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 109</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\floor_ctl.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 245</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 233 26 173 367 303 153 235 165 70 10 8 211 290 301 289 285 349</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\wifi\http.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 158</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 260</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 26 165 289 70 301 235 10 233 8 367 173 43</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 43 301 289 8 154 26 235 70 10 165 173 367 233</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\sensor\iicsensor.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 118</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 84</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 154 333 352 280 301 306 336 8 321 367 320 290 316 311 334 212 233 323 235 165 173 285 289 319 329 282 291 70 10 279 312 314 358 322 354 356 362 144 178 20 224 242</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 306 311 280 314 358 322 354 356 362 144 178 20 224 242 334 336 212</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\motorctl.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 42</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 145</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 285 144 333 280 154 279 290 289 10 312 354 242 316 286 301 367 70 26 306 358 356 20 291 311 334 233 8 235 165 173 321 314 322 352 362 178 224 151 323 319 320 329 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 151 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282 311 306 286 334 280 314 358 322 354 356 362 144 178 20 224 242</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\flash.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 383</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 199</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 217</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 362 301 235 367 154 233 322 224 280 153 26 314 352 178 290 165 173 8 285 358 354 356 144 20 242 161 70 10 289 211</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 161 301 289 8 233 290 285 280 314 358 322 354 352 356 362 144 178 20 224 242</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_iwdg.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 385</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 220</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 62</file>
+          <file> 261</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICCARM</name>
-          <file> 366 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 322 354 352 356 362</file>
+          <file> 30 351 348 383 142 47 266 110 382 197 211 309 263 329 350 22</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 383 351 47 350 348 309 211 329 263 266 197 110 382 30 22</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\esp8266.c</name>
+      <name>$PROJ_DIR$\board\license.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 74</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 23</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 154 285 153 352 311 291 277 341 235 233 301 320 131 316 104 334 286 367 165 173 323 289 319 329 282 211 70 10 378 8 333 321 290 279 312 306</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\wifi\esp8266.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 74</file>
-        </tool>
-        <tool>
           <name>ICCARM</name>
-          <file> 101</file>
+          <file> 108</file>
         </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 23</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 367 285 301 311 291 277 341 165 173 323 233 131 316 203 334 286 154 153 235 290 8 279 312 282 211 70 10 378 333 321 289 319 320 352 329 306</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 131 378 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 311 306 203 277 334 286 341</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\i2c.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 120</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 162</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 285 301 333 235 319 291 8 321 26 165 173 154 289 211 233 323 367 70 10 320 312 216 290 279 352 329 153</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 216 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 211 153</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\sensor\hp5803.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 192</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 270</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 175</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 235 8 321 316 233 26 165 173 319 301 291 285 289 367 70 10 333 290 320 312 282 147 323 279 352 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 147 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\led_net.c</name>
-      <outputs>
         <tool>
           <name>BICOMP</name>
           <file> 185</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 7</file>
-        </tool>
-        <tool>
           <name>__cstat</name>
-          <file> 92</file>
+          <file> 228</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 43 3 22 0 356 366 372 353 357 368</file>
+        </tool>
+        <tool>
           <name>BICOMP</name>
-          <file> 367 290 153 26 154 301 291 286 235 333 320 312 282 94 316 285 334 165 173 289 8 321 319 211 70 10 233 323 279 352 329</file>
+          <file> 211 47 142 367 350 197 3 335 351 339 43 0 263 266 348 347 359 345 336 22 383 31 349 309 110 382 329 344 340 341 356 366 372 353 357 368</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\sensor\bmp280.c</name>
+      <name>$PROJ_DIR$\board\protocol.c</name>
       <outputs>
         <tool>
+          <name>ICCARM</name>
+          <file> 174</file>
+        </tool>
+        <tool>
           <name>BICOMP</name>
-          <file> 177</file>
+          <file> 44</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 124</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 173 26 154 352 280 323 165 301 306 216 233 320 290 291 316 311 334 225 8 333 321 235 285 289 319 329 282 367 70 10 279 312 314 358 322 354 356 362 144 178 20 224 242</file>
+          <name>ICCARM</name>
+          <file> 29 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345 3 43 22 8 42 35 27 4 30 20 40 337 12 0 356 366 372 353 357 368</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 306 311 280 314 358 322 354 356 362 144 178 20 224 242 334 216 225</file>
+          <name>BICOMP</name>
+          <file> 383 337 47 42 142 110 372 3 4 351 368 336 22 27 20 0 309 349 356 367 341 350 43 8 35 30 40 12 348 382 31 344 340 329 366 353 357 29 263 266 197 211 335 347 339 359 345</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\mqtt\mqtt.c</name>
+      <name>$PROJ_DIR$\board\main.c</name>
       <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 86</file>
-        </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 129</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 250</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\led_motor.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
           <file> 268</file>
         </tool>
         <tool>
-          <name>__cstat</name>
-          <file> 78</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
           <name>BICOMP</name>
-          <file> 289 154 26 286 165 285 235 70 290 329 301 233 8 367 10 237 173</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_crc.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 194</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 191</file>
+          <file> 67</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 187</file>
+          <file> 273</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICCARM</name>
-          <file> 255 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 322 354 352 356 362</file>
+          <file> 11 351 348 383 142 47 266 110 382 197 211 309 263 15 0 329 350 356 366 372 353 367 357 368 43 341 31 335 349 344 347 340 359 339</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 351 142 350 309 47 349 0 348 382 383 339 340 15 43 263 110 31 329 347 11 266 197 211 356 366 372 353 367 357 368 341 335 344 359</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\floor.c</name>
+      <name>$PROJ_DIR$\board\robot.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 257</file>
-        </tool>
-        <tool>
           <name>ICCARM</name>
-          <file> 6</file>
+          <file> 386</file>
         </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 264</file>
-        </tool>
-      </outputs>
-      <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 154 233 26 173 367 168 153 235 165 70 10 8 211 290 301 289 285</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 168 301 289 8 233 290 285</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_spi.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 176</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 71</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 207</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 178 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 322 354 352 356 362</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\sensor\lis3dh.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 139</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 130</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 99</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 235 8 321 316 233 26 165 173 319 301 291 285 289 367 70 10 333 290 320 312 282 180 323 279 352 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 180 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\wifi.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 157</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 261</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 49</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 165 334 367 173 26 323 154 289 329 301 306 151 285 319 282 290 291 104 208 153 235 233 320 352 131 316 85 117 280 94 161 70 10 378 8 333 321 279 312 314 358 322 354 356 362 144 178 20 224 242 211</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\modeswitch.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 272</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 35</file>
+          <file> 131</file>
         </tool>
         <tool>
           <name>__cstat</name>
@@ -962,297 +799,39 @@
       </outputs>
       <inputs>
         <tool>
+          <name>ICCARM</name>
+          <file> 35 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345 43 8</file>
+        </tool>
+        <tool>
           <name>BICOMP</name>
-          <file> 321 8 290 301 235 306 334 161 233 26 165 173 319 291 316 285 286 85 22 289 154 367 70 10 333 320 312 282 146 323 279 352 329</file>
+          <file> 309 344 351 350 43 142 110 47 336 348 382 335 341 8 263 383 266 197 211 367 359 35 31 349 329 347 339 340 345</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\wifi\simple-http.c</name>
+      <name>$PROJ_DIR$\board\i2c_software.c</name>
       <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 126</file>
-        </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 227</file>
+          <file> 158</file>
         </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\Debug\Exe\AutoElevator.out</name>
-      <outputs>
-        <tool>
-          <name>OBJCOPY</name>
-          <file> 375</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ILINK</name>
-          <file> 68 243 25 384 188 215 201 171 58 376 381 63 239 150 133 370 164 248 76 163 231 160 197 72 213 123 223 11 218 114 128 136 205 258 103 182 253 112 236 54 37 141 132 379 183</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\ledstatus.c</name>
-      <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 135</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 263</file>
+          <file> 82</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 166</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 286 301 235 285 289 26 165 70 290 329 233 8 367 10 82 173</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 82 301 289 8 154 26 235 70 10 165 173 367 233 290 285 329 286</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\simple_http.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 364</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 377</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 142</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 352 161 26 154 104 10 233 301 320 316 334 70 323 285 289 319 329 291 22 341 146 367 153 235 165 173 8 333 321 290 279 312 282 211</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_wwdg.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 39</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 27</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 33</file>
+          <file> 102</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>ICCARM</name>
-          <file> 228 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 322 354 352 356 362</file>
+          <file> 260 142 47 266 110 382 197 211 309 162 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 17 5 0 356 366 372 353 357 368</file>
         </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\mode.c</name>
-      <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 75</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 189</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 69</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 235 26 289 165 173 286 301 233 8 154 367 208 70 10</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\wifi\simple_http.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 364</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 377</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 142</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 26 367 161 154 70 203 323 233 301 316 334 10 290 8 279 312 291 97 285 341 146 153 235 165 173 333 321 289 319 320 352 329 211 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 97 203 334 341 161 146</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\sensor\delay.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 21</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 171</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 26 165 289 70 301 235 10 233 8 367 173 374</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 374 301 289 8 154 26 235 70 10 165 173 367 233</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\sensor\bh1750.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 32</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 159</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 285 306 20 233 358 280 235 8 301 356 336 323 26 165 173 70 290 279 312 354 144 242 316 311 334 333 321 154 367 10 314 322 352 362 178 224 291 289 319 320 329 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 306 311 280 314 358 322 354 356 362 144 178 20 224 242 334 336</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\wifi\m26.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 98</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 122</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 8 320 285 378 301 311 154 70 306 291 277 341 26 10 321 352 131 316 121 334 286 367 153 235 165 173 333 289 319 329 211 233 323 290 279 312 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 131 378 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 311 306 121 277 334 286 341</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\m26.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 98</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 122</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 19</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 285 378 279 311 154 70 290 312 291 277 341 26 10 333 8 301 306 131 316 117 334 286 367 153 235 165 173 321 233 211 323 289 319 320 352 329 282</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_sig.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 28</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 143</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 119</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>ICCARM</name>
-          <file> 242 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 322 354 352 356 362 178</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\i2c_hardware.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 155</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 148</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 8 154 279 216 321 367 26 290 312 311 211 333 301 306 280 334 233 323 235 165 173 291 70 10 285 289 319 320 352 329 314 358 322 354 356 362 144 178 20 224 242 153</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 306 311 280 314 358 322 354 356 362 144 178 20 224 242 216 334 211 153</file>
+          <file> 162 142 47 383 372 0 266 349 351 368 17 309 197 211 31 329 344 340 356 367 341 5 110 382 263 335 366 353 357 260 350 348 347 339 359</file>
         </tool>
       </inputs>
     </file>
@@ -1260,269 +839,26 @@
       <name>$PROJ_DIR$\board\led_status.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 57</file>
-        </tool>
-        <tool>
           <name>ICCARM</name>
-          <file> 248</file>
+          <file> 267</file>
         </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 91</file>
-        </tool>
-      </outputs>
-      <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 235 10 286 301 285 289 26 165 154 290 329 1 233 8 367 70 287 173</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 287 301 289 8 154 26 235 70 10 165 173 367 233 290 285 329 286 1</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\stm32f10x_vector.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 87</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 112</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 47</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 361</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 361</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\stm32f10x_it.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 24</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 136</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 247</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 10 285 8 154 233 367 301 280 290 314 358 322 354 352 356 362 289 26 235 165 70 361 173</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 361 280 290 301 289 8 154 26 235 70 10 165 173 367 233 285 314 358 322 354 352 356 362</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\license.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 116</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 76</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 184</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 173 26 154 352 285 165 277 323 301 320 334 280 233 235 289 319 329 282 316 303 8 333 321 367 70 10 290 279 312 291 314 358 322 354 356 362</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 334 277 303 280 314 358 322 354 356 362</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\main.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 31</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 231</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 234</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 301 154 285 367 26 321 280 289 10 8 320 312 338 334 233 70 333 290 319 339 235 165 173 314 358 322 354 352 356 362 291 323 279 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 339 301 289 8 154 26 235 70 10 165 173 367 233 338 280 290 285 314 358 322 354 352 356 362 334 291 333 323 321 279 319 312 329 320</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\protocol.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 36</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 123</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 107</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 284 173 26 154 287 322 277 343 165 329 362 316 303 337 330 280 233 323 319 282 314 352 301 291 285 334 342 293 1 0 341 8 235 290 320 358 354 356 288 289 367 70 10 333 321 279 312</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 288 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282 277 334 303 342 287 293 337 343 1 330 0 284 341 280 314 358 322 354 356 362</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\serial.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 315</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 218</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 14</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 323 26 301 320 277 165 173 154 352 311 341 233 235 285 289 319 329 306 280 334 8 333 321 367 70 10 290 279 312 291 314 358 322 354 356 362</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 306 311 280 314 358 322 354 356 362 277 334 341</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\parameter.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 34</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 160</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 111</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 235 154 26 301 349 153 290 367 165 173 303 285 233 211 70 10 289 8</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 303 301 289 8 233 290 285 349</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\robot.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 88</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 11</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
           <file> 73</file>
         </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 235 279 301 154 285 334 8 316 233 26 165 173 323 291 342 289 367 70 10 352 329 293 333 321 290 319 320 312 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 293 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282 334 342</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\switch_monitor.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 169</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 236</file>
-        </tool>
         <tool>
           <name>__cstat</name>
-          <file> 12</file>
+          <file> 130</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 235 154 320 334 8 233 290 352 291 316 342 26 165 173 323 319 329 282 285 286 287 301 289 367 70 10 333 321 279 312 284</file>
+          <name>ICCARM</name>
+          <file> 42 351 348 383 142 47 266 110 382 197 211 309 263 329 350 359 28 30</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 284 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282 334 286 342 287</file>
+          <name>BICOMP</name>
+          <file> 266 382 28 351 350 348 47 197 142 329 359 30 263 383 309 110 42 211</file>
         </tool>
       </inputs>
     </file>
@@ -1530,39 +866,152 @@
       <name>$PROJ_DIR$\board\pinconfig.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 81</file>
+          <name>ICCARM</name>
+          <file> 221</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 197</file>
+          <name>BICOMP</name>
+          <file> 113</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 265</file>
+          <file> 299</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 28 351 348 383 263 0 329 350 356 366 372 353 367 357 368</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 357 366 351 309 197 211 47 329 353 0 142 162 266 348 356 372 367 368 28 110 382 263 383 350 260</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\fm24cl64.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 95</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 200</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 90</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 41 351 348 383 142 47 266 110 382 197 211 309 263 17 329 350 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 309 348 142 351 211 329 383 47 17 263 266 197 110 382 41 350 28</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\serial.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 238</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 307</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 56</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 331 333 0 356 366 372 353 357 368 3 43 12</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 335 47 351 339 3 197 211 142 367 333 12 263 266 350 348 347 359 331 0 43 383 31 349 309 110 382 329 344 340 341 356 366 372 353 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\keyctl.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 144</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 220</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 80</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20 351 348 383 142 47 266 110 382 197 211 309 263 329 350 359 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 266 28 350 351 348 47 197 110 329 359 263 383 309 382 20 211</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floor_ctl.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 279</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 356 358 301 367 165 173 26 290 354 280 154 153 235 289 314 322 352 362 286 70 10 233 8 285 211</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 286 301 289 8 233 280 290 285 314 358 322 354 352 356 362</file>
+          <file> 142 263 47 211 309 22 162 266 197 110 382 383 260 329 351 348 350 41</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\os\portable\cm3\port.c</name>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_i2c.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 196</file>
+          <name>ICCARM</name>
+          <file> 141</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 281</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 135</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\ir.c</name>
+      <outputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 72</file>
+          <file> 377</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 289</file>
         </tool>
         <tool>
           <name>__cstat</name>
@@ -1572,507 +1021,478 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 367 301 291 154 70 323 319 362 312 289 10 26 285 352 356 316 233 8 235 165 173 320 282 329 333 321 290 279</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 329 301 289 8 154 26 235 70 10 165 173 367 233 352 362 356 291 333 290 285 323 321 279 319 312 320 316 282</file>
+          <file> 57 211 47 142 351 350 197 366 28 263 335 357 336 0 383 266 353 163 278 341 43 272 348 309 110 382 31 349 344 340 356 372 367 368 194 242 75 329 347 339 359 345</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\os\queue.c</name>
+      <name>$PROJ_DIR$\board\motorctl.c</name>
       <outputs>
         <tool>
           <name>BICOMP</name>
-          <file> 80</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 223</file>
+          <file> 70</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 102</file>
+          <file> 151</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 154 70 333 285 301 316 319 367 10 26 289 211 291 306 165 235 173 153 8 321 320 312 282 29 233 323 290 279 352 329</file>
+          <name>ICCARM</name>
+          <file> 159 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345 333 331 28 43 0 356 366 372 353 357 368 163 194 57 242 278</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 29 154 26 235 70 10 165 173 367 211 153 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 306</file>
+          <name>BICOMP</name>
+          <file> 350 163 31 0 142 344 329 348 382 340 353 278 336 28 351 309 110 47 331 366 357 57 341 333 43 263 383 266 197 211 349 356 372 367 368 194 242 159 335 347 339 359 345</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\os\tasks.c</name>
+      <name>$PROJ_DIR$\board\flash.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 372</file>
-        </tool>
-        <tool>
           <name>ICCARM</name>
-          <file> 54</file>
+          <file> 234</file>
         </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 193</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 316 367 10 26 233 307 70 153 323 352 329 211 291 317 165 235 173 290 8 301 279 29 333 321 285 289 319 320 312 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 29 154 26 235 70 10 165 173 367 211 153 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 317 307</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\cm3\cm3_core.s</name>
-      <outputs>
-        <tool>
-          <name>AARM</name>
-          <file> 384</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\os\portable\cm3\heap_2.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 59</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 239</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 202</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 289 291 367 165 173 26 333 285 319 301 316 235 8 321 320 312 282 29 70 10 233 323 290 279 352 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 29 154 26 235 70 10 165 173 367 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\os\list.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 96</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 163</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 15</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 333 285 301 173 26 165 319 282 154 289 291 367 235 8 321 320 312 29 70 10 233 323 290 279 352 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 29 154 26 235 70 10 165 173 367 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 282</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\os\portable\cm3\portasm.s</name>
-      <outputs>
-        <tool>
-          <name>AARM</name>
-          <file> 213</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>AARM</name>
-          <file> 312</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\os\croutine.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 41</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 215</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 55</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 352 323 10 329 299 233 367 70 26 316 8 333 321 235 165 173 290 301 279 282 291 285 289 319 320 312</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 291 8 154 26 235 70 10 165 173 367 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 299</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\os\event_groups.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 65</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 376</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 13</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 233 367 290 317 279 301 291 10 8 316 300 70 323 26 352 329 29 165 235 173 333 321 285 289 319 320 312 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 29 154 26 235 70 10 165 173 367 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 317 300</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\os\timers.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 90</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 37</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 266</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 279 301 306 367 154 233 290 291 10 8 316 317 26 165 70 323 352 329 29 235 173 333 321 285 289 319 320 312 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 29 154 26 235 70 10 165 173 367 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 306 317</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\application.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 230</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 243</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 137</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 312 26 8 320 330 233 285 342 165 173 154 301 321 291 303 0 287 235 333 290 319 334 316 305 1 293 288 284 314 358 322 354 352 356 362 289 367 70 10 323 279 329 280 282</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 280 290 301 289 8 154 26 235 70 10 165 173 367 233 285 314 358 322 354 352 356 362 334 291 333 323 321 279 319 312 329 320 316 282 305 303 1 330 293 0 288 342 284 287</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\elevator.c</name>
-      <outputs>
         <tool>
           <name>BICOMP</name>
           <file> 262</file>
         </tool>
         <tool>
+          <name>__cstat</name>
+          <file> 259</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 58</file>
+          <file> 260 142 47 266 110 382 197 211 309 162 191 351 348 383 263 329 350 0 356 366 372 353 367 357 368 163 194 57 242 278</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 368 351 266 309 142 263 372 242 0 162 47 356 367 194 329 197 211 383 350 366 353 357 163 57 278 191 110 382 348 260</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\wifi\http.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 282</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 210</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 68 351 348 383 142 47 266 110 382 197 211 309 263</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 47 197 348 110 351 266 382 263 383 309 211 68</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\iicsensor.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 94</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 179</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 331 333 0 356 366 372 353 357 368 163 194 57 242 278 43 17 248</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 47 142 31 367 0 351 331 17 383 349 309 339 329 336 333 43 248 263 335 266 197 211 350 348 347 359 345 341 110 382 344 340 356 366 372 353 357 368 163 194 57 242 278</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_iwdg.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 236</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 325</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 140</file>
+          <file> 100</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 312 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\esp8266.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 92</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 54</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 321 1 154 70 306 334 367 316 287 293 301 289 10 26 8 319 291 311 285 288 330 337 284 233 235 165 173 333 290 320 312 282 342 323 279 352 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 342 301 289 8 154 26 235 70 10 165 173 367 233 291 333 290 285 323 321 279 319 352 312 329 320 316 282 311 306 287 288 1 330 293 337 334 284</file>
+          <file> 47 142 350 162 367 333 341 3 12 266 263 351 339 177 336 136 43 28 309 197 211 335 348 347 359 345 260 110 382 323 383 31 349 329 344 340 331</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\board.c</name>
+      <name>$PROJ_DIR$\board\wifi\esp8266.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 240</file>
+          <name>ICCARM</name>
+          <file> 120</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 25</file>
+          <name>BICOMP</name>
+          <file> 92</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 52</file>
+          <file> 54</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 154 153 8 286 235 301 285 367 26 339 280 341 165 173 233 211 70 10 289 290 314 358 322 354 352 356 362</file>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 177 323 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 333 331 222 3 43 28 12</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 339 301 289 8 233 280 290 285 314 358 322 354 352 356 362 286 341</file>
+          <name>BICOMP</name>
+          <file> 47 309 350 351 333 341 3 12 197 211 335 263 177 336 222 43 28 142 162 266 329 383 344 340 345 260 110 382 323 31 349 348 347 339 367 359 331</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\crc.c</name>
+      <name>$PROJ_DIR$\board\led_net.c</name>
       <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 127</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 188</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 108</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 26 165 289 70 301 235 10 233 8 367 173 343</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 343 301 289 8 154 26 235 70 10 165 173 367 233</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\dbgserial.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 371</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 201</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 60</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 354 290 319 378 301 341 154 70 358 356 367 26 306 131 291 10 314 322 352 362 289 333 280 334 311 153 235 165 173 285 233 8 321 320 312 211 323 279 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 131 378 280 290 301 289 8 233 285 314 358 322 354 352 356 362 341 334 291 333 323 321 279 319 312 329 320 311 306</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\delay.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 21</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 171</file>
-        </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 174</file>
-        </tool>
-      </outputs>
-      <inputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 154 26 165 289 70 301 235 10 233 8 367 173 346</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 346 301 289 8 154 26 235 70 10 165 173 367 233</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\floormap.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 67</file>
-        </tool>
         <tool>
           <name>ICCARM</name>
           <file> 381</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 229</file>
+        </tool>
+        <tool>
           <name>__cstat</name>
-          <file> 190</file>
+          <file> 129</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 367 289 154 301 173 285 8 26 290 233 235 165 70 10 337 1</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 337 301 289 8 154 26 235 70 10 165 173 367 233 290 285 1</file>
+          <file> 309 329 162 47 142 351 341 28 266 31 339 340 345 132 336 350 43 197 211 348 383 349 347 260 110 382 263 335 344 367 359</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\fm24cl64.c</name>
+      <name>$PROJ_DIR$\board\sensor\hp5803.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 170</file>
+          <name>ICCARM</name>
+          <file> 294</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 63</file>
+          <name>BICOMP</name>
+          <file> 232</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 61</file>
+          <file> 201</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 145 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 266 383 349 336 263 47 197 211 347 351 341 350 348 309 110 382 31 329 339 340 345 145 335 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 192</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 165</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 257 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 260 162</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 350 351 31 266 347 341 383 349 47 197 211 142 348 260 263 335 309 110 382 339 340 257 329 344 367 359 162</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\led_motor.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 285</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 93</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 367 289 154 301 173 290 8 26 336 233 235 165 70 10 349 285 286</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 349 301 289 8 154 26 235 70 10 165 173 367 233 336 290 285 286</file>
+          <file> 348 142 47 28 197 350 266 110 329 359 351 263 383 309 382 272 211</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\i2c_software.c</name>
+      <name>$PROJ_DIR$\mqtt\mqtt.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 48</file>
+          <name>ICCARM</name>
+          <file> 172</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 150</file>
+          <name>BICOMP</name>
+          <file> 98</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 66</file>
+          <file> 280</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\bmp280.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 212</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 331 333 0 356 366 372 353 357 368 163 194 57 242 278 43 257 243</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 211 47 142 367 0 335 197 351 331 257 263 339 329 341 336 333 43 243 383 31 349 266 350 348 347 359 345 309 110 382 344 340 356 366 372 353 357 368 163 194 57 242 278</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_crc.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 225</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 235</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 223</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 305 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\floor.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 378</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 301</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 293</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 198 351 348 383 263 329 350</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 263 47 211 309 198 162 266 197 110 382 383 260 329 351 348 350</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_spi.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 91</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 207</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 245</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 194 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\lis3dh.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 175</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 157</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 121</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 208 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 266 383 349 336 263 47 197 211 347 351 341 350 348 309 110 382 31 329 339 340 345 208 335 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\ledstatus.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 284</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 140</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 204</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 114 351 348 383 142 47 266 110 382 197 211 309 263 329 350 359 28</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 28 351 266 350 348 47 197 110 329 359 263 383 309 382 114 211</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\AutoElevator.out</name>
+      <outputs>
+        <tool>
+          <name>OBJCOPY</name>
+          <file> 314</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 97 276 66 134 219 254 233 199 83 318 324 95 274 158 144 310 195 267 108 193 268 205 221 105 244 174 239 386 238 167 176 150 147 291 117 202 290 182 264 72 76 148 180 321 188</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\simple_http.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 319</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 311</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 154</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 153 154 26 8 322 280 235 321 301 362 336 367 165 173 333 290 279 312 314 352 291 346 70 10 233 323 358 354 356 211 285 289 319 320 329</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 336 346 280 314 358 322 354 356 362</file>
+          <file> 367 191 47 142 136 382 263 351 339 336 43 110 335 350 348 347 359 341 53 12 161 309 162 266 197 211 383 31 349 329 344 340 345 260</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\keyctl.c</name>
+      <name>$PROJ_DIR$\board\wifi.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 195</file>
-        </tool>
-        <tool>
           <name>ICCARM</name>
-          <file> 133</file>
+          <file> 283</file>
         </tool>
-        <tool>
-          <name>__cstat</name>
-          <file> 40</file>
-        </tool>
-      </outputs>
-      <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 154 235 286 285 301 289 26 165 70 290 329 233 8 367 10 330 173</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 330 301 289 8 154 26 235 70 10 165 173 367 233 290 285 329 286</file>
-        </tool>
-      </inputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_gpio.c</name>
-      <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 46</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 128</file>
+          <file> 189</file>
         </tool>
         <tool>
           <name>__cstat</name>
@@ -2082,105 +1502,175 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 154 70 356 233 367 358 301 280 8 10 290 354 355 289 26 235 165 173 314 322 352 362 285</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 322 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 354 352 356 362</file>
+          <file> 197 43 309 211 47 335 142 348 359 351 331 159 350 347 345 329 341 136 247 162 266 263 339 367 177 336 99 187 0 132 191 110 382 323 383 31 349 344 340 356 366 372 353 357 368 163 194 57 242 278 260</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_nvic.c</name>
+      <name>$PROJ_DIR$\board\modeswitch.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 30</file>
+          <name>ICCARM</name>
+          <file> 63</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 205</file>
+          <name>BICOMP</name>
+          <file> 287</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 38</file>
+          <file> 123</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 10 314 8 154 352 301 355 233 367 322 362 280 289 26 235 165 70 290 358 354 356 173 285</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 356 301 289 8 154 26 235 70 10 165 173 367 233 352 355 280 290 285 314 358 322 354 362</file>
+          <file> 349 383 329 351 266 331 43 191 263 47 197 211 347 341 336 350 28 99 53 348 142 309 110 382 31 339 340 345 161 335 344 367 359</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_rcc.c</name>
+      <name>$PROJ_DIR$\board\wifi\simple-http.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 198</file>
+          <name>ICCARM</name>
+          <file> 240</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 170</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\mode.c</name>
+      <outputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 258</file>
+          <file> 230</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 107</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 206</file>
+          <file> 104</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 301 154 8 10 280 233 367 70 26 355 289 235 165 173 285 358 290 314 322 354 352 356 362</file>
-        </tool>
-        <tool>
-          <name>ICCARM</name>
-          <file> 358 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 322 354 352 356 362</file>
+          <file> 266 47 348 197 211 28 351 263 383 142 309 247 110 382</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_flash.c</name>
+      <name>$PROJ_DIR$\board\wifi\simple_http.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 51</file>
+          <name>ICCARM</name>
+          <file> 319</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 114</file>
+          <name>BICOMP</name>
+          <file> 311</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 156</file>
+          <file> 154</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 26 289 355 165 173 301 314 280 154 367 153 235 285 211 70 10 233 8 290 358 322 354 352 356 362</file>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 116 222 43 12 191 161</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 314 301 289 8 233 355 280 290 285 358 322 354 352 356 362</file>
+          <name>BICOMP</name>
+          <file> 47 309 191 142 110 222 335 263 351 336 43 382 329 383 344 340 341 116 350 12 161 162 266 197 211 31 349 348 347 339 367 359 260 345</file>
         </tool>
       </inputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\wifi\wifi.c</name>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_wwdg.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 157</file>
+          <name>ICCARM</name>
+          <file> 55</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 74</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 62</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 261</file>
+          <file> 251 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\i2c_hardware.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 152</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 146</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 331 333 0 356 366 372 353 357 368 163 194 57 242 278 257 43 260 162</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 383 142 344 257 349 309 47 329 340 333 260 31 351 331 0 43 263 335 266 197 211 341 110 382 350 348 347 339 367 359 356 366 372 353 357 368 163 194 57 242 278 162</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\wifi\m26.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 173</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 133</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 177 323 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 333 331 166 3 43 28 12</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 383 339 350 323 351 333 142 110 331 341 3 12 47 382 349 367 177 336 166 43 28 309 162 266 197 211 31 348 347 359 260 263 335 329 344 340 345</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\m26.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 173</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 133</file>
         </tool>
         <tool>
           <name>__cstat</name>
@@ -2190,11 +1680,103 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 290 235 321 285 154 352 291 229 94 153 26 8 301 320 316 121 280 161 367 165 173 333 289 319 329 306 203 334 149 151 208 70 10 233 323 279 312 282 314 358 322 354 356 362 144 178 20 224 242 211</file>
+          <file> 350 323 344 333 142 110 329 340 341 3 12 47 382 31 383 351 331 177 336 187 43 28 309 162 266 197 211 349 263 260 335 348 347 339 367 359 345</file>
         </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\bh1750.c</name>
+      <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 211 154 26 235 70 10 165 173 367 153 291 8 233 333 290 301 289 285 323 321 279 319 352 312 329 320 316 282 306 229 203 121 334 149 280 314 358 322 354 356 362 144 178 20 224 242 151 94 208 161</file>
+          <file> 203</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 61</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 331 333 0 356 366 372 353 357 368 163 194 57 242 278 43 17</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 350 331 57 263 366 0 266 383 351 357 17 335 47 197 211 110 329 344 340 353 163 278 336 333 43 31 349 142 309 382 356 372 367 368 194 242 341 348 347 339 359 345</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\sensor\delay.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 199</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 50</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 317 351 348 383 142 47 266 110 382 197 211 309 263</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 47 197 348 110 351 266 382 263 383 309 211 317</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_sig.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 160</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 58</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 178</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 278 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 372 353 367 357 368 194</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\wifi\wifi.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 283</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 189</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 89</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 331 250 222 166 43 156 0 356 366 372 353 357 368 163 194 57 242 278 159 132 247 191</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 329 266 349 350 142 367 341 250 132 162 47 383 351 339 336 166 0 191 309 197 211 31 348 347 359 331 222 43 156 159 247 110 382 263 335 344 340 345 356 366 372 353 357 368 163 194 57 242 278 260</file>
         </tool>
       </inputs>
     </file>
@@ -2202,43 +1784,193 @@
       <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_adc.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 93</file>
+          <name>ICCARM</name>
+          <file> 115</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 83</file>
+          <name>BICOMP</name>
+          <file> 126</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 244</file>
+          <file> 277</file>
         </tool>
       </outputs>
     </file>
     <file>
-      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_systick.c</name>
+      <name>$PROJ_DIR$\board\stm32f10x_vector.c</name>
       <outputs>
-        <tool>
-          <name>BICOMP</name>
-          <file> 200</file>
-        </tool>
         <tool>
           <name>ICCARM</name>
           <file> 182</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 118</file>
+        </tool>
+        <tool>
           <name>__cstat</name>
-          <file> 373</file>
+          <file> 78</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 173 301 165 289 26 358 235 154 355 280 233 8 367 70 10 285 362 290 314 322 354 352 356</file>
+          <name>ICCARM</name>
+          <file> 371</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 371</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\portable\cm3\port.c</name>
+      <outputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 362 301 289 8 154 26 235 70 10 165 173 367 233 355 358 280 290 285 314 322 354 352 356</file>
+          <file> 105</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 215</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 218</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 359 351 348 383 142 47 266 110 382 197 211 309 263 367 368 357 341 31 329 350 335 349 344 347 340 339 336 345</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 309 351 341 142 110 335 347 368 340 348 382 47 350 367 357 336 263 383 266 197 211 339 345 359 31 349 329 344</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\switch_monitor.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 264</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 213</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 376</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 337 351 348 383 142 47 266 110 382 197 211 309 263 341 31 329 350 335 349 344 347 367 340 359 339 336 345 43 28 8 42</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 266 142 339 43 383 263 329 367 341 336 8 47 197 211 335 347 359 345 350 28 42 351 348 309 110 382 31 349 344 340 337</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\portable\cm3\heap_2.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 274</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 384</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 216</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 64 142 47 266 110 382 197 211 309 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 348 341 309 197 211 47 31 350 347 351 336 266 383 349 339 340 345 64 110 382 263 335 329 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\portable\cm3\portasm.s</name>
+      <outputs>
+        <tool>
+          <name>AARM</name>
+          <file> 244</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>AARM</name>
+          <file> 340</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\croutine.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 254</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 79</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 85</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 341 383 142 47 266 110 382 197 211 309 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 338</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 367 335 382 359 338 263 309 110 47 336 383 31 349 266 197 211 329 351 344 345 341 350 348 347 339 340</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_systick.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 202</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 227</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 316</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 368 351 348 383 142 47 266 110 382 197 211 309 263 363 366 0 329 350 356 372 353 367 357</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 211 351 197 348 47 366 266 142 363 0 263 383 309 110 382 350 368 329 356 372 353 367 357</file>
         </tool>
       </inputs>
     </file>
@@ -2246,26 +1978,224 @@
       <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_usart.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 357</file>
+          <name>ICCARM</name>
+          <file> 290</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 253</file>
+          <name>BICOMP</name>
+          <file> 322</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 249</file>
+          <file> 300</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 154 358 8 10 301 355 280 233 367 70 26 285 354 289 235 165 173 290 314 322 352 356 362</file>
+          <name>ICCARM</name>
+          <file> 353 351 348 383 142 47 266 110 382 197 211 309 263 363 366 0 329 350 356 372 367 357 368</file>
         </tool>
         <tool>
+          <name>BICOMP</name>
+          <file> 142 366 383 382 351 363 0 263 309 110 47 350 353 348 266 197 211 329 356 372 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_gpio.c</name>
+      <outputs>
+        <tool>
           <name>ICCARM</name>
-          <file> 354 301 289 8 154 26 235 70 10 165 173 367 233 355 358 280 290 285 314 322 352 356 362</file>
+          <file> 176</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 77</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 139</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 372 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 353 367 357 368</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 110 357 263 309 366 351 0 383 382 329 353 363 348 47 266 197 211 356 372 367 368 350</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\queue.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 239</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 112</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 122</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 64 142 47 266 110 382 197 211 309 260 162 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 331</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 110 31 350 351 336 347 309 382 47 348 260 341 331 197 266 211 162 383 349 339 340 345 64 263 335 329 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\timers.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 76</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 125</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 296</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 64 142 47 266 110 382 197 211 309 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 331 342</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 344 351 331 309 142 263 329 341 382 383 336 342 47 197 110 335 367 359 64 266 211 31 349 350 348 347 339 340 345</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\cm3\cm3_core.s</name>
+      <outputs>
+        <tool>
+          <name>AARM</name>
+          <file> 134</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\event_groups.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 318</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 103</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 65</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 64 142 47 266 110 382 197 211 309 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 342 326</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 263 309 329 342 344 351 341 382 383 336 326 110 335 47 367 359 64 197 266 211 31 349 350 348 347 339 340 345</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_flash.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 167</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 71</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 149</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 260 142 47 266 110 382 197 211 309 162 356 351 348 383 263 363 0 329 350 366 372 353 367 357 368</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 47 348 363 197 211 351 356 0 142 309 162 266 350 260 110 382 263 383 329 366 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\list.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 193</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 127</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 45</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 64 142 47 266 110 382 197 211 309 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 345</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 31 350 351 211 47 197 347 345 142 348 341 309 266 383 349 339 340 64 110 382 263 335 329 344 367 359</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\os\tasks.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 72</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 320</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 217</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 64 142 47 266 110 382 197 211 309 260 162 341 383 263 31 329 351 348 350 335 349 344 347 367 340 359 339 336 345 342 334</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 142 336 309 382 47 263 334 110 162 335 367 359 260 341 342 197 266 211 329 383 351 344 64 31 349 350 348 347 339 340 345</file>
         </tool>
       </inputs>
     </file>
@@ -2273,28 +2203,99 @@
       <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_scb.c</name>
       <outputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 254</file>
+          <name>ICCARM</name>
+          <file> 117</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 103</file>
+          <name>BICOMP</name>
+          <file> 304</file>
         </tool>
         <tool>
           <name>__cstat</name>
-          <file> 181</file>
+          <file> 231</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
-          <name>BICOMP</name>
-          <file> 10 8 301 154 290 354 280 358 356 355 233 367 70 26 314 322 352 362 289 235 165 173 285</file>
+          <name>ICCARM</name>
+          <file> 367 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 366 372 353 357 368</file>
         </tool>
         <tool>
-          <name>ICCARM</name>
-          <file> 352 301 289 8 154 26 235 70 10 165 173 367 233 355 280 290 285 314 358 322 354 356 362</file>
+          <name>BICOMP</name>
+          <file> 382 383 351 142 329 353 0 366 357 363 263 309 110 47 356 372 367 368 348 266 197 211 350</file>
         </tool>
       </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_nvic.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 147</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 59</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 88</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 357 351 348 383 142 47 266 110 382 197 211 309 263 367 363 0 329 350 356 366 372 353 368</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 382 356 383 142 367 351 363 263 309 372 368 0 348 47 266 197 110 329 366 353 357 211 350</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_rcc.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 291</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 226</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 253</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 366 351 348 383 142 47 266 110 382 197 211 309 263 363 0 329 350 356 372 353 367 357 368</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 351 142 383 382 0 263 309 110 47 363 348 266 197 211 350 366 329 356 372 353 367 357 368</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_exti.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 258</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 298</file>
+        </tool>
+        <tool>
+          <name>__cstat</name>
+          <file> 380</file>
+        </tool>
+      </outputs>
     </file>
     <forcedrebuild>
       <name>$PROJ_DIR$\board\ir.c</name>
@@ -2313,15 +2314,15 @@
       <tool>ICCARM</tool>
     </forcedrebuild>
     <forcedrebuild>
+      <name>$PROJ_DIR$\board\simple_http.c</name>
+      <tool>ICCARM</tool>
+    </forcedrebuild>
+    <forcedrebuild>
       <name>$PROJ_DIR$\board\wifi.c</name>
       <tool>ICCARM</tool>
     </forcedrebuild>
     <forcedrebuild>
       <name>$PROJ_DIR$\board\modeswitch.c</name>
-      <tool>ICCARM</tool>
-    </forcedrebuild>
-    <forcedrebuild>
-      <name>$PROJ_DIR$\board\simple_http.c</name>
       <tool>ICCARM</tool>
     </forcedrebuild>
     <forcedrebuild>

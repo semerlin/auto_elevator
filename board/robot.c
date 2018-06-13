@@ -28,6 +28,7 @@ static robot_info robot = {DEFAULT_ID, DEFAULT_CHECKIN};
 /* monitor flag */
 static bool robot_monitor = FALSE;
 
+static uint32_t monitot_count = 0;
 #define RESET_TIME   (600)
 
 
@@ -37,15 +38,14 @@ static bool robot_monitor = FALSE;
  */
 static void vRobotMonitor(void *pvParameters)
 {
-    uint32_t count = 0;
     for (;;)
     {
         if (robot_monitor)
         {
-            count ++;
-            if (count > RESET_TIME)
+            monitot_count ++;
+            if (monitot_count > RESET_TIME)
             {
-                count = 0;
+                monitot_count = 0;
                 robot_monitor = FALSE;
                 elev_hold_open(FALSE);
                 robot_id_reset();
@@ -54,7 +54,7 @@ static void vRobotMonitor(void *pvParameters)
         }
         else
         {
-            count = 0;
+            monitot_count = 0;
         }
         
         vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -150,6 +150,14 @@ void robot_monitor_start(void)
 void robot_monitor_stop(void)
 {
     robot_monitor = FALSE;
+}
+
+/**
+ * @brief reset robot monitor count
+ */
+void robot_monitor_reset(void)
+{
+    monitot_count = 0;
 }
 
 
