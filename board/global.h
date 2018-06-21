@@ -29,5 +29,7 @@
 /* interrupt priority */
 #define USART1_PRIORITY        (13)
 
+#define ARRIVE_JUDGE    (0)
+
 #endif /* _GLOBAL_H_ */
 

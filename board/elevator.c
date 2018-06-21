@@ -180,12 +180,16 @@ void elev_hold_open(bool flag)
     uint8_t key = keymap_open();
     if (flag)
     {
+#if ARRIVE_JUDGE
         if (switch_arrive == switch_get_status())
         {
+#endif
             hold_cnt = 0;
             hold_door = TRUE;
             keyctl_press(key);
+#if ARRIVE_JUDGE
         }
+#endif
     }
     else
     {
