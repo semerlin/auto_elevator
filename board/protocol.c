@@ -372,7 +372,7 @@ static void send_data(const uint8_t *data, uint8_t len)
 static void vProtocol(void *pvParameters)
 {
     serial *pserial = pvParameters;
-    TickType_t xDelay = 50 / portTICK_PERIOD_MS;
+    TickType_t xDelay = 10 / portTICK_PERIOD_MS;
     uint8_t recv_data[36];
     uint8_t *pdata = recv_data;
     char data = 0;

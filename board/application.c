@@ -24,7 +24,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
 
-#define VERSION  ("v1.0.2.6_beta")
+#define VERSION  ("v1.0.2.7_alpha")
 
 
 /**
@@ -34,7 +34,7 @@ void ApplicationStartup()
 {
     TRACE("startup application...\r\n");
     TRACE("version = %s\r\n", VERSION);
-    license_init();
+    //license_init();
     if (!param_init())
     {
         TRACE("startup application failed!\r\n");
