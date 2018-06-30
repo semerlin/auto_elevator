@@ -19,7 +19,7 @@
 
 
 /* switch 0->1 means arrive，1->0 means leave */
-#define SWITCH_MONITOR_INTERVAL    (5 / portTICK_PERIOD_MS)
+#define SWITCH_MONITOR_INTERVAL    (8 / portTICK_PERIOD_MS)
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
@@ -64,7 +64,7 @@ uint8_t filter_switch_val(void)
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
     
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 8; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
@@ -99,28 +99,33 @@ static void vSwitchMonitor(void *pvParameters)
     for (;;)
     {
         switch_cur = filter_switch_val();
-        if (0x03 == switch_cur)
+        if (0 != switch_cur)
         {
-            cur_status = switch_arrive;
-        }
-        else
-        {
-            cur_status = switch_run;
-        }
-        
-        if (switch_cur != switch_prev)
-        {
-            /* elevator state changed */
-            if ((0x01 == switch_prev) && (0x03 == switch_cur))
+            if (0x03 == switch_cur)
             {
-                elev_increase();
+                cur_status = switch_arrive;
             }
-            else if ((0x02 == switch_prev) && (0x03 == switch_cur))
+            else
             {
-                elev_decrease();
+                cur_status = switch_run;
             }
+            
+            if (switch_cur != switch_prev)
+            {
+                /* elevator state changed */
+                if ((0x01 == switch_prev) && 
+                    ((0x03 == switch_cur) || (0x02 == switch_cur)))
+                {
+                    elev_increase();
+                }
+                else if ((0x02 == switch_prev) && 
+                         ((0x03 == switch_cur) || (0x01 == switch_cur)))
+                {
+                    elev_decrease();
+                }
 
-            switch_prev = switch_cur;
+                switch_prev = switch_cur;
+            }
         }
         vTaskDelay(SWITCH_MONITOR_INTERVAL);
     }
