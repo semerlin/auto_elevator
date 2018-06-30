@@ -28,6 +28,8 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
 
+#define DUMP_MESSAGE 0
+
 /* protocol head and tail */
 #define ROBOT_HEAD    0x02
 #define ROBOT_TAIL    0x03
@@ -289,6 +291,7 @@ static void unpacket_param_data(const uint8_t *data, uint8_t len)
  * @param data - message to dump
  * @param len - data length
  */
+#if DUMP_MESSAGE
 static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
 {
     if (dir)
@@ -308,6 +311,7 @@ static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
     dbg_putchar('\r');
     dbg_putchar('\n');
 }
+#endif
 
 /**
  * @brief send protocol data
@@ -357,8 +361,8 @@ static void send_data(const uint8_t *data, uint8_t len)
     pdata += 3;
 
     assert_param(NULL != g_serial);
+#if DUMP_MESSAGE
     uint8_t datalen = (uint8_t)(pdata - buffer);
-#ifdef __ENABLE_TRACE
     dump_message(1, buffer, datalen);
 #endif
     serial_putstring(g_serial, (const char *)buffer, pdata - buffer);
@@ -395,7 +399,7 @@ static void vProtocol(void *pvParameters)
                     break;
                 }
             }
-#ifdef __ENABLE_TRACE
+#if DUMP_MESSAGE
             dump_message(0, recv_data, len);
 #endif
             if (is_param_setted())

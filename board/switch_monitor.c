@@ -19,7 +19,7 @@
 
 
 /* switch 0->1 means arrive，1->0 means leave */
-#define SWITCH_MONITOR_INTERVAL    (8 / portTICK_PERIOD_MS)
+#define SWITCH_MONITOR_INTERVAL    (5 / portTICK_PERIOD_MS)
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
