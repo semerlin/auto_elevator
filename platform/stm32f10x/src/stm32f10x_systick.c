@@ -20,7 +20,7 @@ typedef struct
     volatile uint32_t CALIB;
 }SYSTICK_T;
 
-SYSTICK_T *SYSTICK = (SYSTICK_T *)SYSTICK_BASE;
+static SYSTICK_T *SYSTICK = (SYSTICK_T *)SYSTICK_BASE;
 
 /* systick regiter definition */
 #define CTRL_COUNTFLAG    (1 << 16)

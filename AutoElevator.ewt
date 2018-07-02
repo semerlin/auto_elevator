@@ -2380,6 +2380,9 @@
           <name>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_systick.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_tim.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_usart.h</name>
         </file>
       </group>
@@ -2402,6 +2405,9 @@
         </file>
         <file>
           <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_systick.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_tim.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_usart.c</name>

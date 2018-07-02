@@ -23,7 +23,7 @@ typedef struct
 	volatile uint32_t WRPR;
 }FLASH_T;
 
-FLASH_T *FLASH = (FLASH_T *)FLASH_BASE;
+static FLASH_T *FLASH = (FLASH_T *)FLASH_BASE;
 
 
 /* flash register's bit band area */

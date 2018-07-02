@@ -28,7 +28,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
 
-#define DUMP_MESSAGE 0
+#define DUMP_MESSAGE 1
 
 /* protocol head and tail */
 #define ROBOT_HEAD    0x02

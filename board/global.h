@@ -28,6 +28,7 @@
 
 /* interrupt priority */
 #define USART1_PRIORITY        (13)
+#define TIM2_PRIORITY          (14)
 
 #define ARRIVE_JUDGE    (0)
 

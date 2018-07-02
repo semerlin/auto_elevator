@@ -32,7 +32,7 @@ typedef struct
 }SCB_T;
 
 /* SCB寄存器结构体定义*/
-SCB_T *SCB = (SCB_T *)SCB_BASE;
+static SCB_T *SCB = (SCB_T *)SCB_BASE;
 
 //寄存器内部位置定义
 #define NMIPENDSET    ((uint32_t)1 << 31)

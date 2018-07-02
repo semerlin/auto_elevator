@@ -26,7 +26,7 @@ typedef struct
     volatile uint32_t CSR;  
 }RCC_T;
 
-RCC_T *RCC = (RCC_T *)RCC_BASE;
+static RCC_T *RCC = (RCC_T *)RCC_BASE;
 
 
 

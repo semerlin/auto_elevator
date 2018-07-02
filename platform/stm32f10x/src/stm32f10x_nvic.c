@@ -30,7 +30,7 @@ typedef struct
 }NVIC_T;
        
 /* NVIC register map definition */
-NVIC_T *NVIC = (NVIC_T *)NVIC_BASE;
+static NVIC_T *NVIC = (NVIC_T *)NVIC_BASE;
 
 
 void NVIC_Init(const NVIC_Config *config)

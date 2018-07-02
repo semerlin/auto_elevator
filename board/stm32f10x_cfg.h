@@ -22,6 +22,7 @@
 #define _MODULE_SCB
 #define _MODULE_NVIC
 #define _MODULE_SYSTICK
+#define _MODULE_TIM
 
 /**********************************************************/
 #ifdef _MODULE_FLASH
@@ -50,6 +51,10 @@
 
 #ifdef _MODULE_SYSTICK
   #include "stm32f10x_systick.h"
+#endif
+
+#ifdef _MODULE_TIM
+  #include "stm32f10x_tim.h"
 #endif
 
 
