@@ -23,6 +23,7 @@
 #define _MODULE_NVIC
 #define _MODULE_SYSTICK
 #define _MODULE_TIM
+#define _MODULE_CAN
 
 /**********************************************************/
 #ifdef _MODULE_FLASH
@@ -55,6 +56,10 @@
 
 #ifdef _MODULE_TIM
   #include "stm32f10x_tim.h"
+#endif
+
+#ifdef _MODULE_CAN
+  #include "stm32f10x_can.h"
 #endif
 
 

@@ -2181,6 +2181,9 @@
       <group>
         <name>inc</name>
         <file>
+          <name>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_can.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_flash.h</name>
         </file>
         <file>
@@ -2213,6 +2216,9 @@
       </group>
       <group>
         <name>src</name>
+        <file>
+          <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_can.c</name>
+        </file>
         <file>
           <name>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_flash.c</name>
         </file>

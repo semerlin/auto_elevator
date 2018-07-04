@@ -55,7 +55,7 @@ typedef struct
 #define RWU              (1 << 1)
 
 
-/* GPIO group array */
+/* USART group array */
 static USART_T * const USARTx[] = {(USART_T *)USART1_BASE, 
                                    (USART_T *)USART2_BASE,
                                    (USART_T *)USART3_BASE};
