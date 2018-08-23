@@ -8,6 +8,7 @@
 #ifndef _PROTOCOL_ROBOT_H_
 #define _PROTOCOL_ROBOT_H_
 
+#ifdef __MASTER
 #include "types.h"
 
 BEGIN_DECLS
@@ -18,6 +19,7 @@ void notify_arrive(char floor);
 void register_arrive_cb(process_robot_cb cb);
 
 END_DECLS
+#endif
 
 
 #endif /* _PROTOCOL_ROBOT_H_ */

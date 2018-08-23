@@ -6,8 +6,9 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _ROBOT_H_
-  #define _ROBOT_H_
+#define _ROBOT_H_
 
+#ifdef __MASTER_H
 #include "types.h"
 
 BEGIN_DECLS
@@ -27,7 +28,7 @@ void robot_monitor_stop(void);
 void robot_monitor_reset(void);
 
 END_DECLS
-
+#endif
 
 #endif /* _ROBOT_H_ */
 

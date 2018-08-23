@@ -33,9 +33,11 @@ static uint8_t hold_cnt = 0;
 /* elevator state */
 static elev_run_state run_state = run_stop;
 static elev_work_state work_state = work_idle;
+#endif
 
 /* key press queue */
 static xQueueHandle xQueueFloor = NULL;
+#ifdef __MASTER
 static xQueueHandle xArriveQueue = NULL;
 static xSemaphoreHandle xNotifySemaphore = NULL;
 #define MAX_CHECK_CNT 5
@@ -133,8 +135,8 @@ bool elev_init(void)
 {
     TRACE("initialize elevator...\r\n");
     xQueueFloor = xQueueCreate(1, 1);
-    xArriveQueue = xQueueCreate(1, 1);
 #ifdef __MASTER
+    xArriveQueue = xQueueCreate(1, 1);
     xNotifySemaphore = xSemaphoreCreateBinary();
     register_arrive_cb(arrive_hook);
     xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
@@ -142,8 +144,10 @@ bool elev_init(void)
 #endif
     xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
+#ifdef __MASTER
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
+#endif
     return TRUE;
 }
 

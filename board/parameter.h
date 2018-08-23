@@ -36,6 +36,7 @@ typedef struct
 typedef struct
 {
     uint8_t id_board;
+    char start_floor;
 } __PACKED__ parameters_t;
 #endif
 

@@ -5,6 +5,7 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
+#ifdef __MASTER
 #include "protocol.h"
 #include "protocol_robot.h"
 #include "trace.h"
@@ -512,4 +513,5 @@ void register_arrive_cb(process_robot_cb cb)
 {
     arrive_cb = cb;
 }
+#endif
 

@@ -5,6 +5,7 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
+#ifdef __MASTER
 #include "robot.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -158,4 +159,4 @@ void robot_monitor_reset(void)
 {
     monitot_count = 0;
 }
-
+#endif

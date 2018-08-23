@@ -223,7 +223,7 @@
         </option>
         <option>
           <name>CCDiagSuppress</name>
-          <state></state>
+          <state>Pa050</state>
         </option>
         <option>
           <name>CCDiagRemark</name>
@@ -1186,7 +1186,7 @@
         </option>
         <option>
           <name>CCDiagSuppress</name>
-          <state></state>
+          <state>Pa050</state>
         </option>
         <option>
           <name>CCDiagRemark</name>
@@ -2051,18 +2051,6 @@
       <name>$PROJ_DIR$\board\protocol_param.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\board\protocol_robot.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\protocol_robot.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\robot.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\robot.h</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\board\serial.c</name>
     </file>
     <file>
@@ -2079,12 +2067,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\stm32f10x_vector.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\switch_monitor.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\switch_monitor.h</name>
     </file>
   </group>
   <group>
@@ -2272,6 +2254,24 @@
   </group>
   <file>
     <name>$PROJ_DIR$\board\expand.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\board\protocol_robot.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\board\protocol_robot.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\board\robot.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\board\robot.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\board\switch_monitor.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\board\switch_monitor.h</name>
   </file>
 </project>
 

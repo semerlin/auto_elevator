@@ -209,7 +209,7 @@ static void vLedMonitor(void *pvParameters)
 {
     for (;;)
     {
-        cur_status = led_status_get();
+        uint16_t cur_status = led_status_get();
         /** TODO: notify master led status */
         vTaskDelay(LED_MONITOR_INTERVAL);
     }

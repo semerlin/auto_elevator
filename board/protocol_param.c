@@ -151,7 +151,6 @@ bool process_param_data(const uint8_t *data, uint8_t len)
     return TRUE;
 }
 
-#ifdef __MASTER
 /**
  * @brief process parameter set
  * @param data - parameter
@@ -164,11 +163,13 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         msg_param_t *msg = (msg_param_t *)data;
 
         parameters_t param = param_get();
+#ifdef __MASTER
         param.id_ctl = msg->id_ctl;
         param.id_elev = msg->id_elev;
+        param.calc_type = msg->calc_type;
+#endif
         param.id_board = msg->id_board;
         param.start_floor = msg->start_floor;
-        param.calc_type = msg->calc_type;
 
         if (!param_store(param))
         {
@@ -186,6 +187,7 @@ END:
     TRACE("set parameter failed!\r\n");
 }
 
+#ifdef __MASTER
 /**
  * @brief process password set
  * @param data - password
