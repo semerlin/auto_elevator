@@ -11,12 +11,12 @@
 
 
 /* pin configure structure */
-typedef struct 
+typedef struct
 {
     char name[16];
     GPIO_Group group;
     GPIO_Config config;
-}PIN_CONFIG;
+} PIN_CONFIG;
 
 
 typedef enum
@@ -24,25 +24,25 @@ typedef enum
     AHB,
     APB1,
     APB2,
-}PIN_BUS;
+} PIN_BUS;
 
 typedef struct
 {
     PIN_BUS bus;
     uint32_t reset_reg;
     uint32_t enable_reg;
-}PIN_CLOCK;
+} PIN_CLOCK;
 
 
 /* pin arrays */
-PIN_CONFIG pins[] = 
+PIN_CONFIG pins[] =
 {
-    {"KEY_DATA", GPIOC, 10, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"KEY_ST", GPIOC, 11, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"KEY_SH", GPIOC, 12, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"LED_DATA", GPIOA, 2, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
-    {"LED_ST", GPIOA, 0, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"LED_SH", GPIOA, 1, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"KEY_DATA", GPIOC, 6, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"KEY_ST", GPIOC, 7, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"KEY_SH", GPIOC, 8, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"LED_DATA", GPIOC, 13, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"LED_ST", GPIOC, 15, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"LED_SH", GPIOC, 14, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
     {"SWITCH1", GPIOB, 12, GPIO_Speed_2MHz, GPIO_Mode_IPD},
     {"SWITCH2", GPIOB, 13, GPIO_Speed_2MHz, GPIO_Mode_IPD},
     {"MODE_SWITCH", GPIOB, 14, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
@@ -50,14 +50,14 @@ PIN_CONFIG pins[] =
     {"WLAN_TX", GPIOA, 9, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"WLAN_RX", GPIOA, 10, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"FM_WP", GPIOB, 5, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
-    {"i2c1_scl", GPIOB, 6, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
-    {"i2c1_sda", GPIOB, 7, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
+    {"I2C1_SCL", GPIOB, 6, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
+    {"I2C1_SDA", GPIOB, 7, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
     {"DEBUG_TX", GPIOB, 10, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"DEBUG_RX", GPIOB, 11, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
 };
 
 /* clock arrays */
-PIN_CLOCK pin_clocks[] = 
+PIN_CLOCK pin_clocks[] =
 {
     {AHB, RCC_AHB_ENABLE_CRC, RCC_AHB_ENABLE_CRC},
     {APB2, RCC_APB2_RESET_AFIO, RCC_APB2_ENABLE_AFIO},
@@ -77,12 +77,14 @@ PIN_CLOCK pin_clocks[] =
 static const PIN_CONFIG *get_pinconfig(const char *name)
 {
     uint32_t len = sizeof(pins) / sizeof(PIN_CONFIG);
-    for(uint32_t i = 0; i < len; ++i)
+    for (uint32_t i = 0; i < len; ++i)
     {
-        if(strcmp(name, pins[i].name) == 0)
+        if (strcmp(name, pins[i].name) == 0)
+        {
             return &pins[i];
+        }
     }
-    
+
     return NULL;
 }
 
@@ -93,9 +95,9 @@ void pin_init(void)
 {
     /* config pin clocks */
     uint32_t len = sizeof(pin_clocks) / sizeof(PIN_CLOCK);
-    for(uint32_t i = 0; i < len; ++i)
+    for (uint32_t i = 0; i < len; ++i)
     {
-        switch(pin_clocks[i].bus)
+        switch (pin_clocks[i].bus)
         {
         case AHB:
             RCC_AHBPeripClockEnable(pin_clocks[i].enable_reg, TRUE);
@@ -114,11 +116,12 @@ void pin_init(void)
             break;
         }
     }
-    
+
+    RCC_StopLSE();
     //GPIO_PinRemap(SWJ_JTAG_DISABLE, TRUE);
     /* config pins */
     len = sizeof(pins) / sizeof(PIN_CONFIG);
-    for(uint32_t i = 0; i < len; ++i)
+    for (uint32_t i = 0; i < len; ++i)
     {
         GPIO_Setup(pins[i].group, &pins[i].config);
     }
@@ -147,7 +150,7 @@ void pin_reset(const char *name)
 }
 
 /**
- * @brief toggle pin 
+ * @brief toggle pin
  * @param name - pin name
  */
 void pin_toggle(const char *name)

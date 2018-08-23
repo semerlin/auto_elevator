@@ -3,7 +3,7 @@
 <project>
   <fileVersion>2</fileVersion>
   <configuration>
-    <name>Debug</name>
+    <name>master</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -17,15 +17,15 @@
         <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>Debug\Exe</state>
+          <state>master\Exe</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>Debug\Obj</state>
+          <state>master\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>Debug\List</state>
+          <state>master\List</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -183,6 +183,7 @@
           <name>CCDefines</name>
           <state>__DEBUG</state>
           <state>__ENABLE_TRACE</state>
+          <state>__MASTER</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -965,29 +966,29 @@
     </settings>
   </configuration>
   <configuration>
-    <name>Release</name>
+    <name>expand</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
-    <debug>0</debug>
+    <debug>1</debug>
     <settings>
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
         <version>24</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>Release\Exe</state>
+          <state>expand\Exe</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>Release\Obj</state>
+          <state>expand\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>Release\List</state>
+          <state>expand\List</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -1000,7 +1001,7 @@
         </option>
         <option>
           <name>Input description</name>
-          <state></state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>Output variant</name>
@@ -1009,7 +1010,7 @@
         </option>
         <option>
           <name>Output description</name>
-          <state></state>
+          <state>Automatic choice of formatter.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -1017,7 +1018,7 @@
         </option>
         <option>
           <name>OGCoreOrChip</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GRuntimeLibSelect</name>
@@ -1031,7 +1032,7 @@
         </option>
         <option>
           <name>RTDescription</name>
-          <state></state>
+          <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
         </option>
         <option>
           <name>OGProductVersion</name>
@@ -1039,7 +1040,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state></state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1051,15 +1052,15 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state></state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GEndianModeBE</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OGBufferedTerminalOutput</name>
@@ -1081,16 +1082,16 @@
         <option>
           <name>GeneralMisraRules04</name>
           <version>0</version>
-          <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+          <state>111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</state>
         </option>
         <option>
           <name>RTConfigPath2</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
           <version>22</version>
-          <state>1</state>
+          <state>38</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -1107,11 +1108,11 @@
         <option>
           <name>CoreVariant</name>
           <version>22</version>
-          <state>0</state>
+          <state>38</state>
         </option>
         <option>
           <name>GFPUDeviceSlave</name>
-          <state>-</state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>FPU2</name>
@@ -1130,7 +1131,7 @@
         <option>
           <name>GFPUCoreSlave2</name>
           <version>22</version>
-          <state>1</state>
+          <state>38</state>
         </option>
       </data>
     </settings>
@@ -1140,10 +1141,12 @@
       <data>
         <version>31</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>NDEBUG</state>
+          <state>__DEBUG</state>
+          <state>__ENABLE_TRACE</state>
+          <state>__EXPAND</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1204,11 +1207,11 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>11111110</state>
+          <state>00000000</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IEndianMode</name>
@@ -1232,7 +1235,7 @@
         </option>
         <option>
           <name>CCSignedPlainChar</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCRequirePrototypes</name>
@@ -1256,7 +1259,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>CCLibConfigHeader</name>
@@ -1272,7 +1275,13 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state></state>
+          <state>$PROJ_DIR$\common</state>
+          <state>$PROJ_DIR$\os\include</state>
+          <state>$PROJ_DIR$\os\portable\cm3</state>
+          <state>$PROJ_DIR$\platform\cm3</state>
+          <state>$PROJ_DIR$\platform\stm32f10x\inc</state>
+          <state>$PROJ_DIR$\board</state>
+          <state>D:\project\AutoElevator\board\sensor</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1292,7 +1301,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>3</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -1301,7 +1310,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1390,7 +1399,7 @@
       <data>
         <version>9</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>AObjPrefix</name>
           <state>1</state>
@@ -1430,7 +1439,7 @@
         </option>
         <option>
           <name>ADebug</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>AltRegisterNames</name>
@@ -1514,7 +1523,7 @@
         </option>
         <option>
           <name>AOutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>AMultibyteSupport</name>
@@ -1556,11 +1565,11 @@
       <data>
         <version>1</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
           <version>3</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -1568,7 +1577,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state></state>
+          <state>AutoElevator.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1576,7 +1585,7 @@
         </option>
         <option>
           <name>OOCObjCopyEnable</name>
-          <state>0</state>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -1608,7 +1617,7 @@
       <data>
         <version>16</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>IlinkLibIOConfig</name>
           <state>1</state>
@@ -1623,7 +1632,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>###Unitialized###</state>
+          <state>AutoElevator.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -1687,7 +1696,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>lnk0t.icf</state>
+          <state>$TOOLKIT_DIR$\config\linker\ST\stm32f103xC.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1747,7 +1756,7 @@
         </option>
         <option>
           <name>IlinkProgramEntryLabel</name>
-          <state></state>
+          <state>__iar_program_start</state>
         </option>
         <option>
           <name>DoFill</name>
@@ -1838,7 +1847,7 @@
         </option>
         <option>
           <name>IlinkOptInline</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IlinkOptExceptionsAllow</name>
@@ -1898,7 +1907,7 @@
       <data>
         <version>0</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>IarchiveInputs</name>
           <state></state>
@@ -1956,6 +1965,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\elevator.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\expand.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\floormap.c</name>
@@ -2031,6 +2043,18 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\protocol.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_param.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_param.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_robot.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_robot.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\robot.c</name>
@@ -2246,6 +2270,9 @@
       </group>
     </group>
   </group>
+  <file>
+    <name>$PROJ_DIR$\board\expand.h</name>
+  </file>
 </project>
 
 

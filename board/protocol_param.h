@@ -5,21 +5,21 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _PROTOCOL_H_
-#define _PROTOCOL_H_
+#ifndef _PROTOCOL_PARAM_H_
+#define _PROTOCOL_PARAM_H_
 
 #include "types.h"
-#include "protocol_param.h"
-#include "protocol_robot.h"
 
 BEGIN_DECLS
 
-bool ptl_init(void);
-void ptl_send_data(const uint8_t *data, uint8_t len);
+bool process_param_data(const uint8_t *data, uint8_t len);
+#ifdef __MASTER
+void notify_calc(uint16_t floor_dis, uint16_t top_dis, uint8_t top_floor);
+#endif
 
 END_DECLS
 
 
-#endif /* _PROTOCOL_H_ */
+#endif /* _PROTOCOL_PARAM_H_ */
 
 

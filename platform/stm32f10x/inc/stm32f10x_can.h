@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_CAN_H_
-  #define _STM32F10X_CAN_H_
+#define _STM32F10X_CAN_H_
 
 #include "types.h"
 
@@ -17,62 +17,61 @@ typedef enum
     CAN1,
     CAN2,
     CAN_Count,
-}CAN_Group;
+} CAN_Group;
 
 /* can configure */
 typedef struct
 {
-  uint16_t prescaler;
-  uint8_t mode;
-  uint8_t sjw;
-  uint8_t bs1;
-  uint8_t bs2;
-  bool ttcm;
-  bool abom;
-  bool awum;
-  bool nart;
-  bool rflm;
-  bool txfp;
-}CAN_Config;
+    uint16_t prescaler;
+    uint8_t mode;
+    uint8_t sjw;
+    uint8_t bs1;
+    uint8_t bs2;
+    bool ttcm;
+    bool abom;
+    bool awum;
+    bool nart;
+    bool rflm;
+    bool txfp;
+} CAN_Config;
 
 /* can filter */
 typedef struct
 {
-  uint16_t id_high;
-  uint16_t id_low; 
-  uint16_t mask_id_high;
-  uint16_t mask_id_low;
-  uint16_t fifo_assignment;
-  uint8_t number;
-  uint8_t mode;
-  uint8_t scale;
-  bool activation;
+    uint16_t id_high;
+    uint16_t id_low;
+    uint16_t mask_id_high;
+    uint16_t mask_id_low;
+    uint16_t fifo_assignment;
+    uint8_t number;
+    uint8_t mode;
+    uint8_t scale;
+    bool activation;
 } CAN_Filter;
 
 /* can tx message */
 typedef struct
 {
-  uint32_t std_id;
-  uint32_t ext_id;
-  uint8_t ide;
-  uint8_t rtr;
-  uint8_t dlc;
-  uint8_t data[8];
+    uint32_t std_id;
+    uint32_t ext_id;
+    uint8_t ide;
+    uint8_t rtr;
+    uint8_t dlc;
+    uint8_t data[8];
 } CAN_TxMsg;
 
-/** 
-  * @brief  CAN Rx message structure definition  
+/**
+  * @brief  CAN Rx message structure definition
   */
-
 typedef struct
 {
-  uint32_t std_id;
-  uint32_t ext_id;
-  uint8_t ide;
-  uint8_t rtr;
-  uint8_t dlc;
-  uint8_t data[8];
-  uint8_t fmi;
+    uint32_t std_id;
+    uint32_t ext_id;
+    uint8_t ide;
+    uint8_t rtr;
+    uint8_t dlc;
+    uint8_t data[8];
+    uint8_t fmi;
 } CAN_RxMsg;
 
 
@@ -80,7 +79,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_Mode 
+/** @defgroup CAN_Mode
   * @{
   */
 
@@ -99,25 +98,25 @@ typedef struct
 
 
 /**
-  * @defgroup CAN_Operating_Mode 
+  * @defgroup CAN_Operating_Mode
   * @{
-  */  
+  */
 #define CAN_OperatingMode_Initialization  ((uint8_t)0x00) /*!< Initialization mode */
 #define CAN_OperatingMode_Normal          ((uint8_t)0x01) /*!< Normal mode */
 #define CAN_OperatingMode_Sleep           ((uint8_t)0x02) /*!< sleep mode */
 
 
 #define IS_CAN_OPERATING_MODE(MODE) (((MODE) == CAN_OperatingMode_Initialization) ||\
-                                    ((MODE) == CAN_OperatingMode_Normal)|| \
-																		((MODE) == CAN_OperatingMode_Sleep))
+                                     ((MODE) == CAN_OperatingMode_Normal)|| \
+                                     ((MODE) == CAN_OperatingMode_Sleep))
 /**
   * @}
   */
-  
+
 /**
   * @defgroup CAN_Mode_Status
   * @{
-  */  
+  */
 
 #define CAN_ModeStatus_Failed    ((uint8_t)0x00)                /*!< CAN entering the specific mode failed */
 #define CAN_ModeStatus_Success   ((uint8_t)!CAN_ModeStatus_Failed)   /*!< CAN entering the specific mode Succeed */
@@ -127,7 +126,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_synchronisation_jump_width 
+/** @defgroup CAN_synchronisation_jump_width
   * @{
   */
 
@@ -142,7 +141,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_time_quantum_in_bit_segment_1 
+/** @defgroup CAN_time_quantum_in_bit_segment_1
   * @{
   */
 
@@ -168,7 +167,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_time_quantum_in_bit_segment_2 
+/** @defgroup CAN_time_quantum_in_bit_segment_2
   * @{
   */
 
@@ -187,7 +186,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_clock_prescaler 
+/** @defgroup CAN_clock_prescaler
   * @{
   */
 
@@ -197,19 +196,19 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_filter_number 
+/** @defgroup CAN_filter_number
   * @{
   */
 #ifndef STM32F10X_CL
-  #define IS_CAN_FILTER_NUMBER(NUMBER) ((NUMBER) <= 13)
+#define IS_CAN_FILTER_NUMBER(NUMBER) ((NUMBER) <= 13)
 #else
-  #define IS_CAN_FILTER_NUMBER(NUMBER) ((NUMBER) <= 27)
-#endif /* STM32F10X_CL */ 
+#define IS_CAN_FILTER_NUMBER(NUMBER) ((NUMBER) <= 27)
+#endif /* STM32F10X_CL */
 /**
   * @}
   */
 
-/** @defgroup CAN_filter_mode 
+/** @defgroup CAN_filter_mode
   * @{
   */
 
@@ -222,7 +221,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_filter_scale 
+/** @defgroup CAN_filter_scale
   * @{
   */
 
@@ -248,7 +247,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup Start_bank_filter_for_slave_CAN 
+/** @defgroup Start_bank_filter_for_slave_CAN
   * @{
   */
 #define IS_CAN_BANKNUMBER(BANKNUMBER) (((BANKNUMBER) >= 1) && ((BANKNUMBER) <= 27))
@@ -256,7 +255,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_Tx 
+/** @defgroup CAN_Tx
   * @{
   */
 
@@ -269,7 +268,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_identifier_type 
+/** @defgroup CAN_identifier_type
   * @{
   */
 
@@ -281,7 +280,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_remote_transmission_request 
+/** @defgroup CAN_remote_transmission_request
   * @{
   */
 
@@ -293,7 +292,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_transmit_constants 
+/** @defgroup CAN_transmit_constants
   * @{
   */
 
@@ -306,7 +305,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_receive_FIFO_number_constants 
+/** @defgroup CAN_receive_FIFO_number_constants
   * @{
   */
 
@@ -319,7 +318,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_sleep_constants 
+/** @defgroup CAN_sleep_constants
   * @{
   */
 
@@ -330,7 +329,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_wake_up_constants 
+/** @defgroup CAN_wake_up_constants
   * @{
   */
 
@@ -344,23 +343,23 @@ typedef struct
 /**
   * @defgroup   CAN_Error_Code_constants
   * @{
-  */  
-                                                                
-#define CAN_ErrorCode_NoErr           ((uint8_t)0x00) /*!< No Error */ 
-#define	CAN_ErrorCode_StuffErr        ((uint8_t)0x10) /*!< Stuff Error */ 
-#define	CAN_ErrorCode_FormErr         ((uint8_t)0x20) /*!< Form Error */ 
-#define	CAN_ErrorCode_ACKErr          ((uint8_t)0x30) /*!< Acknowledgment Error */ 
-#define	CAN_ErrorCode_BitRecessiveErr ((uint8_t)0x40) /*!< Bit Recessive Error */ 
-#define	CAN_ErrorCode_BitDominantErr  ((uint8_t)0x50) /*!< Bit Dominant Error */ 
-#define	CAN_ErrorCode_CRCErr          ((uint8_t)0x60) /*!< CRC Error  */ 
-#define	CAN_ErrorCode_SoftwareSetErr  ((uint8_t)0x70) /*!< Software Set Error */ 
+  */
+
+#define CAN_ErrorCode_NoErr           ((uint8_t)0x00) /*!< No Error */
+#define CAN_ErrorCode_StuffErr        ((uint8_t)0x10) /*!< Stuff Error */
+#define CAN_ErrorCode_FormErr         ((uint8_t)0x20) /*!< Form Error */
+#define CAN_ErrorCode_ACKErr          ((uint8_t)0x30) /*!< Acknowledgment Error */
+#define CAN_ErrorCode_BitRecessiveErr ((uint8_t)0x40) /*!< Bit Recessive Error */
+#define CAN_ErrorCode_BitDominantErr  ((uint8_t)0x50) /*!< Bit Dominant Error */
+#define CAN_ErrorCode_CRCErr          ((uint8_t)0x60) /*!< CRC Error  */
+#define CAN_ErrorCode_SoftwareSetErr  ((uint8_t)0x70) /*!< Software Set Error */
 
 
 /**
   * @}
   */
 
-/** @defgroup CAN_flags 
+/** @defgroup CAN_flags
   * @{
   */
 /* If the flag is 0x3XXXXXXX, it means that it can be used with CAN_GetFlagStatus()
@@ -383,7 +382,7 @@ typedef struct
 /* Operating Mode Flags */
 #define CAN_FLAG_WKU               ((uint32_t)0x31000008) /*!< Wake up Flag */
 #define CAN_FLAG_SLAK              ((uint32_t)0x31000012) /*!< Sleep acknowledge Flag */
-/* Note: When SLAK intterupt is disabled (SLKIE=0), no polling on SLAKI is possible. 
+/* Note: When SLAK intterupt is disabled (SLKIE=0), no polling on SLAKI is possible.
          In this case the SLAK bit can be polled.*/
 
 /* Error Flags */
@@ -410,13 +409,13 @@ typedef struct
   * @}
   */
 
-  
-/** @defgroup CAN_interrupts 
+
+/** @defgroup CAN_interrupts
   * @{
   */
 
 
-  
+
 #define CAN_IT_TME                  ((uint32_t)0x00000001) /*!< Transmit mailbox empty Interrupt*/
 
 /* Receive Interrupts */
@@ -445,12 +444,12 @@ typedef struct
 
 
 #define IS_CAN_IT(IT)        (((IT) == CAN_IT_TME) || ((IT) == CAN_IT_FMP0)  ||\
-                             ((IT) == CAN_IT_FF0)  || ((IT) == CAN_IT_FOV0)  ||\
-                             ((IT) == CAN_IT_FMP1) || ((IT) == CAN_IT_FF1)   ||\
-                             ((IT) == CAN_IT_FOV1) || ((IT) == CAN_IT_EWG)   ||\
-                             ((IT) == CAN_IT_EPV)  || ((IT) == CAN_IT_BOF)   ||\
-                             ((IT) == CAN_IT_LEC)  || ((IT) == CAN_IT_ERR)   ||\
-                             ((IT) == CAN_IT_WKU)  || ((IT) == CAN_IT_SLK))
+                              ((IT) == CAN_IT_FF0)  || ((IT) == CAN_IT_FOV0)  ||\
+                              ((IT) == CAN_IT_FMP1) || ((IT) == CAN_IT_FF1)   ||\
+                              ((IT) == CAN_IT_FOV1) || ((IT) == CAN_IT_EWG)   ||\
+                              ((IT) == CAN_IT_EPV)  || ((IT) == CAN_IT_BOF)   ||\
+                              ((IT) == CAN_IT_LEC)  || ((IT) == CAN_IT_ERR)   ||\
+                              ((IT) == CAN_IT_WKU)  || ((IT) == CAN_IT_SLK))
 
 #define IS_CAN_CLEAR_IT(IT) (((IT) == CAN_IT_TME) || ((IT) == CAN_IT_FF0)    ||\
                              ((IT) == CAN_IT_FOV0)|| ((IT) == CAN_IT_FF1)    ||\
@@ -463,16 +462,16 @@ typedef struct
   * @}
   */
 
-/** @defgroup CAN_Legacy 
+/** @defgroup CAN_Legacy
   * @{
   */
 #define CANINITFAILED               CAN_InitStatus_Failed
 #define CANINITOK                   CAN_InitStatus_Success
 #define CAN_FilterFIFO0             CAN_Filter_FIFO0
 #define CAN_FilterFIFO1             CAN_Filter_FIFO1
-#define CAN_ID_STD                  CAN_Id_Standard           
+#define CAN_ID_STD                  CAN_Id_Standard
 #define CAN_ID_EXT                  CAN_Id_Extended
-#define CAN_RTR_DATA                CAN_RTR_Data         
+#define CAN_RTR_DATA                CAN_RTR_Data
 #define CAN_RTR_REMOTE              CAN_RTR_Remote
 #define CANTXFAILE                  CAN_TxStatus_Failed
 #define CANTXOK                     CAN_TxStatus_Ok
@@ -480,8 +479,8 @@ typedef struct
 #define CAN_NO_MB                   CAN_TxStatus_NoMailBox
 #define CANSLEEPFAILED              CAN_Sleep_Failed
 #define CANSLEEPOK                  CAN_Sleep_Ok
-#define CANWAKEUPFAILED             CAN_WakeUp_Failed        
-#define CANWAKEUPOK                 CAN_WakeUp_Ok        
+#define CANWAKEUPFAILED             CAN_WakeUp_Failed
+#define CANWAKEUPOK                 CAN_WakeUp_Ok
 
 /**
   * @}
@@ -503,8 +502,8 @@ typedef struct
   * @{
   */
 
-/* Initialization and Configuration functions *********************************/ 
-bool CAN_Init(CAN_Group group, CAN_Config* config);
+/* Initialization and Configuration functions *********************************/
+bool CAN_Init(CAN_Group group, CAN_Config *config);
 void CAN_FilterInit(CAN_Filter *filter);
 void CAN_StructInit(CAN_Config *config);
 void CAN_DBGFreeze(CAN_Group group, bool state);
@@ -532,7 +531,7 @@ uint8_t CAN_GetReceiveErrorCounter(CAN_Group group);
 uint8_t CAN_GetLSBTransmitErrorCounter(CAN_Group group);
 
 /* Interrupts and flags management functions **********************************/
-void CAN_ITConfig(CAN_Group group, uint32_t it, bool tate);
+void CAN_ITEnable(CAN_Group group, uint32_t it, bool tate);
 bool CAN_IsFlagSet(CAN_Group group, uint32_t flag);
 void CAN_ClearFlag(CAN_Group group, uint32_t flag);
 bool CAN_IsITPending(CAN_Group group, uint32_t it);

@@ -23,7 +23,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[elev]"
 
-
+#ifdef __MASTER
 /* elevator current floor */
 static char elev_cur_floor = 1;
 
@@ -36,11 +36,12 @@ static elev_work_state work_state = work_idle;
 
 /* key press queue */
 static xQueueHandle xQueueFloor = NULL;
-
 static xQueueHandle xArriveQueue = NULL;
 static xSemaphoreHandle xNotifySemaphore = NULL;
 #define MAX_CHECK_CNT 5
+#endif
 
+#ifdef __MASTER
 /**
  * @brief elevator task
  * @param pvParameters - task parameters
@@ -59,10 +60,11 @@ static void vElevHold(void *pvParameters)
                 keyctl_release(keymap_open());
             }
         }
-        
+
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
+#endif
 
 /**
  * @brief elevator task
@@ -73,7 +75,7 @@ static void vElevControl(void *pvParameters)
     uint8_t key = 0;
     for (;;)
     {
-        if(xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
+        if (xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
         {
             keyctl_press(key);
             vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -82,6 +84,7 @@ static void vElevControl(void *pvParameters)
     }
 }
 
+#ifdef __MASTER
 /**
  * @brief elevator task
  * @param pvParameters - task parameters
@@ -95,8 +98,8 @@ static void vElevArrive(void *pvParameters)
         err_cnt = 0;
         if (xQueueReceive(xArriveQueue, &floor, portMAX_DELAY))
         {
-            while (pdTRUE != xSemaphoreTake(xNotifySemaphore, 
-                                         500 / portTICK_PERIOD_MS))
+            while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
+                                            500 / portTICK_PERIOD_MS))
             {
                 err_cnt ++;
                 if (err_cnt > MAX_CHECK_CNT)
@@ -106,6 +109,7 @@ static void vElevArrive(void *pvParameters)
                 }
                 notify_arrive(floor);
             }
+            robot_checkin_reset();
         }
     }
 }
@@ -119,6 +123,7 @@ void arrive_hook(const uint8_t *data, uint8_t len)
 {
     xSemaphoreGive(xNotifySemaphore);
 }
+#endif
 
 /**
  * @brief initialize elevator
@@ -129,14 +134,16 @@ bool elev_init(void)
     TRACE("initialize elevator...\r\n");
     xQueueFloor = xQueueCreate(1, 1);
     xArriveQueue = xQueueCreate(1, 1);
+#ifdef __MASTER
     xNotifySemaphore = xSemaphoreCreateBinary();
     register_arrive_cb(arrive_hook);
     xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
-                    ELEV_PRIORITY, NULL);
+                ELEV_PRIORITY, NULL);
+#endif
     xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
-                    ELEV_PRIORITY, NULL);
+                ELEV_PRIORITY, NULL);
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
-                    ELEV_PRIORITY, NULL);
+                ELEV_PRIORITY, NULL);
     return TRUE;
 }
 
@@ -147,10 +154,20 @@ bool elev_init(void)
 void elev_go(char floor)
 {
     TRACE("elevator go floor: %d\r\n", floor);
-    uint8_t key = keymap_floor_to_key(floor);
-    xQueueOverwrite(xQueueFloor, &key);
+    if (keymap_floor_contains(floor))
+    {
+        uint8_t key = keymap_floor_to_key(floor);
+        xQueueOverwrite(xQueueFloor, &key);
+    }
+#ifdef __MASTER
+    else
+    {
+        /** TODO: notify expand board goto specified floor */
+    }
+#endif
 }
 
+#ifdef __MASTER
 /**
  * @brief indicate elevator arrive
  * @param floor - arrive floor
@@ -296,6 +313,7 @@ char elev_floor(void)
 {
     return elev_cur_floor;
 }
+#endif
 
 
 

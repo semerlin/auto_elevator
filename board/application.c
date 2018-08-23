@@ -18,14 +18,17 @@
 #include "led_monitor.h"
 #include "protocol.h"
 #include "elevator.h"
+#ifdef __MASTER
 #include "switch_monitor.h"
+#endif
 #include "led_status.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
 
-#define VERSION  ("v1.0.3.0")
+#define VERSION  ("v1.1.0.0")
 
+parameters_t board_parameter;
 
 /**
  * @brief start system
@@ -39,15 +42,25 @@ void ApplicationStartup()
     {
         TRACE("startup application failed!\r\n");
     }
-    
-    protocol_init();
-    
+
+    ptl_init();
+
     if (is_param_setted())
     {
+        board_parameter = param_get();
         keymap_init();
         keyctl_init();
+#ifdef __MASTER
         robot_init();
-        switch_monitor_init();
+        if (CALC_PWD == board_parameter.calc_type)
+        {
+            switch_monitor_init();
+        }
+        else
+        {
+            /* init gaoduji */
+        }
+#endif
         led_monitor_init();
         elev_init();
     }

@@ -5,29 +5,53 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _PARAMETER_H_
-  #define _PARAMETER_H_
+#ifndef _PARAMETERS_H_
+#define _PARAMETERS_H_
 
 #include "types.h"
 
 BEGIN_DECLS
 
+typedef enum
+{
+    CALC_PWD,
+    CALC_ALTIMETER,
+} calc_type_t;
+
+
+#ifdef __MASTER
+#define PARAM_PWD_LEN            4
+typedef struct
+{
+    uint8_t id_ctl;
+    uint8_t id_elev;
+    uint8_t id_board;
+    char start_floor;
+    uint8_t calc_type;
+    uint8_t pwd_window;
+    uint8_t pwd[PARAM_PWD_LEN];
+    uint16_t floor_height;
+} __PACKED__ parameters_t;
+#else
+typedef struct
+{
+    uint8_t id_board;
+} __PACKED__ parameters_t;
+#endif
+
 bool param_init(void);
 void reset_param(void);
 bool is_param_setted(void);
-void param_set_inited(void);
-void param_get_pwd(uint8_t *pwd);
-uint8_t param_get_id_ctl(void);
-uint8_t param_get_id_elev(void);
-char param_get_floormap(void);
-bool param_update_floormap(char floor);
-bool param_update_id_ctl(uint8_t id);
-bool param_update_id_elev(uint8_t id);
-bool param_update_pwd(const uint8_t *pwd);
-bool param_update_all(const uint8_t *data);
+bool param_store(parameters_t param);
+#ifdef __MASTER
+bool param_store_pwd(uint8_t interval, uint8_t *pwd);
+bool param_store_floor_height(uint16_t height);
+#endif
+parameters_t param_get(void);
+void param_dump(void);
 
 
 END_DECLS
 
 
-#endif
+#endif /* _BOARD_PARAMETERS_H_ */

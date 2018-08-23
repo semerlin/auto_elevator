@@ -21,38 +21,40 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
 
-#define LED_INTERVAL            (200)
-#define LED_MONITOR_INTERVAL    (LED_INTERVAL / portTICK_PERIOD_MS)
+#ifdef __MASTER
+extern parameters_t board_parameter;
+#endif
+
+#define LED_INTERVAL                 (200)
+#define LED_MONITOR_INTERVAL         (LED_INTERVAL / portTICK_PERIOD_MS)
+
+#ifdef __MASTER
 #define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
-
 static uint16_t led_status = 0;
-
-/* led password */
-uint8_t led_pwd[5];
 
 typedef struct
 {
     uint8_t pwd;
     uint32_t time;
-}pwd_node;
+} pwd_node;
 
-static pwd_node pwds[4] = 
+static pwd_node pwds[PARAM_PWD_LEN] =
 {
     {0, 0},
     {0, 0},
     {0, 0},
     {0, 0}
 };
+#endif
 
-#define LED_PWD_CHECK_TIME 6000
-
+#ifdef __MASTER
 /**
  * @brief check if floor arrived, 1->0 means arrive
  * @return check result
  */
-static bool __INLINE is_floor_arrive(uint16_t origin, uint16_t new)
+static bool __INLINE is_floor_arrive(uint16_t origin_val, uint16_t new_val)
 {
-    return (0 == (origin & new));
+    return (0 == (origin_val & new_val));
 }
 
 /**
@@ -78,23 +80,24 @@ static uint8_t bit_to_pos(uint16_t data)
 static void push_pwd_node(const pwd_node *node)
 {
     TRACE("push pwd node: key(%d), time(%d)\r\n", node->pwd, node->time);
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < PARAM_PWD_LEN - 1; ++i)
     {
         pwds[i].pwd = pwds[i + 1].pwd;
         pwds[i].time = pwds[i + 1].time;
     }
-    pwds[3].pwd = node->pwd;
-    pwds[3].time = node->time;
+    pwds[PARAM_PWD_LEN - 1].pwd = node->pwd;
+    pwds[PARAM_PWD_LEN - 1].time = node->time;
 
     /* validate time */
-    if (pwds[3].time > pwds[0].time)
+    if (pwds[PARAM_PWD_LEN - 1].time > pwds[0].time)
     {
-        if ((pwds[3].time - pwds[0].time) * LED_INTERVAL < LED_PWD_CHECK_TIME)
+        if ((pwds[PARAM_PWD_LEN - 1].time - pwds[0].time) * LED_INTERVAL < (uint32_t)
+            board_parameter.pwd_window * 1000)
         {
             /* validate password */
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < PARAM_PWD_LEN; ++i)
             {
-                if (pwds[i].pwd != led_pwd[i])
+                if (pwds[i].pwd != board_parameter.pwd[i])
                 {
                     return ;
                 }
@@ -103,7 +106,9 @@ static void push_pwd_node(const pwd_node *node)
         }
     }
 }
+#endif
 
+#ifdef __MASTER
 /**
  * @brief led monitor task
  * @param pvParameters - task parameter
@@ -113,23 +118,33 @@ static void vLedWorkMonitor(void *pvParameters)
     char floor = 0;
     for (;;)
     {
-        /* check elevator status */
+        /** check elevator status */
         if (work_robot == elev_state_work())
         {
             if (DEFAULT_CHECKIN != robot_checkin_get())
             {
                 floor = floormap_phy_to_dis(robot_checkin_get());
+                /** check whether this board can control specified floor */
                 if (!is_led_on(floor) && (floor != elev_floor()))
                 {
-                    elev_go(floor);
+                    if (keymap_floor_contains(floor))
+                    {
+                        elev_go(floor);
+                    }
+                    else
+                    {
+                        /** TODO: nodity expand borard goto specified floor */
+                    }
                 }
             }
         }
-        
-        vTaskDelay(LED_WORK_MONITOR_INTERVAL);      
+
+        vTaskDelay(LED_WORK_MONITOR_INTERVAL);
     }
 }
+#endif
 
+#ifdef __MASTER
 /**
  * @brief led monitor task
  * @param pvParameters - task parameter
@@ -164,20 +179,42 @@ static void vLedMonitor(void *pvParameters)
                     else
                     {
                         TRACE("floor led on: %d\r\n", floor);
-                        /* push password */
-                        pwd_node node = {(uint8_t)floor, timestamp};
-                        push_pwd_node(&node);
+                        if (CALC_PWD == board_parameter.calc_type)
+                        {
+                            /* push password */
+                            pwd_node node = {(uint8_t)floor, timestamp};
+                            push_pwd_node(&node);
+                        }
                     }
                 }
                 changed_status &= changed_status - 1;
-            }while (0 != changed_status);
+            }
+            while (0 != changed_status);
             led_status = cur_status;
         }
         vTaskDelay(LED_MONITOR_INTERVAL);
-        
-        timestamp ++;
+
+        if (CALC_PWD == board_parameter.calc_type)
+        {
+            timestamp ++;
+        }
     }
 }
+#else
+/**
+ * @brief led monitor task
+ * @param pvParameters - task parameter
+ */
+static void vLedMonitor(void *pvParameters)
+{
+    for (;;)
+    {
+        cur_status = led_status_get();
+        /** TODO: notify master led status */
+        vTaskDelay(LED_MONITOR_INTERVAL);
+    }
+}
+#endif
 
 /**
  * @brief initialize led monitor
@@ -186,11 +223,13 @@ static void vLedMonitor(void *pvParameters)
 bool led_monitor_init(void)
 {
     TRACE("initialize led monitor...\r\n");
-    param_get_pwd(led_pwd);
-    xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL, 
-                    LED_MONITOR_PRIORITY, NULL);
-    xTaskCreate(vLedWorkMonitor, "ledworkmonitor", LED_MONITOR_STACK_SIZE, NULL, 
-                    LED_MONITOR_PRIORITY, NULL);
+
+    xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL,
+                LED_MONITOR_PRIORITY, NULL);
+#ifdef __MASTER
+    xTaskCreate(vLedWorkMonitor, "ledworkmonitor", LED_MONITOR_STACK_SIZE, NULL,
+                LED_MONITOR_PRIORITY, NULL);
+#endif
 
     return TRUE;
 }

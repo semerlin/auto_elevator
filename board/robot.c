@@ -19,7 +19,7 @@ typedef struct
 {
     uint8_t id;
     uint8_t floor;
-}robot_info;
+} robot_info;
 
 #define DEFAULT_ID    0xff
 
@@ -30,7 +30,6 @@ static bool robot_monitor = FALSE;
 
 static uint32_t monitot_count = 0;
 #define RESET_TIME   (600)
-
 
 /**
  * @brief led monitor task
@@ -56,7 +55,7 @@ static void vRobotMonitor(void *pvParameters)
         {
             monitot_count = 0;
         }
-        
+
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
@@ -70,7 +69,7 @@ void robot_init(void)
     robot.id = DEFAULT_ID;
     robot.floor = DEFAULT_CHECKIN;
     xTaskCreate(vRobotMonitor, "robot", ROBOT_STACK_SIZE, NULL,
-                    ROBOT_PRIORITY, NULL);
+                ROBOT_PRIORITY, NULL);
 }
 
 /**
@@ -114,7 +113,7 @@ void robot_checkin_set(uint8_t floor)
  */
 void robot_checkin_reset(void)
 {
-    robot.floor = DEFAULT_CHECKIN;   
+    robot.floor = DEFAULT_CHECKIN;
 }
 
 /**
@@ -159,5 +158,4 @@ void robot_monitor_reset(void)
 {
     monitot_count = 0;
 }
-
 

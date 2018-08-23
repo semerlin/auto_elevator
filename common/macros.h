@@ -6,18 +6,18 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _MACROS_H_
-  #define _MACROS_H_
+#define _MACROS_H_
 
 #include <stddef.h>
 
 /* inline definition */
 #ifndef __INLINE
-  #define __INLINE inline
+#define __INLINE inline
 #endif
 
 /* asm definition */
 #ifndef __ASM
-  #define __ASM __asm
+#define __ASM __asm
 #endif
 
 #undef  MAX
@@ -46,11 +46,11 @@
     })
 
 #ifdef __cplusplus
-    #define BEGIN_DECLS    extern "C" {
-    #define END_DECLS      }
+#define BEGIN_DECLS    extern "C" {
+#define END_DECLS      }
 #else
-    #define BEGIN_DECLS
-    #define END_DECLS
+#define BEGIN_DECLS
+#define END_DECLS
 #endif
 
 #define STR(x) VAL(x)
@@ -58,8 +58,10 @@
 
 /* unused parameter declare */
 #ifndef UNUSED
- #define UNUSED(x) ((void)x)
+#define UNUSED(x) ((void)x)
 #endif
+
+#define __PACKED__ __packed
 
 
 #endif /* _MACROS_H_ */

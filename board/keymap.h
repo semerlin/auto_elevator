@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _KEYMAP_H_
-  #define _KEYMAP_H_
+#define _KEYMAP_H_
 
 #include "types.h"
 
@@ -19,6 +19,7 @@ bool keymap_init(void);
 uint8_t keymap_floor_to_key(char floor);
 char keymap_key_to_floor(uint8_t key);
 uint8_t keymap_open(void);
+bool keymap_floor_contains(char floor);
 
 END_DECLS
 
