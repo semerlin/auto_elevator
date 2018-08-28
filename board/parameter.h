@@ -25,7 +25,7 @@ typedef struct
 {
     uint8_t id_ctl;
     uint8_t id_elev;
-    uint8_t id_board;
+    uint8_t id_board; /** fixed to 0x01 */
     char start_floor;
     uint8_t calc_type;
     uint8_t pwd_window;
@@ -35,10 +35,11 @@ typedef struct
 #else
 typedef struct
 {
-    uint8_t id_board;
+    uint8_t id_board; /** valid range is 0x02-0xff */
     char start_floor;
 } __PACKED__ parameters_t;
 #endif
+
 
 bool param_init(void);
 void reset_param(void);

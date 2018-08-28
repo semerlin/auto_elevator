@@ -12,7 +12,7 @@
 #include "trace.h"
 #include "license.h"
 #include "parameter.h"
-#include "keymap.h"
+#include "boardmap.h"
 #include "keyctl.h"
 #include "robot.h"
 #include "led_monitor.h"
@@ -20,6 +20,9 @@
 #include "elevator.h"
 #ifdef __MASTER
 #include "switch_monitor.h"
+#include "altimeter.h"
+#include "altimeter_calc.h"
+#include "floormap.h"
 #endif
 #include "led_status.h"
 
@@ -48,7 +51,16 @@ void ApplicationStartup()
     if (is_param_setted())
     {
         board_parameter = param_get();
-        keymap_init();
+        boardmap_add(board_parameter.id_board, START_KEY, board_parameter.start_floor,
+                     MAX_FLOOR_NUM, 0);
+#ifdef __MASTER
+        floormap_update();
+        if ((0 == board_parameter.floor_height) ||
+            (0xff == board_parameter.floor_height))
+        {
+            board_parameter.floor_height = 2600;
+        }
+#endif
         keyctl_init();
 #ifdef __MASTER
         robot_init();
@@ -58,7 +70,8 @@ void ApplicationStartup()
         }
         else
         {
-            /* init gaoduji */
+            altimeter_init();
+            altimeter_calc_init();
         }
 #endif
         led_monitor_init();

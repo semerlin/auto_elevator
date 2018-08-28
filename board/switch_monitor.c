@@ -26,7 +26,6 @@
 #define LOWER_SWITCH     "SWITCH2"
 
 static xQueueHandle xSwitchVals = NULL;
-static switch_status cur_status = switch_arrive;
 
 static uint8_t filter_step = 0;
 static uint8_t filter_prev = 0;
@@ -50,15 +49,6 @@ static uint8_t switch_val(void)
     }
 
     return val;
-}
-
-/**
- * @brief get switch current status
- * @return current switch status
- */
-switch_status switch_get_status(void)
-{
-    return cur_status;
 }
 
 /**

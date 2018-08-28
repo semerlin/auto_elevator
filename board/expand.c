@@ -1,10 +1,10 @@
 /**
- * This file is part of the auto-elevator project.
- *
- * Copyright 2018, Huang Yang <elious.huang@gmail.com>. All rights reserved.
- *
- * See the COPYING file for the terms of usage and distribution.
- */
+* This file is part of the auto-elevator project.
+*
+* Copyright 2018, Huang Yang <elious.huang@gmail.com>. All rights reserved.
+*
+* See the COPYING file for the terms of usage and distribution.
+*/
 #include <string.h>
 #include "FreeRTOS.h"
 #include "task.h"
@@ -14,7 +14,8 @@
 #include "global.h"
 #include "trace.h"
 #include "parameter.h"
-#include "elevator.h"
+#include "protocol_expand.h"
+#include "boardmap.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[EXPAND]"
@@ -25,41 +26,41 @@ typedef struct
     uint8_t data[8];
 } expand_data;
 
-#define MASTER_ID   0x01
-#define SLAVE_ID    0x02
+extern parameters_t board_parameter;
 
-static uint8_t filter_id = MASTER_ID;
-static uint8_t self_id = SLAVE_ID;
 
-#define EXPAND_QUEUE_LEN   10
-static xQueueHandle xExpandRecvQueue;
-static xQueueHandle xExpandSendQueue;
+#ifdef __EXPAND
+static uint8_t register_status = 0xff;
+#define REGISTER_INTERVAL         (200 / portTICK_PERIOD_MS)
+#endif
 
-static void process_elev_go(const uint8_t *data, uint8_t len);
+#define EXPAND_QUEUE_LEN   8
+static xQueueHandle xExpandRecvQueue = NULL;
+static xQueueHandle xExpandSendQueue = NULL;
 
-/* process handle */
-typedef struct
+
+
+#ifdef __EXPAND
+/**
+ * @brief board register status callback functin
+ * @param[in] data: resgiter status data
+ * @param[in] len: register status data length
+ */
+static void register_status_cb(uint8_t *data, uint8_t len)
 {
-    uint8_t cmd;
-    void (*process)(const uint8_t *data, uint8_t len);
-} cmd_handle;
-
-/* protocol command */
-#define CMD_ELEV_GO            1
-#define CMD_ELEV_LED           2
-
-static cmd_handle cmd_handles[] =
-{
-    {CMD_ELEV_GO, process_elev_go},
-};
+    register_status = *data;
+}
+#endif
 
 /**
- * @brief init can
+ * @brief initialize can
  */
 static void can_init(void)
 {
     CAN_Config config;
+#ifdef __EXPAND
     CAN_Filter filter;
+#endif
 
     CAN_StructInit(&config);
     config.ttcm = FALSE;
@@ -78,16 +79,18 @@ static void can_init(void)
 
     CAN_Init(CAN1, &config);
 
+#ifdef __EXPAND
     filter.number = 1;
     filter.mode = CAN_FilterMode_IdMask;
     filter.scale = CAN_FilterScale_32bit;
     filter.id_high = 0;
-    filter.id_low = (((uint32_t)filter_id << 3) | CAN_ID_EXT | CAN_RTR_DATA) & 0xFFFF;
+    filter.id_low = (((uint32_t)ID_BOARD_MASTER << 3) | CAN_ID_EXT | CAN_RTR_DATA) & 0xFFFF;
     filter.mask_id_high = 0xFFFF;
     filter.mask_id_low = 0xFFFF;
     filter.fifo_assignment = CAN_Filter_FIFO0;
     filter.activation = TRUE;
     CAN_FilterInit(&filter);
+#endif
 
     /* setup interrupt */
     NVIC_Config nvicConfig = {USB_LP_CAN_RX0_IRQChannel, CAN1_PRIORITY, 0, TRUE};
@@ -108,7 +111,11 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
     uint16_t count = 0;
     CAN_TxMsg msg;
     msg.std_id = 0;
-    msg.ext_id = self_id;
+#ifdef __MASTER
+    msg.ext_id = ID_BOARD_MASTER;
+#else
+    msg.ext_id = board_parameter.id_board;
+#endif
     msg.ide = CAN_ID_EXT;
     msg.rtr = CAN_RTR_DATA;
     msg.dlc = len;
@@ -118,12 +125,13 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
         msg.data[i] = data[i];
     }
 
-    //发送数据
+    /** send message */
     mbox = CAN_Transmit(CAN1, &msg);
     while ((CAN_TxStatus_Failed == CAN_TransmitStatus(CAN1, mbox)) &&
            (count < 0xfff))
     {
-        count++;    //等待发送结束
+        /** wait message send finish */
+        count++;
     }
 
     if (count > 0xfff)
@@ -134,8 +142,26 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
     return len;
 }
 
+#ifdef __EXPAND
 /**
- * @brief switch monitor task
+ * @brief can receive message task
+ * @param pvParameters - task parameter
+ */
+static void vRegisterBoard(void *pvParameters)
+{
+    for (;;)
+    {
+        if (0 != register_status)
+        {
+            register_board(board_parameter.id_board, board_parameter.start_floor);
+        }
+        vTaskDelay(REGISTER_INTERVAL);
+    }
+}
+#endif
+
+/**
+ * @brief can receive message task
  * @param pvParameters - task parameter
  */
 static void vExpandRecv(void *pvParameters)
@@ -145,20 +171,13 @@ static void vExpandRecv(void *pvParameters)
     {
         if (xQueueReceive(xExpandRecvQueue, &data, portMAX_DELAY))
         {
-            for (int i = 0; i < sizeof(cmd_handles) / sizeof(cmd_handles[0]); ++i)
-            {
-                if (data.data[0] == cmd_handles[i].cmd)
-                {
-                    cmd_handles[i].process(data.data + 1, data.len - 1);
-                    break;
-                }
-            }
+            process_expand_data(data.data, data.len);
         }
     }
 }
 
 /**
- * @brief switch monitor task
+ * @brief can send message task
  * @param pvParameters - task parameter
  */
 static void vExpandSend(void *pvParameters)
@@ -170,7 +189,7 @@ static void vExpandSend(void *pvParameters)
         {
             can_send_msg(data.data, data.len);
         }
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(50 / portTICK_PERIOD_MS);
     }
 }
 
@@ -188,28 +207,28 @@ void expand_send_data(const uint8_t *buf, uint8_t len)
         data.len = 8;
     }
     memcpy(data.data, buf, data.len);
-    xQueueReceive(xExpandSendQueue, &data, 100 / portTICK_PERIOD_MS);
+    xQueueReceive(xExpandSendQueue, &data, 50 / portTICK_PERIOD_MS);
 }
 
+#ifdef __EXPAND
 /**
- * @brief expand init
- * @return init status
+ * @brief get board register status
+ * @retval TRUE: board has been registered successfully
+ * @retval FALSE: board has not beed registered
+ */
+bool is_expand_board_registered(void)
+{
+    return (0 == register_status);
+}
+#endif
+
+/**
+ * @brief expand initialize
+ * @return initialize status
  */
 bool expand_init(void)
 {
     TRACE("initialize expand module...\r\n");
-#if 0
-    if (board_master == param_get_board_type())
-    {
-        filter_id = SLAVE_ID;
-        self_id = MASTER_ID;
-    }
-    else
-    {
-        filter_id = MASTER_ID;
-        self_id = SLAVE_ID;
-    }
-#endif
     can_init();
     xExpandRecvQueue = xQueueCreate(EXPAND_QUEUE_LEN, sizeof(expand_data));
     xExpandSendQueue = xQueueCreate(EXPAND_QUEUE_LEN, sizeof(expand_data));
@@ -217,31 +236,12 @@ bool expand_init(void)
                 EXPAND_PRIORITY, NULL);
     xTaskCreate(vExpandSend, "expand_send", EXPAND_STACK_SIZE, NULL,
                 EXPAND_PRIORITY, NULL);
+#ifdef __EXPAND
+    set_register_cb(register_status_cb);
+    xTaskCreate(vRegisterBoard, "register_board", EXPAND_STACK_SIZE, NULL,
+                EXPAND_PRIORITY, NULL);
+#endif
     return TRUE;
-}
-
-/**
- * @brief process elevator goto floor message
- * @param data - data to process
- * @param len - data length
- */
-static void process_elev_go(const uint8_t *data, uint8_t len)
-{
-    char floor = (char)(*data);
-    elev_go(floor);
-}
-
-/**
- * @brief notify led status changed
- * @param led_status - led status
- */
-void expand_notify_led_change(uint8_t led_status)
-{
-
-}
-
-void expand_elev_go(char floor)
-{
 }
 
 /**

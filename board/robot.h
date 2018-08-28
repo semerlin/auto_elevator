@@ -8,7 +8,7 @@
 #ifndef _ROBOT_H_
 #define _ROBOT_H_
 
-#ifdef __MASTER_H
+#ifdef __MASTER
 #include "types.h"
 
 BEGIN_DECLS

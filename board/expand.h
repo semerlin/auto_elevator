@@ -12,7 +12,12 @@
 
 BEGIN_DECLS
 
-bool expand_inti(void);
+bool expand_init(void);
+void expand_send_data(const uint8_t *buf, uint8_t len);
+
+#ifdef __EXPAND
+bool is_expand_board_registered(void);
+#endif
 
 END_DECLS
 

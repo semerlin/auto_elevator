@@ -14,7 +14,7 @@ BEGIN_DECLS
 
 bool process_param_data(const uint8_t *data, uint8_t len);
 #ifdef __MASTER
-void notify_calc(uint16_t floor_dis, uint16_t top_dis, uint8_t top_floor);
+void notify_calc(uint16_t floor_height);
 #endif
 
 END_DECLS

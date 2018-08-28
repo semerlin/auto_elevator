@@ -5,14 +5,47 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
+#ifdef __MASTER
+#include <string.h>
 #include "floormap.h"
 #include "assert.h"
 #include "trace.h"
-#include "keymap.h"
+#include "expand.h"
+#include "parameter.h"
+#include "boardmap.h"
 
 #undef __TRACE_MODULE
-#define __TRACE_MODULE  "[PARAM]"
+#define __TRACE_MODULE  "[FLOORMAP]"
 
+
+extern parameters_t board_parameter;
+static char floormap[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
+
+/**
+ * @brief update phy-dis floormap
+ */
+void floormap_update(void)
+{
+    TRACE("updating floormap...\r\n");
+
+    /** fill floormap */
+    char *pfloor = floormap;
+    for (uint8_t i = 0; i < MAX_BOARD_NUM; ++i)
+    {
+        if (0 != boardmaps[i].start_floor)
+        {
+            for (uint8_t j = 0; j < boardmaps[i].floor_num; ++j)
+            {
+                *pfloor = boardmaps[i].start_floor + j;
+                if (0 == *pfloor)
+                {
+                    *pfloor += 1;
+                }
+                pfloor ++;
+            }
+        }
+    }
+}
 
 /**
  * @brief convert display floor to physical floor
@@ -21,7 +54,15 @@
  */
 uint8_t floormap_dis_to_phy(char floor)
 {
-    return keymap_floor_to_key(floor);
+    for (uint16_t i = 0; i < MAX_FLOOR_NUM +
+         MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
+    {
+        if (floor == floormap[i])
+        {
+            return i + 1;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -31,5 +72,24 @@ uint8_t floormap_dis_to_phy(char floor)
  */
 char floormap_phy_to_dis(uint8_t floor)
 {
-    return keymap_key_to_floor(floor);
+    return floormap[floor - 1];
 }
+
+/**
+ * @brief check whether contains specified floor
+ * @param[in] floor: floor to check
+ *@return check status
+ */
+bool floormap_contains_floor(char floor)
+{
+    for (uint16_t i = 0; i < MAX_FLOOR_NUM +
+         MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
+    {
+        if (floor == floormap[i])
+        {
+            return i + 1;
+        }
+    }
+    return 0;
+}
+#endif

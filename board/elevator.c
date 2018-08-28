@@ -13,16 +13,20 @@
 #include "trace.h"
 #include "led_status.h"
 #include "protocol.h"
-#include "keymap.h"
 #include "keyctl.h"
 #include "robot.h"
+#include "boardmap.h"
 #include "floormap.h"
 #include "global.h"
 #include "switch_monitor.h"
+#include "expand.h"
+#include "protocol_expand.h"
+#include "parameter.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[elev]"
 
+extern parameters_t board_parameter;
 #ifdef __MASTER
 /* elevator current floor */
 static char elev_cur_floor = 1;
@@ -59,7 +63,7 @@ static void vElevHold(void *pvParameters)
             {
                 hold_door = FALSE;
                 hold_cnt = 0;
-                keyctl_release(keymap_open());
+                keyctl_release(boardmap_opendoor_key());
             }
         }
 
@@ -158,15 +162,17 @@ bool elev_init(void)
 void elev_go(char floor)
 {
     TRACE("elevator go floor: %d\r\n", floor);
-    if (keymap_floor_contains(floor))
+    uint8_t id_board = boardmap_get_floor_board_id(floor);
+    if (board_parameter.id_board == id_board)
     {
-        uint8_t key = keymap_floor_to_key(floor);
+        /** self control */
+        uint8_t key = boardmap_floor_to_key(floor);
         xQueueOverwrite(xQueueFloor, &key);
     }
 #ifdef __MASTER
     else
     {
-        /** TODO: notify expand board goto specified floor */
+        expand_elev_go(id_board, floor);
     }
 #endif
 }
@@ -198,7 +204,7 @@ void elev_arrived(char floor)
  */
 void elev_hold_open(bool flag)
 {
-    uint8_t key = keymap_open();
+    uint8_t key = boardmap_opendoor_key();
     if (flag)
     {
 #if ARRIVE_JUDGE
@@ -274,12 +280,44 @@ void elev_increase(void)
 }
 
 /**
- * @brief set current floor as first floor
+ * @brief set elevator floor
+ * @param[in] floor: floor number
  */
-void elev_set_first_floor(void)
+void elev_set_floor(char floor)
 {
-    TRACE("set first floor\r\n");
-    elev_cur_floor = 1;
+    TRACE("set elevator floor: %d\r\n", floor);
+    elev_cur_floor = floor;
+}
+
+/**
+ * @brief set elevator physical floor
+ * @param[in] cur_floor: current physical floor
+ * @param[in] prev_floor: previous physical floor
+ */
+void elev_set_phy_floor(char cur_floor, char prev_floor)
+{
+    elev_cur_floor = floormap_phy_to_dis(cur_floor);
+    TRACE("set elevator floor: phy = %d, dis = %d\r\n", cur_floor, elev_cur_floor);
+    if (0 == prev_floor)
+    {
+        /** first set, perhaps after power on */
+        run_state = run_stop;
+    }
+    else
+    {
+        if (is_up_led_on(elev_cur_floor))
+        {
+            run_state = run_up;
+        }
+        else if (is_down_led_on(elev_cur_floor))
+        {
+            run_state = run_down;
+        }
+        else
+        {
+            run_state = run_stop;
+        }
+    }
 }
 
 /**

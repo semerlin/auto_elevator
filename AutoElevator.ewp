@@ -1931,6 +1931,18 @@
   <group>
     <name>board</name>
     <file>
+      <name>$PROJ_DIR$\board\altimeter.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\altimeter.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\altimeter_calc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\altimeter_calc.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\application.c</name>
     </file>
     <file>
@@ -1941,6 +1953,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\board.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\boardmap.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\boardmap.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\crc.c</name>
@@ -1968,6 +1986,9 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\expand.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\expand.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\floormap.c</name>
@@ -1998,12 +2019,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\keyctl.h</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\keymap.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\board\keymap.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\led_monitor.c</name>
@@ -2045,10 +2060,28 @@
       <name>$PROJ_DIR$\board\protocol.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\protocol_expand.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_expand.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\protocol_param.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\protocol_param.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_robot.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\protocol_robot.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\robot.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\robot.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\board\serial.c</name>
@@ -2067,6 +2100,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\board\stm32f10x_vector.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\switch_monitor.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\switch_monitor.h</name>
     </file>
   </group>
   <group>
@@ -2252,27 +2291,6 @@
       </group>
     </group>
   </group>
-  <file>
-    <name>$PROJ_DIR$\board\expand.h</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\board\protocol_robot.c</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\board\protocol_robot.h</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\board\robot.c</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\board\robot.h</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\board\switch_monitor.c</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\board\switch_monitor.h</name>
-  </file>
 </project>
 
 

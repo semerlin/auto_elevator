@@ -1,22 +1,23 @@
 /**
-* This file is part of the auto-elevator project.
+* This file is part of the vendoring machine project.
 *
 * Copyright 2018, Huang Yang <elious.huang@gmail.com>. All rights reserved.
 *
 * See the COPYING file for the terms of usage and distribution.
 */
-#ifndef _SWITCH_MONITOR_H_
-#define _SWITCH_MONITOR_H_
+#ifndef _ALTIMETER_H_
+#define _ALTIMETER_H_
 
 #ifdef __MASTER
 #include "types.h"
 
 BEGIN_DECLS
 
-bool switch_monitor_init(void);
+bool altimeter_init(void);
+uint32_t altimeter_get_distance(void);
 
 END_DECLS
+
 #endif
 
-#endif /* _SWITCH_MONITOR_H_ */
-
+#endif /* _ALTIMETER_H_*/

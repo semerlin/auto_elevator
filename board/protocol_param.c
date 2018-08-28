@@ -12,6 +12,8 @@
 #include "stm32f10x_cfg.h"
 #include "parameter.h"
 #include "crc.h"
+#include "altimeter.h"
+#include "altimeter_calc.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_param]"
@@ -26,12 +28,19 @@ static void process_param_pwd(const uint8_t *data, uint8_t len);
 static void process_param_calc(const uint8_t *data, uint8_t len);
 #endif
 
+typedef enum
+{
+    SUCCESS,
+    INVALID_PARAM,
+    OPERATION_FAIL,
+} param_status_t;
+
 /* process handle */
 typedef struct
 {
     uint8_t cmd;
     void (*process)(const uint8_t *data, uint8_t len);
-} cmd_handle;
+} cmd_handle_t;
 
 /* protocol command */
 #define CMD_SET            0x01
@@ -41,7 +50,7 @@ typedef struct
 #define CMD_CALC_NOTIFY    0x04
 #endif
 
-static cmd_handle cmd_handles[] =
+static cmd_handle_t cmd_handles[] =
 {
     {CMD_SET, process_param_set},
 #ifdef __MASTER
@@ -51,45 +60,44 @@ static cmd_handle cmd_handles[] =
 };
 
 #ifdef __MASTER
-typedef enum
-{
-    CALC_START = 0x01,
-    CALC_STOP = 0x02,
-} calc_action_t;
-
 typedef struct
 {
     uint8_t id_ctl;
     uint8_t id_elev;
-    uint8_t id_board;
     char start_floor;
     uint8_t calc_type;
 } __PACKED__ msg_param_t;
 
 typedef struct
 {
-    uint8_t interval;
+    uint8_t scan_window;
     uint8_t pwd[4];
 } __PACKED__ msg_pwd_t;
 
-typedef struct
-{
-    uint8_t action;
-    uint8_t interval;
-} __PACKED__ msg_calc_t;
+#define IS_PWD_SCAN_WINDOW_VALID(window) (0x00 != window)
 
 typedef struct
 {
-    uint16_t floor_dis;
-    uint16_t top_dis;
-    uint8_t top_floor;
+    uint8_t action; /** 0x01: start 0x02: stop */
+    uint8_t interval; /** 0: disable */
+} __PACKED__ msg_calc_t;
+
+#define IS_ACTION_VALID(action) ((0x01 == action) || (0x02 == action))
+
+typedef struct
+{
+    uint16_t floor_height;
 } __PACKED__ msg_calc_data;
 #else
 typedef struct
 {
+    /** valid range id 0x02-0xfe */
     uint8_t id_board;
     char start_floor;
 } __PACKED__ msg_param_t;
+
+#define IS_BOARD_ID_VALID(id) (((id) >= 0x02) && ((id) <= 0xfe))
+
 #endif
 
 
@@ -97,10 +105,9 @@ typedef struct
  * @brief replay to init
  * @param[] flag - init status
  */
-static void param_reply(uint8_t cmd, bool flag)
+static void param_reply(uint8_t cmd, uint8_t status)
 {
     uint8_t rsp[7];
-    uint8_t status = (flag ? 0x00 : 0x01);
     uint16_t crc = crc16(&status, 1);
     rsp[0] = PARAM_HEAD;
     rsp[1] = 7;
@@ -158,6 +165,7 @@ bool process_param_data(const uint8_t *data, uint8_t len)
  */
 static void process_param_set(const uint8_t *data, uint8_t len)
 {
+    param_status_t status = SUCCESS;
     if (len == sizeof(msg_param_t))
     {
         msg_param_t *msg = (msg_param_t *)data;
@@ -167,24 +175,41 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         param.id_ctl = msg->id_ctl;
         param.id_elev = msg->id_elev;
         param.calc_type = msg->calc_type;
+        param.id_board = 0x01;
 #endif
-        param.id_board = msg->id_board;
+
+#ifdef __EXPAND
+        if (IS_BOARD_ID_VALID(msg->id_board))
+        {
+            param.id_board = msg->id_board;
+        }
+        else
+        {
+            status = INVALID_PARAM;
+            goto END;
+        }
+#endif
         param.start_floor = msg->start_floor;
 
         if (!param_store(param))
         {
-            goto END;
+            status = OPERATION_FAIL;
         }
-
-        param_reply(CMD_SET, TRUE);
-        TRACE("rebooting...\r\n");
-        SCB_SystemReset();
-        return ;
+    }
+    else
+    {
+        status = OPERATION_FAIL;
     }
 
+#ifdef __EXPAND
 END:
-    param_reply(CMD_SET, FALSE);
-    TRACE("set parameter failed!\r\n");
+#endif
+    param_reply(CMD_SET, status);
+    if (SUCCESS == status)
+    {
+        TRACE("rebooting...\r\n");
+        SCB_SystemReset();
+    }
 }
 
 #ifdef __MASTER
@@ -195,20 +220,33 @@ END:
  */
 static void process_param_pwd(const uint8_t *data, uint8_t len)
 {
+    param_status_t status = SUCCESS;
     if (len == sizeof(msg_pwd_t))
     {
         msg_pwd_t *msg = (msg_pwd_t *)data;
-        if (!param_store_pwd(msg->interval, msg->pwd))
+        if (IS_PWD_SCAN_WINDOW_VALID(msg->scan_window))
         {
-            param_reply(CMD_PWD, TRUE);
-            TRACE("rebooting...\r\n");
-            SCB_SystemReset();
-            return ;
+            if (!param_store_pwd(msg->scan_window, msg->pwd))
+            {
+                status = OPERATION_FAIL;
+            }
+        }
+        else
+        {
+            status = INVALID_PARAM;
         }
     }
+    else
+    {
+        status = OPERATION_FAIL;
+    }
 
-    param_reply(CMD_SET, FALSE);
-    TRACE("set password failed!\r\n");
+    param_reply(CMD_SET, status);
+    if (SUCCESS == status)
+    {
+        TRACE("rebooting...\r\n");
+        SCB_SystemReset();
+    }
 }
 
 /**
@@ -218,36 +256,35 @@ static void process_param_pwd(const uint8_t *data, uint8_t len)
  */
 static void process_param_calc(const uint8_t *data, uint8_t len)
 {
+    param_status_t status = SUCCESS;
     if (len == sizeof(msg_calc_t))
     {
         msg_calc_t *calc = (msg_calc_t *)data;
-        if (CALC_START == calc->action)
+        if (IS_ACTION_VALID(calc->action))
         {
-            /* start calculation */
+            altimeter_calc_run((calc_action_t)(calc->action));
         }
         else
         {
-            /* stop calculation */
+            status = INVALID_PARAM;
         }
-        param_reply(CMD_CALC, FALSE);
     }
     else
     {
-        param_reply(CMD_CALC, FALSE);
+        status = OPERATION_FAIL;
     }
+    param_reply(CMD_CALC, status);
 }
 
 /**
  * @brief notify calculation data to user
  */
-void notify_calc(uint16_t floor_dis, uint16_t top_dis, uint8_t top_floor)
+void notify_calc(uint16_t floor_height)
 {
     msg_calc_data msg;
-    msg.floor_dis = floor_dis;
-    msg.top_dis = top_dis;
-    msg.top_floor = top_floor;
+    msg.floor_height = floor_height;
 
-    uint8_t rsp[15];
+    uint8_t rsp[11];
     uint16_t crc = crc16((uint8_t *)&msg, sizeof(msg));
     rsp[0] = PARAM_HEAD;
     rsp[1] = 6 + sizeof(msg);
