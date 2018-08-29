@@ -72,20 +72,29 @@ static void vAltimeterCalc(void *pvParameters)
                     {
                         index = 0;
                     }
+                }
 
-                    if (0 != heights[index])
+                uint32_t sum = 0;
+                uint32_t valid = 0;
+                for (uint8_t i = 0; i < HEIGHT_AVERAGE_COUNT; ++i)
+                {
+                    if (0 != heights[i])
                     {
-                        uint32_t sum = 0;
-                        for (uint8_t i = 0; i < HEIGHT_AVERAGE_COUNT; ++i)
-                        {
-                            sum += heights[i];
-                        }
-                        board_parameter.floor_height = sum / HEIGHT_AVERAGE_COUNT;
-                        param_store_floor_height(board_parameter.floor_height);
-                        TRACE("average height: %d\r\n", board_parameter.floor_height);
-                        notify_calc(board_parameter.floor_height);
+                        valid ++;
+                        sum += heights[i];
                     }
                 }
+                if (valid > 0)
+                {
+                    board_parameter.floor_height = sum / valid;
+                    param_store_floor_height(board_parameter.floor_height);
+                    TRACE("average height: %d\r\n", board_parameter.floor_height);
+                }
+                else
+                {
+                    TRACE("no valid data, use default height: %d\r\n", board_parameter.floor_height);
+                }
+                notify_calc(board_parameter.floor_height);
             }
         }
     }

@@ -39,7 +39,7 @@ char elev_floor(void);
 void elev_decrease(void);
 void elev_increase(void);
 void elev_set_floor(char floor);
-void elev_set_phy_floor(char cur_floor, char prev_floor);
+void elev_set_phy_floor(uint8_t cur_floor, uint8_t prev_floor);
 elev_run_state elev_state_run(void);
 elev_work_state elev_state_work(void);
 void elevator_set_state_work(elev_work_state state);

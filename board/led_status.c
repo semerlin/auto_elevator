@@ -122,7 +122,7 @@ bool is_led_on(char floor)
     }
 
     /** get board led status */
-    boardmap_get_led_status(id_board);
+    status = boardmap_get_led_status(id_board);
 
     /** get floor key */
     key = boardmap_floor_to_key(floor);

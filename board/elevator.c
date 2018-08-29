@@ -30,6 +30,7 @@ extern parameters_t board_parameter;
 #ifdef __MASTER
 /* elevator current floor */
 static char elev_cur_floor = 1;
+static char elev_cur_phy_floor = 1;
 
 static bool hold_door = FALSE;
 static uint8_t hold_cnt = 0;
@@ -234,11 +235,11 @@ void elev_hold_open(bool flag)
  */
 void elev_decrease(void)
 {
-    elev_cur_floor --;
-    if (0 == elev_cur_floor)
+    if (elev_cur_phy_floor > 1)
     {
-        elev_cur_floor --;
+        elev_cur_phy_floor --;
     }
+    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);;
     TRACE("decrease floor: %d\r\n", elev_cur_floor);
     if (is_down_led_on(elev_cur_floor))
     {
@@ -259,11 +260,8 @@ void elev_decrease(void)
  */
 void elev_increase(void)
 {
-    elev_cur_floor ++;
-    if (0 == elev_cur_floor)
-    {
-        elev_cur_floor ++;
-    }
+    elev_cur_phy_floor ++;
+    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);
     TRACE("increase floor: %d\r\n", elev_cur_floor);
     if (is_up_led_on(elev_cur_floor))
     {
@@ -287,6 +285,7 @@ void elev_set_floor(char floor)
 {
     TRACE("set elevator floor: %d\r\n", floor);
     elev_cur_floor = floor;
+    elev_cur_phy_floor = floormap_dis_to_phy(elev_cur_floor);
 }
 
 /**
@@ -294,9 +293,10 @@ void elev_set_floor(char floor)
  * @param[in] cur_floor: current physical floor
  * @param[in] prev_floor: previous physical floor
  */
-void elev_set_phy_floor(char cur_floor, char prev_floor)
+void elev_set_phy_floor(uint8_t cur_floor, uint8_t prev_floor)
 {
     elev_cur_floor = floormap_phy_to_dis(cur_floor);
+    elev_cur_phy_floor = cur_floor;
     TRACE("set elevator floor: phy = %d, dis = %d\r\n", cur_floor, elev_cur_floor);
     if (0 == prev_floor)
     {

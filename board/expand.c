@@ -111,11 +111,7 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
     uint16_t count = 0;
     CAN_TxMsg msg;
     msg.std_id = 0;
-#ifdef __MASTER
-    msg.ext_id = ID_BOARD_MASTER;
-#else
     msg.ext_id = board_parameter.id_board;
-#endif
     msg.ide = CAN_ID_EXT;
     msg.rtr = CAN_RTR_DATA;
     msg.dlc = len;

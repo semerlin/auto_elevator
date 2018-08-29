@@ -32,7 +32,7 @@
 #define VERSION  ("v1.1.0.0")
 
 parameters_t board_parameter;
-
+#define DEFAULT_FLOOR_HEIGHT    2600
 /**
  * @brief start system
  */
@@ -58,7 +58,7 @@ void ApplicationStartup()
         if ((0 == board_parameter.floor_height) ||
             (0xff == board_parameter.floor_height))
         {
-            board_parameter.floor_height = 2600;
+            board_parameter.floor_height = DEFAULT_FLOOR_HEIGHT;
         }
 #endif
         keyctl_init();

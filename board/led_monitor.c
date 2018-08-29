@@ -229,7 +229,7 @@ static void vLedMonitor(void *pvParameters)
 {
     uint16_t cur_status = 0;
 #ifdef __MASTER
-    led_status_t status = {ID_BOARD_MASTER, led_status_get(), 0};
+    led_status_t status = {board_parameter.id_board, led_status_get(), 0};
 #endif
     for (;;)
     {
@@ -238,6 +238,7 @@ static void vLedMonitor(void *pvParameters)
         status.cur_status = cur_status;
         xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
         status.prev_status = status.cur_status;
+        boardmap_update_led_status(board_parameter.id_board, cur_status);
 #else
         notify_led_status(board_parameter.id_board, cur_status);
 #endif
