@@ -97,6 +97,10 @@ static void vAltimeterCalc(void *pvParameters)
                 notify_calc(board_parameter.floor_height);
             }
         }
+        else
+        {
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+        }
     }
 }
 
