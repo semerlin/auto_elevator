@@ -54,7 +54,7 @@ bool param_init(void)
             return FALSE;
         }
         param_setted = (0 == memcpy(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN));
-        TRACE("parameter status(%d)", param_setted);
+        TRACE("parameter status(%d)\r\n", param_setted);
         return TRUE;
     }
 

@@ -42,7 +42,7 @@ static uint16_t calc_once(char current_floor)
     {
         return 0;
     }
-    return (uint16_t)(distance / 1000.0 / floor_num);
+    return (uint16_t)(distance / 10.0 / floor_num);
 }
 
 /**
@@ -105,7 +105,7 @@ static void vAltimeterCalc(void *pvParameters)
  */
 bool altimeter_calc_init(void)
 {
-    TRACE("initialize altimeter calculate....");
+    TRACE("initialize altimeter calculate....\r\n");
     xQueueCalc = xQueueCreate(1, 1);
     xTaskCreate(vAltimeterCalc, "altimeter_calc", ALTIMETER_CALC_STACK_SIZE,
                 NULL, ALTIMETER_CALC_PRIORITY, NULL);

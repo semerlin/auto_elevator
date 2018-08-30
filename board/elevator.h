@@ -43,6 +43,7 @@ void elev_set_phy_floor(uint8_t cur_floor, uint8_t prev_floor);
 elev_run_state elev_state_run(void);
 elev_work_state elev_state_work(void);
 void elevator_set_state_work(elev_work_state state);
+void elevator_floor_update(void);
 #endif
 
 END_DECLS

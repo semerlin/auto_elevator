@@ -187,6 +187,7 @@ static void process_board_register(const uint8_t *data, uint8_t len)
     else
     {
         floormap_update();
+        elevator_floor_update();
         expand_ptl_reply(CMD_BOARD_REGISTER, SUCCESS, NULL, 0);
     }
 }

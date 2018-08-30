@@ -90,7 +90,8 @@ static uint32_t bin2hex(const uint8_t *data, uint8_t len)
             TRACE("invalid bin\r\n");
             return 0;
         }
-        hex_data |= (temp_hex << (i * 4));
+        hex_data <<= 4;
+        hex_data |= temp_hex;
     }
 
     return hex_data;
@@ -109,18 +110,20 @@ static uint8_t bit_set_pos(uint32_t data)
 
 static void msg2tof(const uint8_t *data, uint8_t len)
 {
-    UNUSED(len);
-    const msg_tof_t *pmsg = (msg_tof_t *)data;
-    /** only process mc */
-    if (0 == memcmp(pmsg->type, "MC", 2))
+    if (len >= sizeof(msg_tof_t))
     {
-        uint8_t mask = bin2hex(pmsg->mask, 2);
-        /** only enable one tag and base station */
-        if (0 == (mask & (mask - 1)))
+        const msg_tof_t *pmsg = (msg_tof_t *)data;
+        /** only process mc */
+        if (0 == memcmp(pmsg->type, "mc", 2))
         {
-            tof.range = bin2hex(pmsg->range[bit_set_pos(mask)].range, 8);
-            tof.id_tag = pmsg->id_tag - '0';
-            tof.id_base_station = pmsg->id_base_station - '0';
+            uint8_t mask = bin2hex(pmsg->mask, 2);
+            /** only enable one tag and base station */
+            if (0 == (mask & (mask - 1)))
+            {
+                tof.range = bin2hex(pmsg->range[bit_set_pos(mask)].range, 8);
+                tof.id_tag = pmsg->id_tag - '0';
+                tof.id_base_station = pmsg->id_base_station - '0';
+            }
         }
     }
 }
@@ -164,14 +167,13 @@ static void vAltimeter(void *pvParameters)
             if (tof.range > 0)
             {
                 /** calculate physical floor */
-                floor = tof.range / 1000.0 / board_parameter.floor_height;
+                floor = tof.range / 10.0 / board_parameter.floor_height;
+                floor_cur = (uint8_t)floor;
                 floor -= (uint8_t)floor;
                 if (floor > 0.8)
                 {
-                    floor_cur = (uint8_t)floor;
                     floor_cur ++;
                 }
-                floor_cur += 1;
                 if (floor_cur != floor_prev)
                 {
                     /** floor changed */
@@ -179,6 +181,7 @@ static void vAltimeter(void *pvParameters)
                     floor_prev = floor_cur;
                 }
             }
+            recv_data[len] = 0x00;
 #ifdef DUMP_MESSAGE
             TRACE("recv data: %s", recv_data);
 #endif
@@ -191,11 +194,11 @@ static void vAltimeter(void *pvParameters)
  */
 bool altimeter_init(void)
 {
-    TRACE("initialize altimeter....");
-    g_serial = serial_request(COM1);
+    TRACE("initialize altimeter....\r\n");
+    g_serial = serial_request(COM2);
     if (NULL == g_serial)
     {
-        TRACE("initialize failed, can't open serial \'COM1\'\r\n");
+        TRACE("initialize failed, can't open serial \'COM2\'\r\n");
         return FALSE;
     }
     serial_open(g_serial);

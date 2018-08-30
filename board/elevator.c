@@ -239,7 +239,7 @@ void elev_decrease(void)
     {
         elev_cur_phy_floor --;
     }
-    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);;
+    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);
     TRACE("decrease floor: %d\r\n", elev_cur_floor);
     if (is_down_led_on(elev_cur_floor))
     {
@@ -354,6 +354,14 @@ void elevator_set_state_work(elev_work_state state)
 char elev_floor(void)
 {
     return elev_cur_floor;
+}
+
+/**
+ * @brief update elevator floor
+ */
+void elevator_floor_update(void)
+{
+    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);
 }
 #endif
 

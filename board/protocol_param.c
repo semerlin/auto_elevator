@@ -31,6 +31,7 @@ static void process_param_calc(const uint8_t *data, uint8_t len);
 typedef enum
 {
     SUCCESS,
+    CRC_ERROR,
     INVALID_PARAM,
     OPERATION_FAIL,
 } param_status_t;
@@ -152,6 +153,10 @@ bool process_param_data(const uint8_t *data, uint8_t len)
                     break;
                 }
             }
+        }
+        else
+        {
+            param_reply(CMD_SET, CRC_ERROR);
         }
     }
 

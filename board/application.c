@@ -25,20 +25,29 @@
 #include "floormap.h"
 #endif
 #include "led_status.h"
+#include "expand.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
 
+#ifdef __MASTER
 #define VERSION  ("v1.1.0.0")
+#else
+#define VERSION  ("v1.1.0.0")
+#endif
 
 parameters_t board_parameter;
-#define DEFAULT_FLOOR_HEIGHT    2600
+#define DEFAULT_FLOOR_HEIGHT    260
 /**
  * @brief start system
  */
 void ApplicationStartup()
 {
-    TRACE("startup application...\r\n");
+#ifdef __MASTER
+    TRACE("startup master application...\r\n");
+#else
+    TRACE("startup expand application...\r\n");
+#endif
     TRACE("version = %s\r\n", VERSION);
     //license_init();
     if (!param_init())
@@ -76,6 +85,7 @@ void ApplicationStartup()
 #endif
         led_monitor_init();
         elev_init();
+        expand_init();
     }
 
     /* Start the scheduler. */
