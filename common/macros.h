@@ -61,7 +61,7 @@
 #define UNUSED(x) ((void)x)
 #endif
 
-#define __PACKED__ __packed
+//#define __PACKED__ __packed
 
 
 #endif /* _MACROS_H_ */

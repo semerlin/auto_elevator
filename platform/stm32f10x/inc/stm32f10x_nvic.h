@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_NVIC_H_
-  #define _STM32F10X_NVIC_H_
+#define _STM32F10X_NVIC_H_
 
 #include "types.h"
 
@@ -63,6 +63,23 @@ typedef struct
 #define EXTI15_10_IRQChannel         (0x28)  /* External Line[15:10] Interrupts */
 #define RTCAlarm_IRQChannel          (0x29)  /* RTC Alarm through EXTI Line Interrupt */
 #define USBWakeUp_IRQChannel         (0x2A)  /* USB WakeUp from suspend through EXTI Line Interrupt */
+#define TIM8_BRK_IRQChannel          (0x2B)  /* TIM8 Break Interrupt */
+#define TIM8_UP_IRQChannel           (0x2C)  /* TIM8 Update Interrupt */
+#define TIM8_TRG_COM_IRQChannel      (0x2D)  /* TIM8 Trigger and Commutation Interrupt */
+#define TIM8_CC_IRQChannel           (0x2E)  /* TIM8 Capture Compare Interrupt */
+#define ADC3_IRQChannel              (0x2F)  /* ADC3 global Interrupt */
+#define FSMC_IRQChannel              (0x30)  /* FSMC global Interrupt */
+#define SDIO_IRQChannel              (0x31)  /* SDIO global Interrupt */
+#define TIM5_IRQChannel              (0x32)  /* TIM5 global Interrupt */
+#define SPI3_IRQChannel              (0x33)  /* SPI3 global Interrupt */
+#define UART4_IRQChannel             (0x34)  /* UART4 global Interrupt */
+#define UART5_IRQChannel             (0x35)  /* UART5 global Interrupt */
+#define TIM6_IRQChannel              (0x36)  /* TIM6 global Interrupt */
+#define TIM7_IRQChannel              (0x37)  /* TIM7 global Interrupt */
+#define DMA2_Channel1_IRQChannel     (0x38)  /* DMA2 Channel 1 global Interrupt */
+#define DMA2_Channel2_IRQChannel     (0x39)  /* DMA2 Channel 2 global Interrupt */
+#define DMA2_Channel3_IRQChannel     (0x3A)  /* DMA2 Channel 3 global Interrupt */
+#define DMA2_Channel4_5_IRQChannel   (0x3B)  /* DMA2 Channel 4 and Channel 5 global Interrupt */
 
 #define IS_NVIC_IRQ_CHANNEL(CHANNEL) ((CHANNEL == WWDG_IRQChannel) || \
                                       (CHANNEL == PVD_IRQChannel) || \
@@ -106,7 +123,24 @@ typedef struct
                                       (CHANNEL == USART3_IRQChannel) || \
                                       (CHANNEL == EXTI15_10_IRQChannel) || \
                                       (CHANNEL == RTCAlarm_IRQChannel) || \
-                                      (CHANNEL == USBWakeUp_IRQChannel))
+                                      (CHANNEL == USBWakeUp_IRQChannel) || \
+                                      (CHANNEL == TIM8_BRK_IRQChannel) || \
+                                      (CHANNEL == TIM8_UP_IRQChannel) || \
+                                      (CHANNEL == TIM8_TRG_COM_IRQChannel) || \
+                                      (CHANNEL == TIM8_CC_IRQChannel) || \
+                                      (CHANNEL == ADC3_IRQChannel) || \
+                                      (CHANNEL == FSMC_IRQChannel) || \
+                                      (CHANNEL == SDIO_IRQChannel) || \
+                                      (CHANNEL == TIM5_IRQChannel) || \
+                                      (CHANNEL == SPI3_IRQChannel) || \
+                                      (CHANNEL == UART4_IRQChannel) || \
+                                      (CHANNEL == UART5_IRQChannel) || \
+                                      (CHANNEL == TIM6_IRQChannel) || \
+                                      (CHANNEL == TIM7_IRQChannel) || \
+                                      (CHANNEL == DMA2_Channel1_IRQChannel) || \
+                                      (CHANNEL == DMA2_Channel2_IRQChannel) || \
+                                      (CHANNEL == DMA2_Channel3_IRQChannel) || \
+                                      (CHANNEL == DMA2_Channel4_5_IRQChannel))
 
 
 

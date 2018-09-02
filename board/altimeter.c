@@ -17,6 +17,7 @@
 #include "stm32f10x_cfg.h"
 #include "elevator.h"
 #include "parameter.h"
+#include "altimeter_calc.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[altimeter]"
@@ -30,11 +31,12 @@ typedef struct
     uint8_t id_base_station;
 } tof_t;
 
+#pragma pack(1)
 typedef struct
 {
     uint8_t range[8];
     uint8_t space;
-} __PACKED__ msg_range_t;
+} msg_range_t;
 
 typedef struct
 {
@@ -53,7 +55,8 @@ typedef struct
     uint8_t id_tag;
     uint8_t colon;
     uint8_t id_base_station;
-} __PACKED__ msg_tof_t;
+} msg_tof_t;
+#pragma pack()
 
 static tof_t tof;
 
@@ -164,26 +167,30 @@ static void vAltimeter(void *pvParameters)
 
             /** receive packet */
             msg2tof(recv_data, len);
-            if (tof.range > 0)
+            if (!altimeter_is_calculating())
             {
-                /** calculate physical floor */
-                floor = tof.range / 10.0 / board_parameter.floor_height;
-                floor_cur = (uint8_t)floor;
-                floor -= (uint8_t)floor;
-                if (floor > 0.8)
+                if (tof.range > 0)
                 {
-                    floor_cur ++;
-                }
-                if (floor_cur != floor_prev)
-                {
-                    /** floor changed */
-                    elev_set_phy_floor(floor_cur, floor_prev);
-                    floor_prev = floor_cur;
+                    /** calculate physical floor */
+                    floor = tof.range / 10.0 / board_parameter.floor_height;
+                    floor_cur = (uint8_t)floor;
+                    floor -= (uint8_t)floor;
+                    if (floor > 0.8)
+                    {
+                        floor_cur ++;
+                    }
+                    floor_cur++;
+                    if (floor_cur != floor_prev)
+                    {
+                        /** floor changed */
+                        elev_set_phy_floor(floor_cur, floor_prev);
+                        floor_prev = floor_cur;
+                    }
                 }
             }
             recv_data[len] = 0x00;
 #ifdef DUMP_MESSAGE
-            TRACE("recv data: %s", recv_data);
+            TRACE("recv data: %s\r\n", recv_data);
 #endif
         }
     }
@@ -195,7 +202,7 @@ static void vAltimeter(void *pvParameters)
 bool altimeter_init(void)
 {
     TRACE("initialize altimeter....\r\n");
-    g_serial = serial_request(COM2);
+    g_serial = serial_request(COM4);
     if (NULL == g_serial)
     {
         TRACE("initialize failed, can't open serial \'COM2\'\r\n");

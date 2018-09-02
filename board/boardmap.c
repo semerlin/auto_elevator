@@ -11,6 +11,7 @@
 #include "parameter.h"
 #include "global.h"
 #include "expand.h"
+#include "dbgserial.h"
 
 
 #undef __TRACE_MODULE
@@ -18,6 +19,8 @@
 
 extern parameters_t board_parameter;
 boardmap_t boardmaps[MAX_BOARD_NUM];
+
+#define DUMP_MESSAGE   1
 
 
 #ifdef __MASTER
@@ -70,6 +73,45 @@ static void boardmap_sort(void)
     }
 }
 
+#if DUMP_MESSAGE
+/**
+ * @brief dump message
+ * @param data - message to dump
+ * @param len - data length
+ */
+static void dump_message(void)
+{
+    TRACE("boardmap: \r\n");
+
+    for (uint8_t i = 0; i < MAX_BOARD_NUM; ++i)
+    {
+        if (0 != boardmaps[i].id_board)
+        {
+            dbg_putstring("id: ", 4);
+            dbg_putchar("0123456789abcdef"[boardmaps[i].id_board >> 4]);
+            dbg_putchar("0123456789abcdef"[boardmaps[i].id_board & 0x0f]);
+            dbg_putchar(' ');
+
+            dbg_putstring("start key: ", 11);
+            dbg_putchar("0123456789abcdef"[boardmaps[i].start_key >> 4]);
+            dbg_putchar("0123456789abcdef"[boardmaps[i].start_key & 0x0f]);
+            dbg_putchar(' ');
+
+            dbg_putstring("start floor: ", 13);
+            dbg_putchar("0123456789abcdef"[(uint8_t)(boardmaps[i].start_floor) >> 4]);
+            dbg_putchar("0123456789abcdef"[(uint8_t)(boardmaps[i].start_floor) & 0x0f]);
+            dbg_putchar(' ');
+
+            dbg_putstring("floor num: ", 11);
+            dbg_putchar("0123456789abcdef"[boardmaps[i].floor_num >> 4]);
+            dbg_putchar("0123456789abcdef"[boardmaps[i].floor_num & 0x0f]);
+
+            dbg_putstring("\r\n", 2);
+        }
+    }
+}
+#endif
+
 /**
  * @param add new board to board map
  */
@@ -86,6 +128,9 @@ bool boardmap_add(uint8_t id_board, uint8_t start_key, char start_floor,
             boardmaps[i].floor_num = floor_num;
             boardmaps[i].led_status = led_status;
             boardmap_sort();
+#if DUMP_MESSAGE
+            dump_message();
+#endif
             return TRUE;
         }
     }

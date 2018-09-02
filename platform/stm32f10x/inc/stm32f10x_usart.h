@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_USART_H_
-  #define _STM32F10X_USART_H_
+#define _STM32F10X_USART_H_
 
 #include "types.h"
 
@@ -31,7 +31,7 @@
 /* USART Parity */
 #define USART_Parity_None                    (0x0000)
 #define USART_Parity_Even                    (0x02 << 9)
-#define USART_Parity_Odd                     (0x03 << 9) 
+#define USART_Parity_Odd                     (0x03 << 9)
 
 #define IS_USART_PARITY(PARITY) ((PARITY == USART_Parity_None) || \
                                  (PARITY == USART_Parity_Even) || \
@@ -44,10 +44,10 @@
 #define USART_HardwareFlowControl_RTS_CTS    (0x03 << 8)
 
 #define IS_USART_HARDWARE_FLOW_CONTROL(CONTROL)\
-                              ((CONTROL == USART_HardwareFlowControl_None) || \
-                               (CONTROL == USART_HardwareFlowControl_RTS) || \
-                               (CONTROL == USART_HardwareFlowControl_CTS) || \
-                               (CONTROL == USART_HardwareFlowControl_RTS_CTS))
+    ((CONTROL == USART_HardwareFlowControl_None) || \
+     (CONTROL == USART_HardwareFlowControl_RTS) || \
+     (CONTROL == USART_HardwareFlowControl_CTS) || \
+     (CONTROL == USART_HardwareFlowControl_RTS_CTS))
 
 /* USART Clock Polarity */
 #define USART_CPOL_Low                    (0x00)
@@ -55,7 +55,7 @@
 
 #define IS_USART_CPOL(CPOL) ((CPOL == USART_CPOL_Low) || \
                              (CPOL == USART_CPOL_High))
-                               
+
 /* USART Clock Phase */
 #define USART_CPHA_1Edge                  (0x00)
 #define USART_CPHA_2Edge                  (1 << 9)
@@ -125,8 +125,8 @@
 #define USART_LINBreakDetectLength_11      (1 << 1)
 
 #define IS_USART_LIN_BREAK_DETECT_LENGTH(LENGTH) \
-                               ((LENGTH == USART_LINBreakDetectLength_10) || \
-                                (LENGTH == USART_LINBreakDetectLength_11))
+    ((LENGTH == USART_LINBreakDetectLength_10) || \
+     (LENGTH == USART_LINBreakDetectLength_11))
 
 /* USART IrDA Low Power */
 #define USART_IrDAMode_LowPower              (1 << 2)
@@ -142,8 +142,10 @@ typedef enum
     USART1,
     USART2,
     USART3,
+    UART4,
+    UART5,
     UASRT_Count,
-}USART_Group;
+} USART_Group;
 
 
 /*usart configuration */
@@ -160,7 +162,7 @@ typedef struct
     uint16_t clkPolarity;
     uint16_t clkPhase;
     bool lastBitClkEnable;
-}USART_Config;
+} USART_Config;
 
 
 
@@ -179,7 +181,7 @@ void USART_WriteData_Wait(USART_Group group, uint8_t data);
 void USART_WriteData(USART_Group group, uint8_t data);
 uint8_t USART_ReadData(USART_Group group);
 void USART_SetWakeupMethod(USART_Group group, uint16_t method);
-void USART_EnableInt(USART_Group group, uint8_t intFlag, 
+void USART_EnableInt(USART_Group group, uint8_t intFlag,
                      bool flag);
 bool USART_IsIntEnabled(USART_Group group, uint8_t intFlag);
 void USART_SetRecvMode(USART_Group group, uint8_t mode);

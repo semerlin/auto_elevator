@@ -49,7 +49,7 @@ void ApplicationStartup()
     TRACE("startup expand application...\r\n");
 #endif
     TRACE("version = %s\r\n", VERSION);
-    //license_init();
+    license_init();
     if (!param_init())
     {
         TRACE("startup application failed!\r\n");

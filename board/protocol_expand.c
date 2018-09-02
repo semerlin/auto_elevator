@@ -45,28 +45,30 @@ static void process_elev_led(const uint8_t *data, uint8_t len);
 static void process_elev_go(const uint8_t *data, uint8_t len);
 #endif
 
+#pragma pack(1)
 typedef struct
 {
     uint8_t id_board;
     char start_floor;
-} __PACKED__ msg_board_register_t;
+} msg_board_register_t;
 
 typedef struct
 {
     uint8_t status;
-} __PACKED__ msg_board_register_status_t;
+} msg_board_register_status_t;
 
 typedef struct
 {
     uint8_t id_board;
     uint16_t led_status;
-} __PACKED__ msg_led_status_t;
+} msg_led_status_t;
 
 typedef struct
 {
     uint8_t id_board;
     char floor;
-} __PACKED__ msg_elev_go_t;
+} msg_elev_go_t;
+#pragma pack()
 
 
 /* process handle */

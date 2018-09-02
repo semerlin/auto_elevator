@@ -18,6 +18,10 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_param]"
 
+#ifdef __MASTER
+extern parameters_t board_parameter;
+#endif
+
 /* protocol head and tail */
 #define PARAM_HEAD    0x55
 #define PARAM_TAIL    0xaa
@@ -48,7 +52,7 @@ typedef struct
 #ifdef __MASTER
 #define CMD_PWD            0x02
 #define CMD_CALC           0x03
-#define CMD_CALC_NOTIFY    0x04
+#define CMD_CALC_NOTIFY    0x80
 #endif
 
 static cmd_handle_t cmd_handles[] =
@@ -61,41 +65,49 @@ static cmd_handle_t cmd_handles[] =
 };
 
 #ifdef __MASTER
+
+#define IS_PWD_SCAN_WINDOW_VALID(window) (0x00 != window)
+#define IS_CALC_TYPE_VALID(type) ((CALC_PWD == (type)) || (CALC_ALTIMETER == (type)))
+#define IS_ACTION_VALID(action) ((0x01 == action) || (0x02 == action))
+
+#pragma pack(1)
 typedef struct
 {
     uint8_t id_ctl;
     uint8_t id_elev;
     char start_floor;
-    uint8_t calc_type;
-} __PACKED__ msg_param_t;
+    calc_type_t calc_type;
+} msg_param_t;
 
 typedef struct
 {
     uint8_t scan_window;
     uint8_t pwd[4];
-} __PACKED__ msg_pwd_t;
-
-#define IS_PWD_SCAN_WINDOW_VALID(window) (0x00 != window)
+} msg_pwd_t;
 
 typedef struct
 {
     uint8_t action; /** 0x01: start 0x02: stop */
-    uint8_t interval; /** 0: disable */
-} __PACKED__ msg_calc_t;
-
-#define IS_ACTION_VALID(action) ((0x01 == action) || (0x02 == action))
+} msg_calc_t;
 
 typedef struct
 {
+    uint8_t opcode;
     uint16_t floor_height;
-} __PACKED__ msg_calc_data;
+    uint16_t distance;
+} msg_calc_data;
+#pragma pack()
+
 #else
+
+#pragma pack(1)
 typedef struct
 {
     /** valid range id 0x02-0xfe */
     uint8_t id_board;
     char start_floor;
-} __PACKED__ msg_param_t;
+} msg_param_t;
+#pragma pack()
 
 #define IS_BOARD_ID_VALID(id) (((id) >= 0x02) && ((id) <= 0xfe))
 
@@ -180,6 +192,11 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         param.id_ctl = msg->id_ctl;
         param.id_elev = msg->id_elev;
         param.calc_type = msg->calc_type;
+        if (!IS_CALC_TYPE_VALID(msg->calc_type))
+        {
+            status = INVALID_PARAM;
+            goto END;
+        }
         param.id_board = 0x01;
 #endif
 
@@ -206,9 +223,7 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         status = OPERATION_FAIL;
     }
 
-#ifdef __EXPAND
 END:
-#endif
     param_reply(CMD_SET, status);
     if (SUCCESS == status)
     {
@@ -226,24 +241,31 @@ END:
 static void process_param_pwd(const uint8_t *data, uint8_t len)
 {
     param_status_t status = SUCCESS;
-    if (len == sizeof(msg_pwd_t))
+    if (CALC_PWD == board_parameter.calc_type)
     {
-        msg_pwd_t *msg = (msg_pwd_t *)data;
-        if (IS_PWD_SCAN_WINDOW_VALID(msg->scan_window))
+        if (len == sizeof(msg_pwd_t))
         {
-            if (!param_store_pwd(msg->scan_window, msg->pwd))
+            msg_pwd_t *msg = (msg_pwd_t *)data;
+            if (IS_PWD_SCAN_WINDOW_VALID(msg->scan_window))
             {
-                status = OPERATION_FAIL;
+                if (!param_store_pwd(msg->scan_window, msg->pwd))
+                {
+                    status = OPERATION_FAIL;
+                }
+            }
+            else
+            {
+                status = INVALID_PARAM;
             }
         }
         else
         {
-            status = INVALID_PARAM;
+            status = OPERATION_FAIL;
         }
     }
     else
     {
-        status = OPERATION_FAIL;
+        status = INVALID_PARAM;
     }
 
     param_reply(CMD_SET, status);
@@ -262,44 +284,56 @@ static void process_param_pwd(const uint8_t *data, uint8_t len)
 static void process_param_calc(const uint8_t *data, uint8_t len)
 {
     param_status_t status = SUCCESS;
-    if (len == sizeof(msg_calc_t))
+    if (CALC_ALTIMETER == board_parameter.calc_type)
     {
-        msg_calc_t *calc = (msg_calc_t *)data;
-        if (IS_ACTION_VALID(calc->action))
+        if (len == sizeof(msg_calc_t))
         {
-            altimeter_calc_run((calc_action_t)(calc->action));
+            msg_calc_t *calc = (msg_calc_t *)data;
+            if (IS_ACTION_VALID(calc->action))
+            {
+                altimeter_calc_run((calc_action_t)(calc->action));
+            }
+            else
+            {
+                status = INVALID_PARAM;
+            }
         }
         else
         {
-            status = INVALID_PARAM;
+            status = OPERATION_FAIL;
         }
     }
     else
     {
-        status = OPERATION_FAIL;
+        status = INVALID_PARAM;
     }
+
     param_reply(CMD_CALC, status);
 }
 
 /**
  * @brief notify calculation data to user
  */
-void notify_calc(uint16_t floor_height)
+void notify_calc(uint16_t floor_height, uint16_t distance)
 {
     msg_calc_data msg;
+    msg.opcode = CMD_CALC_NOTIFY;
     msg.floor_height = floor_height;
-
-    uint8_t rsp[11];
+    msg.distance = distance;
+    uint8_t rsp[13];
     uint16_t crc = crc16((uint8_t *)&msg, sizeof(msg));
     rsp[0] = PARAM_HEAD;
-    rsp[1] = 6 + sizeof(msg);
-    rsp[2] = CMD_CALC_NOTIFY;
-    memcpy(rsp + 3, &msg, sizeof(msg));
-    rsp[3 + sizeof(msg)] = (uint8_t)((crc >> 8) & 0xff);
-    rsp[4 + sizeof(msg)] = (uint8_t)(crc & 0xff);
-    rsp[5 + sizeof(msg)] = PARAM_TAIL;
+    rsp[1] = 5 + sizeof(msg);
+    rsp[2] = msg.opcode;
+    rsp[3] = (uint8_t)(msg.floor_height >> 8);
+    rsp[4] = (uint8_t)(msg.floor_height & 0xff);
+    rsp[5] = (uint8_t)(msg.distance >> 8);
+    rsp[6] = (uint8_t)(msg.distance & 0xff);
+    rsp[7] = (uint8_t)((crc >> 8) & 0xff);
+    rsp[8] = (uint8_t)(crc & 0xff);
+    rsp[9] = PARAM_TAIL;
 
-    ptl_send_data(rsp, 6 + sizeof(msg));
+    ptl_send_data(rsp, 5 + sizeof(msg));
 }
 #endif
 

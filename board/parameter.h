@@ -31,13 +31,13 @@ typedef struct
     uint8_t pwd_window;
     uint8_t pwd[PARAM_PWD_LEN];
     uint16_t floor_height;
-} __PACKED__ parameters_t;
+} parameters_t;
 #else
 typedef struct
 {
     uint8_t id_board; /** valid range is 0x02-0xff */
     char start_floor;
-} __PACKED__ parameters_t;
+} parameters_t;
 #endif
 
 

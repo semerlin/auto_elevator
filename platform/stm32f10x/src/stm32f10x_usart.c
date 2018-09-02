@@ -12,7 +12,7 @@
 
 
 /* flash register structure */
-typedef struct 
+typedef struct
 {
     volatile uint16_t SR;
     uint16_t RESERVED0;
@@ -28,7 +28,7 @@ typedef struct
     uint16_t RESERVED5;
     volatile uint16_t GTPR;
     uint16_t RESERVED6;
-}USART_T;
+} USART_T;
 
 /* usart definition */
 #define UE               (1 << 13)
@@ -56,9 +56,12 @@ typedef struct
 
 
 /* USART group array */
-static USART_T * const USARTx[] = {(USART_T *)USART1_BASE, 
-                                   (USART_T *)USART2_BASE,
-                                   (USART_T *)USART3_BASE};
+static USART_T *const USARTx[] = {(USART_T *)USART1_BASE,
+                                  (USART_T *)USART2_BASE,
+                                  (USART_T *)USART3_BASE,
+                                  (USART_T *)UART4_BASE,
+                                  (USART_T *)UART5_BASE,
+                                 };
 
 
 /**
@@ -69,12 +72,16 @@ static USART_T * const USARTx[] = {(USART_T *)USART1_BASE,
 void USART_Enable(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group]; 
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR1 |= UE;
+    }
     else
+    {
         UsartX->CR1 &= ~UE;
+    }
 }
 
 /**
@@ -85,12 +92,16 @@ void USART_Enable(USART_Group group, bool flag)
 void USART_TransEnable(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR1 |= TE;
+    }
     else
+    {
         UsartX->CR1 &= ~TE;
+    }
 }
 
 /**
@@ -101,12 +112,16 @@ void USART_TransEnable(USART_Group group, bool flag)
 void USART_RecvEnable(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR1 |= RE;
+    }
     else
+    {
         UsartX->CR1 &= ~RE;
+    }
 }
 
 void USART_Setup(USART_Group group, const USART_Config *config)
@@ -120,49 +135,63 @@ void USART_Setup(USART_Group group, const USART_Config *config)
     assert_param(IS_USART_HARDWARE_FLOW_CONTROL(config->hardwareFlowControl));
     assert_param(IS_USART_CPOL(config->clkPolarity));
     assert_param(IS_USART_CPHA(config->clkPhase));
-   
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     uint32_t pclk = 0;
-    if(group == USART1)
+    if (group == USART1)
+    {
         pclk = RCC_GetPCLK2();
+    }
     else
+    {
         pclk = RCC_GetPCLK1();
-    
+    }
+
     //config baudrate
     uint16_t divFraction = 0;
     uint16_t divMantissa = 0;
     float divVal = pclk / (float)(config->baudRate);
     divMantissa = (uint16_t)(divVal / 16);
     divFraction = (uint8_t)((divVal - divMantissa * 16));
-    if(((divVal - divMantissa * 16) - divFraction) >= 0.5)
+    if (((divVal - divMantissa * 16) - divFraction) >= 0.5)
+    {
         divFraction += 1;
-    
+    }
+
     UsartX->BRR = (divMantissa << 4) + divFraction;
-    
+
     //config word lenght, tx/rx enable, parity
     UsartX->CR1 &= ~(M | TE | RE | PARITY);
     UsartX->CR1 |= (config->wordLength | config->parity);
-    if(config->txEnable)
+    if (config->txEnable)
+    {
         UsartX->CR1 |= TE;
-    if(config->rxEnable)
+    }
+    if (config->rxEnable)
+    {
         UsartX->CR1 |= RE;
-    
+    }
+
     //config stop bits, CK
     UsartX->CR2 &= ~(CLKEN | CPOL | CPHA | STOP | LBCL);
     UsartX->CR2 |= (config->stopBits | config->clkPolarity | config->clkPhase);
-    if(config->clkEnable)
+    if (config->clkEnable)
+    {
         UsartX->CR2 |= CLKEN;
-    if(config->lastBitClkEnable)
+    }
+    if (config->lastBitClkEnable)
+    {
         UsartX->CR2 |= LBCL;
-    
+    }
+
     UsartX->CR3 &= ~CRTS;
     UsartX->CR3 |= config->hardwareFlowControl;
 
 }
 
 void USART_StructInit(USART_Config *config)
-{   
+{
     config->baudRate = 9600;
     config->wordLength = USART_WordLength_8;
     config->parity = USART_Parity_None;
@@ -185,8 +214,8 @@ void USART_SetAddress(USART_Group group, uint8_t address)
 {
     assert_param(group < UASRT_Count);
     assert_param(address < 16);
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     UsartX->CR2 &= ~ADD;
     UsartX->CR2 |= address;
 }
@@ -199,8 +228,8 @@ void USART_SetAddress(USART_Group group, uint8_t address)
 uint8_t USART_GetAddress(USART_Group group)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     return ((uint8_t)(UsartX->CR2 & ADD));
 }
 
@@ -212,8 +241,8 @@ uint8_t USART_GetAddress(USART_Group group)
 void USART_SetPrescaler(USART_Group group, uint8_t prescaler)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     UsartX->GTPR &= ~PSC;
     UsartX->GTPR |= prescaler;
 }
@@ -228,12 +257,16 @@ bool USART_IsFlagOn(USART_Group group, uint16_t flag)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_FLAG(flag));
-    
-    USART_T * const UsartX = USARTx[group];
-    if(UsartX->SR & flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (UsartX->SR & flag)
+    {
         return TRUE;
+    }
     else
+    {
         return FALSE;
+    }
 }
 
 /**
@@ -245,9 +278,9 @@ void USART_ClearFlag(USART_Group group, uint16_t flag)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_FLAG(flag));
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     UsartX->SR &= ~flag;
 }
 
@@ -259,13 +292,13 @@ void USART_ClearFlag(USART_Group group, uint16_t flag)
 void USART_WriteData_Wait(USART_Group group, uint8_t data)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     UsartX->DR = data;
-    
+
     /* wait data written */
-    while(!(UsartX->SR & SR_TXE));
+    while (!(UsartX->SR & SR_TXE));
 }
 
 /**
@@ -276,9 +309,9 @@ void USART_WriteData_Wait(USART_Group group, uint8_t data)
 void USART_WriteData(USART_Group group, uint8_t data)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     UsartX->DR = data;
 }
 
@@ -290,9 +323,9 @@ void USART_WriteData(USART_Group group, uint8_t data)
 uint8_t USART_ReadData(USART_Group group)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     return UsartX->DR;
 }
 
@@ -305,9 +338,9 @@ void USART_SetWakeupMethod(USART_Group group, uint16_t method)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_WAKEUP(method));
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     UsartX->CR1 &= ~WAKE;
     UsartX->CR1 |= method;
 }
@@ -321,28 +354,40 @@ void USART_EnableInt(USART_Group group, uint8_t intFlag, bool flag)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_IT(intFlag));
-    
-    USART_T * const UsartX = USARTx[group];
-    
-    switch(intFlag & 0x01)
+
+    USART_T *const UsartX = USARTx[group];
+
+    switch (intFlag & 0x01)
     {
     case 0x01:
-        if(flag)
+        if (flag)
+        {
             UsartX->CR1 |= (1 << (intFlag >> 4));
+        }
         else
+        {
             UsartX->CR1 &= ~(1 << (intFlag >> 4));
+        }
         break;
     case 0x02:
-        if(flag)
+        if (flag)
+        {
             UsartX->CR2 |= (1 << (intFlag >> 4));
+        }
         else
+        {
             UsartX->CR2 &= ~(1 << (intFlag >> 4));
+        }
         break;
     case 0x03:
-        if(flag)
+        if (flag)
+        {
             UsartX->CR3 |= (1 << (intFlag >> 4));
+        }
         else
+        {
             UsartX->CR3 &= ~(1 << (intFlag >> 4));
+        }
         break;
     default:
         break;
@@ -359,27 +404,33 @@ bool USART_IsIntEnabled(USART_Group group, uint8_t intFlag)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_IT(intFlag));
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     bool ret = FALSE;
-    switch(intFlag & 0x01)
+    switch (intFlag & 0x01)
     {
     case 0x01:
-        if(UsartX->CR1 & (1 << (intFlag >> 4)))
+        if (UsartX->CR1 & (1 << (intFlag >> 4)))
+        {
             ret = TRUE;
+        }
         break;
     case 0x02:
-        if(UsartX->CR2 & (1 << (intFlag >> 4)))
+        if (UsartX->CR2 & (1 << (intFlag >> 4)))
+        {
             ret = TRUE;
+        }
         break;
     case 0x03:
-        if(UsartX->CR3 & (1 << (intFlag >> 4)))
+        if (UsartX->CR3 & (1 << (intFlag >> 4)))
+        {
             ret = TRUE;
+        }
         break;
     default:
         break;
     }
-    
+
     return ret;
 }
 
@@ -392,9 +443,9 @@ void USART_SetRecvMode(USART_Group group, uint8_t mode)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_RECVMODE(mode));
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     UsartX->CR1 &= ~RWU;
     UsartX->CR1 |= mode;
 }
@@ -406,9 +457,9 @@ void USART_SetRecvMode(USART_Group group, uint8_t mode)
 void USART_SendBreakCharacter(USART_Group group)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
+
+    USART_T *const UsartX = USARTx[group];
+
     UsartX->CR1 |= 0x01;
 }
 
@@ -419,13 +470,17 @@ void USART_SendBreakCharacter(USART_Group group)
 void USART_EnableLINMode(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+
+    if (flag)
+    {
         UsartX->CR2 |= (1 << 14);
+    }
     else
+    {
         UsartX->CR2 &= ~(1 << 14);
+    }
 }
 
 /**
@@ -437,8 +492,8 @@ void USART_SetLineBreakDetectLength(USART_Group group, uint8_t length)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_LIN_BREAK_DETECT_LENGTH(length));
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     UsartX->CR2 &= ~(1 << 1);
     UsartX->CR2 |= length;
 }
@@ -446,112 +501,136 @@ void USART_SetLineBreakDetectLength(USART_Group group, uint8_t length)
 /**
  * @param enable or disable dma tx
  * @param group: usart group
- * @param enable or disable flag 
+ * @param enable or disable flag
  */
 void USART_EnableDMATX(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+
+    if (flag)
+    {
         UsartX->CR3 &= ~(1 << 7);
+    }
     else
+    {
         UsartX->CR3 |= (1 << 7);
+    }
 }
 
 /**
  * @param enable or disable dma rx
  * @param group: usart group
- * @param enable or disable flag 
+ * @param enable or disable flag
  */
 void USART_EnableDMARX(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+
+    if (flag)
+    {
         UsartX->CR3 &= ~(1 << 6);
+    }
     else
+    {
         UsartX->CR3 |= (1 << 6);
+    }
 }
 
 /**
  * @param enable or disable smartcard
  * @param group: usart group
- * @param enable or disable flag 
+ * @param enable or disable flag
  */
 void USART_SmartcardEnable(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR3 &= ~(1 << 5);
+    }
     else
+    {
         UsartX->CR3 |= (1 << 5);
+    }
 }
 
 /**
  * @param enable or disable smartcard NACK
  * @param group: usart group
- * @param enable or disable flag 
+ * @param enable or disable flag
  */
 void USART_SmartcardNACKEnable(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR3 &= ~(1 << 4);
+    }
     else
+    {
         UsartX->CR3 |= (1 << 5);
+    }
 }
 
 /**
  * @param enable or disable half duplex selection
  * @param group: usart group
- * @param enable or disable flag 
+ * @param enable or disable flag
  */
 void USART_HalfDuplexSelection(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR3 &= ~(1 << 3);
+    }
     else
+    {
         UsartX->CR3 |= (1 << 5);
+    }
 }
 
 /**
  * @param enable or disable irda
  * @param group: usart group
- * @param enable or disable flag 
+ * @param enable or disable flag
  */
 void USART_IrdaEnable(USART_Group group, bool flag)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
-    if(flag)
+
+    USART_T *const UsartX = USARTx[group];
+    if (flag)
+    {
         UsartX->CR3 &= ~(1 << 1);
+    }
     else
+    {
         UsartX->CR3 |= (1 << 1);
+    }
 }
 
 /**
  * @param set irda mode
  * @param group: usart group
- * @param work mode 
+ * @param work mode
  */
 void USART_SetIrdaMode(USART_Group group, uint8_t mode)
 {
     assert_param(group < UASRT_Count);
     assert_param(IS_USART_IRDA_MODE(mode));
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     UsartX->CR3 &= ~(1 << 2);
     UsartX->CR3 |= mode;
 }
@@ -559,8 +638,8 @@ void USART_SetIrdaMode(USART_Group group, uint8_t mode)
 void USART_SetGuardTime(USART_Group group, uint16_t time)
 {
     assert_param(group < UASRT_Count);
-    
-    USART_T * const UsartX = USARTx[group];
+
+    USART_T *const UsartX = USARTx[group];
     UsartX->GTPR &= ~(0x0ff << 8);
     UsartX->GTPR |= (time << 8);
 }

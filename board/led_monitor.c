@@ -40,7 +40,7 @@ typedef struct
     uint8_t id_board;
     uint16_t prev_status;
     uint16_t cur_status;
-} __PACKED__ led_status_t;
+} led_status_t;
 static xQueueHandle xQueueLed = NULL;
 #define LED_QUEUE_SIZE       20
 #define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
@@ -58,6 +58,7 @@ static pwd_node pwds[PARAM_PWD_LEN] =
     {0, 0},
     {0, 0}
 };
+#define FLOOR_RESET_COUNT   4
 #endif
 
 #ifdef __MASTER
@@ -129,6 +130,7 @@ static void push_pwd_node(const pwd_node *node)
 static void vLedWorkMonitor(void *pvParameters)
 {
     char floor = 0;
+    uint8_t err_cnt = 0;
     for (;;)
     {
         /** check elevator status */
@@ -139,7 +141,29 @@ static void vLedWorkMonitor(void *pvParameters)
                 floor = floormap_phy_to_dis(robot_checkin_get());
                 if (!is_led_on(floor) && (floor != elev_floor()))
                 {
-                    elev_go(floor);
+                    if (CALC_PWD == board_parameter.calc_type)
+                    {
+                        err_cnt ++;
+                        if (err_cnt > FLOOR_RESET_COUNT)
+                        {
+                            err_cnt = 0;
+                            elev_set_floor(floor);
+                            /* notify floor arrived */
+                            elev_arrived(floor);
+                        }
+                        else
+                        {
+                            elev_go(floor);
+                        }
+                    }
+                    else
+                    {
+                        elev_go(floor);
+                    }
+                }
+                else
+                {
+                    err_cnt = 0;
                 }
             }
         }

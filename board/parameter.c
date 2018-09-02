@@ -24,7 +24,7 @@ typedef struct
 {
     uint8_t flag[PARAM_SETTED_FLAG_LEN];
     parameters_t parameters;
-} __PACKED__ flash_map_t;
+} flash_map_t;
 
 static flash_map_t flash_map;
 
@@ -53,7 +53,7 @@ bool param_init(void)
         {
             return FALSE;
         }
-        param_setted = (0 == memcpy(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN));
+        param_setted = (0 == memcmp(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN));
         TRACE("parameter status(%d)\r\n", param_setted);
         return TRUE;
     }
@@ -82,7 +82,7 @@ bool param_store(parameters_t param)
 bool param_store_pwd(uint8_t interval, uint8_t *pwd)
 {
     uint8_t buf[PARAM_PWD_LEN + 1] = {interval, pwd[0], pwd[1], pwd[2], pwd[3]};
-    uint32_t offset = OFFSET_OF(flash_map_t, parameters.pwd);
+    uint32_t offset = OFFSET_OF(flash_map_t, parameters.pwd_window);
     return fm_write(PARAM_START_ADDRESS + offset, buf, PARAM_PWD_LEN + 1);
 }
 

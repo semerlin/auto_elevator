@@ -33,7 +33,7 @@ BEGIN_DECLS
 typedef struct
 {
     /** 0 means empty */
-    uint16_t id_board;
+    uint8_t id_board;
     uint8_t start_key;
     char start_floor;
     uint8_t floor_num;

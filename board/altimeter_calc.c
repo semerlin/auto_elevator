@@ -29,9 +29,8 @@ static calc_action_t calc_action = CALC_STOP;
 static xQueueHandle xQueueCalc = NULL;
 #define HEIGHT_AVERAGE_COUNT    5
 
-static uint16_t calc_once(char current_floor)
+static uint16_t calc_once(char current_floor, uint32_t distance)
 {
-    uint32_t distance = altimeter_get_distance();
     uint8_t floor_num = current_floor - board_parameter.start_floor;
     if ((board_parameter.start_floor < 0) && (current_floor > 0))
     {
@@ -53,17 +52,19 @@ static void vAltimeterCalc(void *pvParameters)
 {
     char floor = 1;
     uint16_t heights[HEIGHT_AVERAGE_COUNT];
-    memset(heights, 0, HEIGHT_AVERAGE_COUNT);
+    memset(heights, 0, HEIGHT_AVERAGE_COUNT * sizeof(uint16_t));
     uint8_t index = 0;
     uint16_t cur_height = 0;
+    uint32_t distance = 0;
     for (;;)
     {
         if (CALC_START == calc_action)
         {
             if (xQueueReceive(xQueueCalc, &floor, portMAX_DELAY))
             {
-                cur_height = calc_once(floor);
-                TRACE("calculated height: %d\r\n", cur_height);
+                distance = altimeter_get_distance();
+                cur_height = calc_once(floor, distance);
+                TRACE("calculated height: %d(cm), %d(mm)\r\n", cur_height, distance);
                 if (0 != cur_height)
                 {
                     heights[index] = cur_height;
@@ -94,7 +95,7 @@ static void vAltimeterCalc(void *pvParameters)
                 {
                     TRACE("no valid data, use default height: %d\r\n", board_parameter.floor_height);
                 }
-                notify_calc(board_parameter.floor_height);
+                notify_calc(board_parameter.floor_height, distance / 10);
             }
         }
         else
@@ -126,6 +127,11 @@ bool altimeter_calc_run(calc_action_t action)
 {
     TRACE("set calculate action(%d)\r\n", action);
     calc_action = action;
+    if (CALC_STOP == action)
+    {
+        TRACE("rebooting...\r\n");
+        SCB_SystemReset();
+    }
     return TRUE;
 }
 

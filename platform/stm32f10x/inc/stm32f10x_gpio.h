@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_GPIO_H_
-  #define _STM32F10X_GPIO_H_
+#define _STM32F10X_GPIO_H_
 
 #include "types.h"
 
@@ -21,18 +21,18 @@ typedef enum
     GPIOF,
     GPIOG,
     GPIO_Count
-}GPIO_Group;
+} GPIO_Group;
 
 /* gpio configure definition */
 typedef enum
-{ 
+{
     GPIO_Speed_10MHz = 1,
-    GPIO_Speed_2MHz, 
+    GPIO_Speed_2MHz,
     GPIO_Speed_50MHz
-}GPIO_Speed;
+} GPIO_Speed;
 
 typedef enum
-{ 
+{
     GPIO_Mode_AIN = 0x0,
     GPIO_Mode_IN_FLOATING = 0x01,
     GPIO_Mode_IPD = 0x02,
@@ -41,15 +41,15 @@ typedef enum
     GPIO_Mode_Out_PP = 0x10,
     GPIO_Mode_AF_OD = 0x13,
     GPIO_Mode_AF_PP = 0x12
-}GPIO_Mode;
+} GPIO_Mode;
 
-     
+
 typedef struct
 {
     uint8_t pin;
     GPIO_Speed speed;
-    GPIO_Mode mode;  
-}GPIO_Config;
+    GPIO_Mode mode;
+} GPIO_Config;
 
 
 #define SWJ_JTAG_DISABLE     (2 << 24)
