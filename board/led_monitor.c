@@ -264,7 +264,10 @@ static void vLedMonitor(void *pvParameters)
         status.prev_status = status.cur_status;
         boardmap_update_led_status(board_parameter.id_board, cur_status);
 #else
-        notify_led_status(board_parameter.id_board, cur_status);
+        if (is_expand_board_registered())
+        {
+            notify_led_status(board_parameter.id_board, cur_status);
+        }
 #endif
 
         vTaskDelay(LED_MONITOR_INTERVAL);
