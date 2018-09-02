@@ -18,14 +18,14 @@ typedef enum
     work_idle,
     work_robot,
     work_full,
-}elev_work_state;
+} elev_work_state;
 
 typedef enum
 {
     run_stop,
     run_up,
     run_down,
-}elev_run_state;
+} elev_run_state;
 
 
 bool elev_init(void);
@@ -36,6 +36,7 @@ char elev_floor(void);
 void elev_decrease(void);
 void elev_increase(void);
 void elev_set_first_floor(void);
+void elev_set_floor(char floor);
 elev_run_state elev_state_run(void);
 elev_work_state elev_state_work(void);
 void elevator_set_state_work(elev_work_state state);

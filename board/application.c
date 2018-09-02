@@ -24,7 +24,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
 
-#define VERSION  ("v1.0.3.0")
+#define VERSION  ("v1.0.4.0")
 
 
 /**
@@ -39,9 +39,9 @@ void ApplicationStartup()
     {
         TRACE("startup application failed!\r\n");
     }
-    
+
     protocol_init();
-    
+
     if (is_param_setted())
     {
         keymap_init();

@@ -59,7 +59,7 @@ static void vElevHold(void *pvParameters)
                 keyctl_release(keymap_open());
             }
         }
-        
+
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
@@ -73,7 +73,7 @@ static void vElevControl(void *pvParameters)
     uint8_t key = 0;
     for (;;)
     {
-        if(xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
+        if (xQueueReceive(xQueueFloor, &key, portMAX_DELAY))
         {
             keyctl_press(key);
             vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -95,8 +95,8 @@ static void vElevArrive(void *pvParameters)
         err_cnt = 0;
         if (xQueueReceive(xArriveQueue, &floor, portMAX_DELAY))
         {
-            while (pdTRUE != xSemaphoreTake(xNotifySemaphore, 
-                                         500 / portTICK_PERIOD_MS))
+            while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
+                                            500 / portTICK_PERIOD_MS))
             {
                 err_cnt ++;
                 if (err_cnt > MAX_CHECK_CNT)
@@ -132,11 +132,11 @@ bool elev_init(void)
     xNotifySemaphore = xSemaphoreCreateBinary();
     register_arrive_cb(arrive_hook);
     xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
-                    ELEV_PRIORITY, NULL);
+                ELEV_PRIORITY, NULL);
     xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
-                    ELEV_PRIORITY, NULL);
+                ELEV_PRIORITY, NULL);
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
-                    ELEV_PRIORITY, NULL);
+                ELEV_PRIORITY, NULL);
     return TRUE;
 }
 
@@ -259,6 +259,15 @@ void elev_set_first_floor(void)
 {
     TRACE("set first floor\r\n");
     elev_cur_floor = 1;
+}
+
+/**
+ * @brief set elevator current floor
+ */
+void elev_set_floor(char floor)
+{
+    TRACE("set elevator floor: %d\r\n", floor);
+    elev_cur_floor = floor;
 }
 
 /**

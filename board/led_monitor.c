@@ -21,9 +21,10 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
 
-#define LED_INTERVAL            (200)
-#define LED_MONITOR_INTERVAL    (LED_INTERVAL / portTICK_PERIOD_MS)
-#define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
+#define LED_INTERVAL                 (200)
+#define LED_MONITOR_INTERVAL         (LED_INTERVAL / portTICK_PERIOD_MS)
+#define LED_WORK_MONITOR_INTERVAL    (800 / portTICK_PERIOD_MS)
+#define FLOOR_RESET_COUNT            4
 
 static uint16_t led_status = 0;
 
@@ -34,9 +35,9 @@ typedef struct
 {
     uint8_t pwd;
     uint32_t time;
-}pwd_node;
+} pwd_node;
 
-static pwd_node pwds[4] = 
+static pwd_node pwds[4] =
 {
     {0, 0},
     {0, 0},
@@ -111,6 +112,7 @@ static void push_pwd_node(const pwd_node *node)
 static void vLedWorkMonitor(void *pvParameters)
 {
     char floor = 0;
+    uint8_t err_cnt = 0;
     for (;;)
     {
         /* check elevator status */
@@ -121,12 +123,27 @@ static void vLedWorkMonitor(void *pvParameters)
                 floor = floormap_phy_to_dis(robot_checkin_get());
                 if (!is_led_on(floor) && (floor != elev_floor()))
                 {
-                    elev_go(floor);
+                    err_cnt ++;
+                    if (err_cnt > FLOOR_RESET_COUNT)
+                    {
+                        err_cnt = 0;
+                        elev_set_floor(floor);
+                        /* notify floor arrived */
+                        elev_arrived(floor);
+                    }
+                    else
+                    {
+                        elev_go(floor);
+                    }
+                }
+                else
+                {
+                    err_cnt = 0;
                 }
             }
         }
-        
-        vTaskDelay(LED_WORK_MONITOR_INTERVAL);      
+
+        vTaskDelay(LED_WORK_MONITOR_INTERVAL);
     }
 }
 
@@ -170,11 +187,12 @@ static void vLedMonitor(void *pvParameters)
                     }
                 }
                 changed_status &= changed_status - 1;
-            }while (0 != changed_status);
+            }
+            while (0 != changed_status);
             led_status = cur_status;
         }
         vTaskDelay(LED_MONITOR_INTERVAL);
-        
+
         timestamp ++;
     }
 }
@@ -187,10 +205,10 @@ bool led_monitor_init(void)
 {
     TRACE("initialize led monitor...\r\n");
     param_get_pwd(led_pwd);
-    xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL, 
-                    LED_MONITOR_PRIORITY, NULL);
-    xTaskCreate(vLedWorkMonitor, "ledworkmonitor", LED_MONITOR_STACK_SIZE, NULL, 
-                    LED_MONITOR_PRIORITY, NULL);
+    xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL,
+                LED_MONITOR_PRIORITY, NULL);
+    xTaskCreate(vLedWorkMonitor, "ledworkmonitor", LED_MONITOR_STACK_SIZE, NULL,
+                LED_MONITOR_PRIORITY, NULL);
 
     return TRUE;
 }
