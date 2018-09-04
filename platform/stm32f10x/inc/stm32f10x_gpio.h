@@ -52,7 +52,9 @@ typedef struct
 } GPIO_Config;
 
 
-#define SWJ_JTAG_DISABLE     (2 << 24)
+#define SWJ_JTAG_DISABLE      (2 << 24)
+#define CAN_REMAP_PB          (2 << 13)
+#define CAN_REMAP_PD          (3 << 13)
 
 /* interface */
 void GPIO_Setup(GPIO_Group group, const GPIO_Config *config);

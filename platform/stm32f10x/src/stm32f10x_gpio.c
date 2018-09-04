@@ -10,38 +10,39 @@
 #include "stm32f10x_cfg.h"
 
 /* flash register structure */
-typedef struct 
+typedef struct
 {
-	volatile uint32_t CRL;
-	volatile uint32_t CRH;
-	volatile uint32_t IDR;
-	volatile uint32_t ODR;
-	volatile uint32_t BSRR;
-	volatile uint32_t BRR;
-	volatile uint32_t LCKR;
-}GPIO_T;
+    volatile uint32_t CRL;
+    volatile uint32_t CRH;
+    volatile uint32_t IDR;
+    volatile uint32_t ODR;
+    volatile uint32_t BSRR;
+    volatile uint32_t BRR;
+    volatile uint32_t LCKR;
+} GPIO_T;
 
-typedef struct 
+typedef struct
 {
-	volatile uint32_t EVCR;
-	volatile uint32_t MAPR;
-	volatile uint32_t EXTICR[4];
+    volatile uint32_t EVCR;
+    volatile uint32_t MAPR;
+    volatile uint32_t EXTICR[4];
     uint32_t RESERVED0;
-	volatile uint32_t MAPR2;
-}AFIO_T;
+    volatile uint32_t MAPR2;
+} AFIO_T;
 
 
 
 /* GPIO group array */
-static GPIO_T * const GPIOx[] = {(GPIO_T *)GPIOA_BASE, 
-                                 (GPIO_T *)GPIOB_BASE,
-                                 (GPIO_T *)GPIOC_BASE,
-                                 (GPIO_T *)GPIOD_BASE,
-                                 (GPIO_T *)GPIOE_BASE,
-                                 (GPIO_T *)GPIOF_BASE,
-                                 (GPIO_T *)GPIOG_BASE};
+static GPIO_T *const GPIOx[] = {(GPIO_T *)GPIOA_BASE,
+                                (GPIO_T *)GPIOB_BASE,
+                                (GPIO_T *)GPIOC_BASE,
+                                (GPIO_T *)GPIOD_BASE,
+                                (GPIO_T *)GPIOE_BASE,
+                                (GPIO_T *)GPIOF_BASE,
+                                (GPIO_T *)GPIOG_BASE
+                               };
 
-static AFIO_T * const AFIO = (AFIO_T *)AFIO_BASE;
+static AFIO_T *const AFIO = (AFIO_T *)AFIO_BASE;
 
 
 
@@ -54,14 +55,14 @@ void GPIO_Setup(GPIO_Group group, const GPIO_Config *config)
 {
     assert_param(config->pin < 16);
     assert_param(group < GPIO_Count);
-    
-    GPIO_T * const GpioX = GPIOx[group];
- 
+
+    GPIO_T *const GpioX = GPIOx[group];
+
     /* config pin mode */
-    if((config->mode & 0x10) == 0x10)
+    if ((config->mode & 0x10) == 0x10)
     {
         /* output */
-        if(config->pin < 8)
+        if (config->pin < 8)
         {
             GpioX->CRL &= ~(0x0f << (config->pin << 2));
             GpioX->CRL |= (config->speed << (config->pin << 2));
@@ -71,14 +72,14 @@ void GPIO_Setup(GPIO_Group group, const GPIO_Config *config)
         {
             GpioX->CRH &= ~(0x0f << ((config->pin - 8) << 2));
             GpioX->CRH |= (config->speed << ((config->pin - 8) << 2));
-            GpioX->CRH |= ((config->mode & 0x0f) << 
+            GpioX->CRH |= ((config->mode & 0x0f) <<
                            (((config->pin - 8) << 2) + 2));
         }
     }
     else
     {
         /* input */
-        if(config->pin < 8)
+        if (config->pin < 8)
         {
             GpioX->CRL &= ~(0x0f << (config->pin << 2));
             GpioX->CRL |= ((config->mode & 0x0f) << ((config->pin << 2) + 2));
@@ -86,14 +87,18 @@ void GPIO_Setup(GPIO_Group group, const GPIO_Config *config)
         else
         {
             GpioX->CRH &= ~(0x0f << ((config->pin - 8) << 2));
-            GpioX->CRH |= ((config->mode & 0x0f) << 
+            GpioX->CRH |= ((config->mode & 0x0f) <<
                            (((config->pin - 8) << 2) + 2));
         }
-        
-        if(config->mode & 0x20)
+
+        if (config->mode & 0x20)
+        {
             GpioX->ODR |= (1 << (config->pin));
+        }
         else
+        {
             GpioX->ODR &= ~(1 << (config->pin));
+        }
     }
 }
 
@@ -106,7 +111,7 @@ void GPIO_Setup(GPIO_Group group, const GPIO_Config *config)
 uint16_t GPIO_ReadDataGroup(GPIO_Group group)
 {
     assert_param(group < GPIO_Count);
-    
+
     return GPIOx[group]->IDR;
 }
 
@@ -134,7 +139,7 @@ uint8_t GPIO_ReadPin(GPIO_Group group, uint8_t pin)
 {
     assert_param(group < GPIO_Count);
     assert_param(pin < 16);
-    
+
     return (GPIOx[group]->IDR >> pin) & 0x01;
 }
 
@@ -163,7 +168,7 @@ void GPIO_ResetPin(GPIO_Group group, uint8_t pin)
 
     GPIOx[group]->BRR = (1 << pin);
 }
- 
+
 /**
  * @brief lock pin
  * @param group: port group
@@ -173,11 +178,11 @@ void GPIO_LockPin(GPIO_Group group, uint8_t pin)
 {
     assert_param(group < GPIO_Count);
     assert_param(pin < 16);
-    
-    GPIO_T * const GpioX = GPIOx[group];
+
+    GPIO_T *const GpioX = GPIOx[group];
     uint32_t tmp = 0x00010000;
     tmp |= pin;
-    
+
     /* lock sequence */
     GpioX->LCKR = tmp;
     GpioX->LCKR =  pin;
@@ -211,6 +216,7 @@ void GPIO_PinRemap(uint32_t pin, bool flag)
 {
     if (flag)
     {
+        AFIO->MAPR &= ~pin;
         AFIO->MAPR |= pin;
     }
     else

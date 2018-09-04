@@ -20,6 +20,8 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[EXPAND]"
 
+#define LOOP_BACK_TEST 0
+
 typedef struct
 {
     uint8_t len;
@@ -67,7 +69,11 @@ static void can_init(void)
     config.nart = FALSE;
     config.rflm = FALSE;
     config.txfp = FALSE;
+#if LOOP_BACK_TEST
+    config.mode = CAN_Mode_LoopBack;
+#else
     config.mode = CAN_Mode_Normal;
+#endif
 
     /* 100k */
     config.sjw = CAN_SJW_1tq;
@@ -124,7 +130,11 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
     uint16_t count = 0;
     CAN_TxMsg msg;
     msg.std_id = 0;
+#if LOOP_BACK_TEST
+    msg.ext_id = ID_BOARD_MASTER;
+#else
     msg.ext_id = board_parameter.id_board;
+#endif
     msg.ide = CAN_ID_EXT;
     msg.rtr = CAN_RTR_DATA;
     msg.dlc = len;
@@ -136,19 +146,26 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
 
     /** send message */
     mbox = CAN_Transmit(CAN1, &msg);
-    while ((CAN_TxStatus_Failed == CAN_TransmitStatus(CAN1, mbox)) &&
-           (count < 0xfff))
-    {
-        /** wait message send finish */
-        count++;
-    }
-
-    if (count > 0xfff)
+    if (CAN_TxStatus_NoMailBox == mbox)
     {
         return 0;
     }
+    else
+    {
+        while ((CAN_TxStatus_Failed == CAN_TransmitStatus(CAN1, mbox)) &&
+               (count < 0xfff))
+        {
+            /** wait message send finish */
+            count++;
+        }
 
-    return len;
+        if (count > 0xfff)
+        {
+            return 0;
+        }
+
+        return len;
+    }
 }
 
 #ifdef __EXPAND

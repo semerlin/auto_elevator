@@ -9,6 +9,7 @@
 #include "pinconfig.h"
 #include "stm32f10x_cfg.h"
 
+#define CAN_REMAP 1
 
 /* pin configure structure */
 typedef struct
@@ -54,8 +55,13 @@ PIN_CONFIG pins[] =
     {"I2C1_SDA", GPIOB, 7, GPIO_Speed_2MHz, GPIO_Mode_Out_OD},
     {"DEBUG_TX", GPIOB, 10, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"DEBUG_RX", GPIOB, 11, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+#if CAN_REMAP
+    {"CAN_TX", GPIOB, 9, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
+    {"CAN_RX", GPIOB, 8, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+#else
     {"CAN_TX", GPIOA, 12, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
-    {"CAN_RX", GPIOA, 11, GPIO_Speed_50MHz, GPIO_Mode_IN_FLOATING},
+    {"CAN_RX", GPIOA, 11, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+#endif
     {"ALTIMETER_TX", GPIOC, 10, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"ALTIMETER_RX", GPIOC, 11, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
 };
@@ -124,8 +130,10 @@ void pin_init(void)
         }
     }
 
-    RCC_StopLSE();
-    //GPIO_PinRemap(SWJ_JTAG_DISABLE, TRUE);
+    //RCC_StopLSE();
+#if CAN_REMAP
+    GPIO_PinRemap(CAN_REMAP_PB, TRUE);
+#endif
     /* config pins */
     len = sizeof(pins) / sizeof(PIN_CONFIG);
     for (uint32_t i = 0; i < len; ++i)
