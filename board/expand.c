@@ -31,7 +31,7 @@ extern parameters_t board_parameter;
 
 #ifdef __EXPAND
 static uint8_t register_status = 0xff;
-#define REGISTER_INTERVAL         (200 / portTICK_PERIOD_MS)
+#define REGISTER_INTERVAL         (1000 / portTICK_PERIOD_MS)
 #endif
 
 #define EXPAND_QUEUE_LEN   8
@@ -58,9 +58,7 @@ static void register_status_cb(uint8_t *data, uint8_t len)
 static void can_init(void)
 {
     CAN_Config config;
-#ifdef __EXPAND
     CAN_Filter filter;
-#endif
 
     CAN_StructInit(&config);
     config.ttcm = FALSE;
@@ -73,24 +71,39 @@ static void can_init(void)
 
     /* 100k */
     config.sjw = CAN_SJW_1tq;
-    config.bs1 = CAN_BS1_3tq;
+    config.bs1 = CAN_BS1_7tq;
     config.bs2 = CAN_BS2_2tq;
-    config.prescaler = 60;
+    config.prescaler = 36;
 
-    CAN_Init(CAN1, &config);
+#if 0
+    /** 20k */
+    config.sjw = CAN_SJW_1tq;
+    config.bs1 = CAN_BS1_14tq;
+    config.bs2 = CAN_BS2_3tq;
+    config.prescaler = 100;
+#endif
 
-#ifdef __EXPAND
-    filter.number = 1;
+    bool ret = CAN_Init(CAN1, &config);
+
+
+    filter.number = 0;
     filter.mode = CAN_FilterMode_IdMask;
     filter.scale = CAN_FilterScale_32bit;
+#ifdef __MASTER
     filter.id_high = 0;
-    filter.id_low = (((uint32_t)ID_BOARD_MASTER << 3) | CAN_ID_EXT | CAN_RTR_DATA) & 0xFFFF;
-    filter.mask_id_high = 0xFFFF;
-    filter.mask_id_low = 0xFFFF;
+    filter.id_low = 0;
+    filter.mask_id_high = 0;
+    filter.mask_id_low = 0;
+#else
+    filter.id_high = 0;
+    filter.id_low = (((uint32_t)ID_BOARD_MASTER << 3) | CAN_ID_EXT | CAN_RTR_DATA) & 0xffff;
+    filter.mask_id_high = 0xffff;
+    filter.mask_id_low = 0xffff;
+#endif
+
     filter.fifo_assignment = CAN_Filter_FIFO0;
     filter.activation = TRUE;
     CAN_FilterInit(&filter);
-#endif
 
     /* setup interrupt */
     NVIC_Config nvicConfig = {USB_LP_CAN_RX0_IRQChannel, CAN1_PRIORITY, 0, TRUE};
@@ -147,11 +160,11 @@ static void vRegisterBoard(void *pvParameters)
 {
     for (;;)
     {
+        vTaskDelay(REGISTER_INTERVAL);
         if (0 != register_status)
         {
             register_board(board_parameter.id_board, board_parameter.start_floor);
         }
-        vTaskDelay(REGISTER_INTERVAL);
     }
 }
 #endif
@@ -203,7 +216,7 @@ void expand_send_data(const uint8_t *buf, uint8_t len)
         data.len = 8;
     }
     memcpy(data.data, buf, data.len);
-    xQueueReceive(xExpandSendQueue, &data, 50 / portTICK_PERIOD_MS);
+    xQueueSend(xExpandSendQueue, &data, 50 / portTICK_PERIOD_MS);
 }
 
 #ifdef __EXPAND
