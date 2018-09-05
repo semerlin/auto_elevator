@@ -211,6 +211,11 @@ static void process_param_set(const uint8_t *data, uint8_t len)
             goto END;
         }
 #endif
+        if (0 == msg->start_floor)
+        {
+            status = INVALID_PARAM;
+            goto END;
+        }
         param.start_floor = msg->start_floor;
 
         if (!param_store(param))

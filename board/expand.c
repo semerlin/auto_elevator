@@ -32,7 +32,14 @@ extern parameters_t board_parameter;
 
 
 #ifdef __EXPAND
-static uint8_t register_status = 0xff;
+typedef enum
+{
+    REGISTER_SUCCESS,
+    REGISTER_ID_EXISTS,
+    REGISTER_FLOOR_EXISTS,
+    REGISTER_FAIL,
+} register_status_t;
+static register_status_t register_status = REGISTER_FAIL;
 #define REGISTER_INTERVAL         (1000 / portTICK_PERIOD_MS)
 #endif
 
@@ -50,7 +57,7 @@ static xQueueHandle xExpandSendQueue = NULL;
  */
 static void register_status_cb(uint8_t *data, uint8_t len)
 {
-    register_status = *data;
+    register_status = (register_status_t) * data;
 }
 #endif
 
@@ -178,7 +185,7 @@ static void vRegisterBoard(void *pvParameters)
     for (;;)
     {
         vTaskDelay(REGISTER_INTERVAL);
-        if (0 != register_status)
+        if (REGISTER_SUCCESS != register_status)
         {
             register_board(board_parameter.id_board, board_parameter.start_floor);
         }
@@ -244,7 +251,7 @@ void expand_send_data(const uint8_t *buf, uint8_t len)
  */
 bool is_expand_board_registered(void)
 {
-    return (0 == register_status);
+    return (REGISTER_SUCCESS == register_status);
 }
 #endif
 

@@ -9,7 +9,7 @@
 #include "pinconfig.h"
 #include "stm32f10x_cfg.h"
 
-#define CAN_REMAP 1
+#define CAN_REMAP 0
 
 /* pin configure structure */
 typedef struct

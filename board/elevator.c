@@ -164,18 +164,21 @@ void elev_go(char floor)
 {
     TRACE("elevator go floor: %d\r\n", floor);
     uint8_t id_board = boardmap_get_floor_board_id(floor);
-    if (board_parameter.id_board == id_board)
+    if (ID_BOARD_INVALID != id_board)
     {
-        /** self control */
-        uint8_t key = boardmap_floor_to_key(floor);
-        xQueueOverwrite(xQueueFloor, &key);
-    }
+        if (board_parameter.id_board == id_board)
+        {
+            /** self control */
+            uint8_t key = boardmap_floor_to_key(floor);
+            xQueueOverwrite(xQueueFloor, &key);
+        }
 #ifdef __MASTER
-    else
-    {
-        expand_elev_go(id_board, floor);
-    }
+        else
+        {
+            expand_elev_go(id_board, floor);
+        }
 #endif
+    }
 }
 
 #ifdef __MASTER

@@ -63,7 +63,7 @@ static void boardmap_sort(void)
     {
         for (uint8_t j = 0; j < MAX_BOARD_NUM - i - 1; ++j)
         {
-            if (boardmaps[j].start_floor > boardmaps[j + i].start_floor)
+            if (boardmaps[j].start_floor > boardmaps[j + 1].start_floor)
             {
                 boardmap_t temp_map = boardmaps[j];
                 boardmaps[j] = boardmaps[j + 1];
@@ -124,7 +124,14 @@ bool boardmap_add(uint8_t id_board, uint8_t start_key, char start_floor,
         {
             boardmaps[i].id_board = id_board;
             boardmaps[i].start_key = start_key;
-            boardmaps[i].start_floor = start_floor;
+            if (0 == start_floor)
+            {
+                boardmaps[i].start_floor = 1;
+            }
+            else
+            {
+                boardmaps[i].start_floor = start_floor;
+            }
             boardmaps[i].floor_num = floor_num;
             boardmaps[i].led_status = led_status;
             boardmap_sort();

@@ -55,6 +55,7 @@ typedef struct
 typedef struct
 {
     uint8_t status;
+    uint8_t id_board;
 } msg_board_register_status_t;
 
 typedef struct
@@ -153,10 +154,11 @@ static void expand_ptl_reply(uint8_t cmd, uint8_t status, uint8_t *data, uint8_t
 static void process_board_register(const uint8_t *data, uint8_t len)
 {
     msg_board_register_t *pmsg = (msg_board_register_t *)data;
+    TRACE("expand want to register:%d-%d\r\n", pmsg->id_board, pmsg->start_floor);
     /** check start */
     if (floormap_contains_floor(pmsg->start_floor))
     {
-        expand_ptl_reply(CMD_BOARD_REGISTER, FLOOR_EXISTS, NULL, 0);
+        expand_ptl_reply(CMD_BOARD_REGISTER, FLOOR_EXISTS, &pmsg->id_board, 1);
         return ;
     }
 
@@ -169,28 +171,28 @@ static void process_board_register(const uint8_t *data, uint8_t len)
     /** check end, so range checked */
     if (floormap_contains_floor(end_floor))
     {
-        expand_ptl_reply(CMD_BOARD_REGISTER, FLOOR_EXISTS, NULL, 0);
+        expand_ptl_reply(CMD_BOARD_REGISTER, FLOOR_EXISTS, &pmsg->id_board, 1);
         return ;
     }
 
     if (boardmap_is_board_id_exists(pmsg->id_board))
     {
-        expand_ptl_reply(CMD_BOARD_REGISTER, ID_EXISTS, NULL, 0);
+        expand_ptl_reply(CMD_BOARD_REGISTER, ID_EXISTS, &pmsg->id_board, 1);
         return ;
     }
 
     /** add board */
-    if (boardmap_add(pmsg->id_board, EXPAND_START_KEY, pmsg->start_floor,
-                     MAX_EXPAND_FLOOR_NUM, 0))
+    if (!boardmap_add(pmsg->id_board, EXPAND_START_KEY, pmsg->start_floor,
+                      MAX_EXPAND_FLOOR_NUM, 0))
     {
         /** no place for store */
-        expand_ptl_reply(CMD_BOARD_REGISTER, REGISTER_FAIL, NULL, 0);
+        expand_ptl_reply(CMD_BOARD_REGISTER, REGISTER_FAIL, &pmsg->id_board, 1);
     }
     else
     {
         floormap_update();
         elevator_floor_update();
-        expand_ptl_reply(CMD_BOARD_REGISTER, SUCCESS, NULL, 0);
+        expand_ptl_reply(CMD_BOARD_REGISTER, SUCCESS, &pmsg->id_board, 1);
     }
 }
 
@@ -204,9 +206,13 @@ static void process_elev_led(const uint8_t *data, uint8_t len)
     msg_led_status_t *pmsg = (msg_led_status_t *)data;
     if (boardmap_is_board_id_exists(pmsg->id_board))
     {
+        TRACE("led status:%d-0x%04x", pmsg->id_board, pmsg->led_status);
         uint16_t prev_led_status = boardmap_get_led_status(pmsg->id_board);
-        led_monitor_process(pmsg->id_board, prev_led_status, pmsg->led_status);
-        boardmap_update_led_status(pmsg->id_board, pmsg->led_status);
+        if (prev_led_status != pmsg->led_status)
+        {
+            led_monitor_process(pmsg->id_board, prev_led_status, pmsg->led_status);
+            boardmap_update_led_status(pmsg->id_board, pmsg->led_status);
+        }
     }
 }
 
@@ -231,9 +237,13 @@ void expand_elev_go(uint8_t id_board, char floor)
 static void process_board_register(const uint8_t *data, uint8_t len)
 {
     msg_board_register_status_t *pmsg = (msg_board_register_status_t *)data;
-    if (NULL != register_cb_func)
+    if (pmsg->id_board == board_parameter.id_board)
     {
-        register_cb_func(&pmsg->status, 1);
+        TRACE("board register status(%d)\r\n", pmsg->status);
+        if (NULL != register_cb_func)
+        {
+            register_cb_func(&pmsg->status, 1);
+        }
     }
 }
 
@@ -244,10 +254,13 @@ static void process_board_register(const uint8_t *data, uint8_t len)
  */
 static void process_elev_go(const uint8_t *data, uint8_t len)
 {
-    msg_elev_go_t *pmsg = (msg_elev_go_t *)data;
-    if (pmsg->id_board == board_parameter.id_board)
+    if (is_expand_board_registered())
     {
-        elev_go(pmsg->floor);
+        msg_elev_go_t *pmsg = (msg_elev_go_t *)data;
+        if (pmsg->id_board == board_parameter.id_board)
+        {
+            elev_go(pmsg->floor);
+        }
     }
 }
 

@@ -22,7 +22,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[altimeter]"
 
-#define DUMP_MESSAGE 1
+#define DUMP_MESSAGE 0
 
 typedef struct
 {
@@ -175,7 +175,7 @@ static void vAltimeter(void *pvParameters)
                     floor = tof.range / 10.0 / board_parameter.floor_height;
                     floor_cur = (uint8_t)floor;
                     floor -= (uint8_t)floor;
-                    if (floor > 0.8)
+                    if (floor > 0.75)
                     {
                         floor_cur ++;
                     }
@@ -189,7 +189,7 @@ static void vAltimeter(void *pvParameters)
                 }
             }
             recv_data[len] = 0x00;
-#ifdef DUMP_MESSAGE
+#if DUMP_MESSAGE
             TRACE("recv data: %s\r\n", recv_data);
 #endif
         }
@@ -205,9 +205,10 @@ bool altimeter_init(void)
     g_serial = serial_request(COM4);
     if (NULL == g_serial)
     {
-        TRACE("initialize failed, can't open serial \'COM2\'\r\n");
+        TRACE("initialize failed, can't open serial \'COM4\'\r\n");
         return FALSE;
     }
+    serial_set_baudrate(g_serial, Baudrate_115200);
     serial_open(g_serial);
     xTaskCreate(vAltimeter, "altimeter", ALTIMETER_STACK_SIZE, g_serial,
                 ALTIMETER_PRIORITY, NULL);

@@ -276,6 +276,7 @@ static void vLedMonitor(void *pvParameters)
         {
             if (first_time)
             {
+                vTaskDelay(LED_MONITOR_INTERVAL);
                 notify_led_status(board_parameter.id_board, cur_status);
                 prev_status = cur_status;
                 first_time = FALSE;
