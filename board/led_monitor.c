@@ -253,20 +253,41 @@ static void vLedMonitor(void *pvParameters)
 {
     uint16_t cur_status = 0;
 #ifdef __MASTER
-    led_status_t status = {board_parameter.id_board, led_status_get(), 0};
+    cur_status = led_status_get();
+    led_status_t status = {board_parameter.id_board, cur_status, cur_status};
+    boardmap_update_led_status(board_parameter.id_board, cur_status);
+#else
+    uint16_t prev_status = 0;
+    static bool first_time = TRUE;
 #endif
     for (;;)
     {
         cur_status = led_status_get();
 #ifdef __MASTER
         status.cur_status = cur_status;
-        xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
-        status.prev_status = status.cur_status;
-        boardmap_update_led_status(board_parameter.id_board, cur_status);
+        if (status.cur_status != status.prev_status)
+        {
+            xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
+            boardmap_update_led_status(board_parameter.id_board, cur_status);
+            status.prev_status = status.cur_status;
+        }
 #else
         if (is_expand_board_registered())
         {
-            notify_led_status(board_parameter.id_board, cur_status);
+            if (first_time)
+            {
+                notify_led_status(board_parameter.id_board, cur_status);
+                prev_status = cur_status;
+                first_time = FALSE;
+            }
+            else
+            {
+                if (cur_status != prev_status)
+                {
+                    notify_led_status(board_parameter.id_board, cur_status);
+                    prev_status = cur_status;
+                }
+            }
         }
 #endif
 
