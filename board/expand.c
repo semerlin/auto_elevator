@@ -30,6 +30,7 @@ typedef struct
 
 extern parameters_t board_parameter;
 
+#define USE_SPEED_100K 1
 
 #ifdef __EXPAND
 typedef enum
@@ -82,13 +83,13 @@ static void can_init(void)
     config.mode = CAN_Mode_Normal;
 #endif
 
+#if USE_SPEED_100K
     /* 100k */
     config.sjw = CAN_SJW_1tq;
     config.bs1 = CAN_BS1_7tq;
     config.bs2 = CAN_BS2_2tq;
     config.prescaler = 36;
-
-#if 0
+#else
     /** 20k */
     config.sjw = CAN_SJW_1tq;
     config.bs1 = CAN_BS1_14tq;
