@@ -23,8 +23,7 @@
 
 #define LED_INTERVAL                 (200)
 #define LED_MONITOR_INTERVAL         (LED_INTERVAL / portTICK_PERIOD_MS)
-#define LED_WORK_MONITOR_INTERVAL    (800 / portTICK_PERIOD_MS)
-#define FLOOR_RESET_COUNT            4
+#define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
 
 static uint16_t led_status = 0;
 
@@ -112,7 +111,6 @@ static void push_pwd_node(const pwd_node *node)
 static void vLedWorkMonitor(void *pvParameters)
 {
     char floor = 0;
-    uint8_t err_cnt = 0;
     for (;;)
     {
         /* check elevator status */
@@ -123,22 +121,7 @@ static void vLedWorkMonitor(void *pvParameters)
                 floor = floormap_phy_to_dis(robot_checkin_get());
                 if (!is_led_on(floor) && (floor != elev_floor()))
                 {
-                    err_cnt ++;
-                    if (err_cnt > FLOOR_RESET_COUNT)
-                    {
-                        err_cnt = 0;
-                        elev_set_floor(floor);
-                        /* notify floor arrived */
-                        elev_arrived(floor);
-                    }
-                    else
-                    {
-                        elev_go(floor);
-                    }
-                }
-                else
-                {
-                    err_cnt = 0;
+                    elev_go(floor);
                 }
             }
         }

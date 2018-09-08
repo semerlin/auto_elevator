@@ -19,6 +19,7 @@
 #include "floormap.h"
 #include "global.h"
 #include "switch_monitor.h"
+#include "led_status.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[elev]"
@@ -39,7 +40,7 @@ static xQueueHandle xQueueFloor = NULL;
 
 static xQueueHandle xArriveQueue = NULL;
 static xSemaphoreHandle xNotifySemaphore = NULL;
-#define MAX_CHECK_CNT 5
+#define MAX_CHECK_CNT 4
 
 /**
  * @brief elevator task
@@ -101,7 +102,7 @@ static void vElevArrive(void *pvParameters)
                 err_cnt ++;
                 if (err_cnt > MAX_CHECK_CNT)
                 {
-                    robot_checkin_reset();
+                    //robot_checkin_reset();
                     break;
                 }
                 notify_arrive(floor);
@@ -225,6 +226,11 @@ void elev_decrease(void)
     {
         run_state = run_stop;
     }
+    /** check led status */
+    if (!is_led_on(elev_cur_floor))
+    {
+        elev_arrived(elev_cur_floor);
+    }
 }
 
 /**
@@ -249,6 +255,11 @@ void elev_increase(void)
     else
     {
         run_state = run_stop;
+    }
+    /** check led status */
+    if (!is_led_on(elev_cur_floor))
+    {
+        elev_arrived(elev_cur_floor);
     }
 }
 
