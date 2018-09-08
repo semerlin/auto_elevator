@@ -57,7 +57,7 @@ typedef struct
     uint8_t robot_id;
     uint8_t elev_id;
     uint8_t cmd;
-}recv_head;
+} recv_head;
 
 typedef union
 {
@@ -69,13 +69,14 @@ typedef union
         uint8_t door : 1;
         uint8_t reserve : 1;
         uint8_t state : 2;
-    }_status;
-}elev_status;
+    } _status;
+} elev_status;
 
 /* serial handle */
 static serial *g_serial = NULL;
 process_cb arrive_cb = NULL;
 
+void notify_arrive(char floor);
 static void process_elev_apply(const uint8_t *data, uint8_t len);
 static void process_elev_release(const uint8_t *data, uint8_t len);
 static void process_elev_checkin(const uint8_t *data, uint8_t len);
@@ -90,7 +91,7 @@ typedef struct
 {
     uint8_t cmd;
     void (*process)(const uint8_t *data, uint8_t len);
-}cmd_handle;
+} cmd_handle;
 
 /* protocol command */
 #define CMD_APPLY         50
@@ -101,7 +102,7 @@ typedef struct
 #define CMD_DOOR_CLOSE    36
 #define CMD_ARRIVE        40
 
-cmd_handle cmd_handles[] = 
+cmd_handle cmd_handles[] =
 {
     {CMD_APPLY, process_elev_apply},
     {CMD_RELEASE, process_elev_release},
@@ -192,7 +193,7 @@ static void unpacket_robot_data(const uint8_t *data, uint8_t len)
                     if ((head.ctl_id == param_get_id_ctl()) &&
                         (head.elev_id == param_get_id_elev()))
                     {
-                        if(work_robot == elev_state_work())
+                        if (work_robot == elev_state_work())
                         {
                             /* check robot address */
                             if (head.robot_id == robot_id_get())
@@ -248,7 +249,7 @@ static void init_reply(bool flag)
     rsp[3] = (uint8_t)((crc >> 8) & 0xff);
     rsp[4] = (uint8_t)(crc & 0xff);
     rsp[5] = PARAM_TAIL;
-    
+
     serial_putstring(g_serial, (const char *)rsp, 6);
 }
 
@@ -271,7 +272,7 @@ static void unpacket_param_data(const uint8_t *data, uint8_t len)
         calc_crc = crc16(data + 2, pkt_len - 5);
         if (recv_crc == calc_crc)
         {
-            if(param_update_all(data + 2))
+            if (param_update_all(data + 2))
             {
                 init_reply(TRUE);
                 TRACE("rebooting...\r\n");
@@ -322,7 +323,7 @@ static void send_data(const uint8_t *data, uint8_t len)
 {
     uint8_t buffer[36];
     uint8_t *pdata = buffer;
-    *pdata ++= ROBOT_HEAD;
+    *pdata ++ = ROBOT_HEAD;
     uint16_t sum = 0;
     for (int i = 0; i < len; ++i)
     {
@@ -445,7 +446,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     payload[3] = 51;
     payload[4] = floormap_dis_to_phy(elev_floor());
     payload[5] = data[4];
-    
+
     elev_status status;
     status._status.dir = elev_state_run();
     if (DEFAULT_FLOOR == data[5])
@@ -461,7 +462,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[6] = status.status;
-    
+
     send_data(payload, 7);
     robot_id_set(data[1]);
     elevator_set_state_work(work_robot);
@@ -483,7 +484,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
     payload[4] = data[4];
     payload[5] = 0x00;
     send_data(payload, 6);
-    
+
     elev_hold_open(FALSE);
     robot_id_reset();
     robot_checkin_reset();
@@ -505,7 +506,7 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
     payload[3] = 31;
     payload[4] = data[4];
     payload[5] = data[5];
-    
+
     send_data(payload, 6);
     char dis_floor = floormap_phy_to_dis(data[4]);
     robot_checkin_set(data[4]);
@@ -514,7 +515,7 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
     if (dis_floor == elev_floor())
     {
         /* already arrive */
-        elev_arrived(dis_floor);
+        notify_arrive(dis_floor);
     }
 }
 
@@ -532,7 +533,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
     payload[3] = 33;
     payload[4] = floormap_dis_to_phy(elev_floor());
     payload[5] = robot_checkin_get();
-    
+
     elev_status status;
     status._status.dir = elev_state_run();
     if (DEFAULT_FLOOR == payload[5])
@@ -548,7 +549,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[6] = status.status;
-    
+
     send_data(payload, 7);
 }
 
@@ -564,9 +565,9 @@ static void process_elev_door_open(const uint8_t *data, uint8_t len)
     payload[1] = param_get_id_elev();
     payload[2] = data[1];
     payload[3] = 35;
- 
+
     send_data(payload, 4);
-    
+
     /* open */
     elev_hold_open(TRUE);
 }
@@ -584,9 +585,9 @@ static void process_elev_door_close(const uint8_t *data, uint8_t len)
     payload[1] = param_get_id_elev();
     payload[2] = data[1];
     payload[3] = 37;
-    
+
     send_data(payload, 4);
-    
+
     /* release */
     elev_hold_open(FALSE);
 }
@@ -624,7 +625,7 @@ void notify_arrive(char floor)
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[5] = status.status;
-    
+
     send_data(payload, 6);
 }
 
@@ -640,7 +641,7 @@ static void notify_busy(uint8_t id)
     payload[3] = 55;
     payload[4] = floormap_dis_to_phy(elev_floor());
     payload[5] = robot_id_get();
-    
+
     elev_status status;
     status._status.dir = elev_state_run();
     if (DEFAULT_FLOOR == robot_checkin_get())
@@ -656,7 +657,7 @@ static void notify_busy(uint8_t id)
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[6] = status.status;
-    
+
     send_data(payload, 7);
 }
 
@@ -684,7 +685,7 @@ bool protocol_init(void)
     }
     serial_open(g_serial);
     xTaskCreate(vProtocol, "protocol", PROTOCOL_STACK_SIZE, g_serial,
-                    PROTOCOL_PRIORITY, NULL);
+                PROTOCOL_PRIORITY, NULL);
 
     return TRUE;
 }
