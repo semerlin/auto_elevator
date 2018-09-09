@@ -131,6 +131,7 @@ bool elev_init(void)
     TRACE("initialize elevator...\r\n");
     xQueueFloor = xQueueCreate(1, 1);
     xArriveQueue = xQueueCreate(1, 1);
+    //xQueueFloorChange = xQueueCreate(1, 1);
     xNotifySemaphore = xSemaphoreCreateBinary();
     register_arrive_cb(arrive_hook);
     xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
@@ -139,6 +140,8 @@ bool elev_init(void)
                 ELEV_PRIORITY, NULL);
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
+    //xTaskCreate(vElevFloorChange, "elvarrive", ELEV_STACK_SIZE, NULL,
+    //            ELEV_PRIORITY, NULL);
     return TRUE;
 }
 
@@ -214,7 +217,7 @@ void elev_decrease(void)
     {
         elev_cur_floor --;
     }
-    TRACE("decrease floor: %d\r\n", elev_cur_floor);
+    TRACE("floor--: %d\r\n", elev_cur_floor);
     if (is_down_led_on(elev_cur_floor))
     {
         run_state = run_down;
@@ -244,7 +247,7 @@ void elev_increase(void)
     {
         elev_cur_floor ++;
     }
-    TRACE("increase floor: %d\r\n", elev_cur_floor);
+    TRACE("floor++: %d\r\n", elev_cur_floor);
     if (is_up_led_on(elev_cur_floor))
     {
         run_state = run_up;

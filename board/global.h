@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _GLOBAL_H_
-  #define _GLOBAL_H_
+#define _GLOBAL_H_
 
 #include "FreeRTOS.h"
 
@@ -27,8 +27,8 @@
 #define ROBOT_STACK_SIZE             (configMINIMAL_STACK_SIZE)
 
 /* interrupt priority */
-#define USART1_PRIORITY        (13)
-#define TIM2_PRIORITY          (14)
+#define USART1_PRIORITY        (14)
+#define TIM2_PRIORITY          (13)
 
 #define ARRIVE_JUDGE    (0)
 

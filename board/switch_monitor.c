@@ -47,7 +47,7 @@ static uint8_t switch_val(void)
     {
         val |= 0x01;
     }
-    
+
     return val;
 }
 
@@ -69,12 +69,12 @@ uint8_t filter_switch_val(void)
     uint8_t switch_map[4] = {0x00, 0x01, 0x02, 0x03};
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
-    
+
     for (int i = 0; i < 10; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
-    
+
     for (int i = 0; i < 4; ++i)
     {
         if (max < switch_cnt[i])
@@ -82,7 +82,7 @@ uint8_t filter_switch_val(void)
             max = switch_cnt[i];
         }
     }
-    
+
     for (int i = 0; i < 4; ++i)
     {
         if (switch_cnt[i] == max)
@@ -90,7 +90,7 @@ uint8_t filter_switch_val(void)
             return switch_map[i];
         }
     }
-    
+
     return 0;
 }
 
@@ -101,7 +101,7 @@ void TIM2_IRQHandler(void)
 {
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
 
-    switch(filter_step)
+    switch (filter_step)
     {
     case 0:
         filter_cur = filter_switch_val();
@@ -114,8 +114,8 @@ void TIM2_IRQHandler(void)
         {
             if (0 != filter_cur)
             {
-                xQueueSendFromISR(xSwitchVals, &filter_cur, 
-                            &xHigherPriorityTaskWoken);
+                xQueueSendFromISR(xSwitchVals, &filter_cur,
+                                  &xHigherPriorityTaskWoken);
             }
         }
         filter_step = 0;
@@ -125,9 +125,9 @@ void TIM2_IRQHandler(void)
     }
 
     TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
-    
+
     /* check if there is any higher priority task need to wakeup */
-	portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);  
+    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 }
 
 
@@ -141,7 +141,7 @@ static void vSwitchMonitor(void *pvParameters)
     uint8_t switch_cur = switch_prev;
     for (;;)
     {
-        if(xQueueReceive(xSwitchVals, &switch_cur, portMAX_DELAY))
+        if (xQueueReceive(xSwitchVals, &switch_cur, portMAX_DELAY))
         {
             if (switch_cur != switch_prev)
             {
@@ -166,12 +166,13 @@ static void vSwitchMonitor(void *pvParameters)
  */
 void init_filter(void)
 {
-    /* timeout interval 10ms */
+    /** timer count interval 100us */
     TIM_SetCntInterval(TIM2, 100);
-    TIM_SetAutoReload(TIM2, 80);
+    /** timer reload value 80(5ms) */
+    TIM_SetAutoReload(TIM2, 50);
     TIM_SetCountMode(TIM2, TIM_COUNTMODE_UP);
     TIM_IntEnable(TIM2, TIM_INT_UPDATE, TRUE);
-    
+
     /* setup interrupt */
     NVIC_Config nvicConfig = {TIM2_IRQChannel, TIM2_PRIORITY, 0, TRUE};
     NVIC_Init(&nvicConfig);
@@ -185,8 +186,8 @@ bool switch_monitor_init(void)
 {
     TRACE("initialize switch monitor...\r\n");
     xSwitchVals = xQueueCreate(10, (UBaseType_t)sizeof(portCHAR));
-    xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL, 
-                    SWITCH_MONITOR_PRIORITY, NULL);
+    xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL,
+                SWITCH_MONITOR_PRIORITY, NULL);
     init_filter();
     return TRUE;
 }
