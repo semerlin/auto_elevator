@@ -102,7 +102,7 @@ static void vElevArrive(void *pvParameters)
                 err_cnt ++;
                 if (err_cnt > MAX_CHECK_CNT)
                 {
-                    //robot_checkin_reset();
+                    robot_checkin_reset();
                     break;
                 }
                 notify_arrive(floor);
@@ -118,6 +118,7 @@ static void vElevArrive(void *pvParameters)
  */
 void arrive_hook(const uint8_t *data, uint8_t len)
 {
+    robot_checkin_reset();
     xSemaphoreGive(xNotifySemaphore);
 }
 
