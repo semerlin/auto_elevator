@@ -169,7 +169,7 @@ void init_filter(void)
     /** timer count interval 100us */
     TIM_SetCntInterval(TIM2, 100);
     /** timer reload value 80(5ms) */
-    TIM_SetAutoReload(TIM2, 50);
+    TIM_SetAutoReload(TIM2, 65);
     TIM_SetCountMode(TIM2, TIM_COUNTMODE_UP);
     TIM_IntEnable(TIM2, TIM_INT_UPDATE, TRUE);
 
