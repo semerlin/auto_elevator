@@ -70,7 +70,7 @@ uint8_t filter_switch_val(void)
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 6; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
@@ -112,11 +112,8 @@ void TIM2_IRQHandler(void)
         filter_cur = filter_switch_val();
         if (filter_prev == filter_cur)
         {
-            if (0 != filter_cur)
-            {
-                xQueueSendFromISR(xSwitchVals, &filter_cur,
-                                  &xHigherPriorityTaskWoken);
-            }
+            xQueueSendFromISR(xSwitchVals, &filter_cur,
+                              &xHigherPriorityTaskWoken);
         }
         filter_step = 0;
         break;
@@ -137,25 +134,53 @@ void TIM2_IRQHandler(void)
  */
 static void vSwitchMonitor(void *pvParameters)
 {
+    /**
+     * 0-1-3: floor increase
+     * 0-2-3: floor decrese
+     */
     uint8_t switch_prev = switch_val();
     uint8_t switch_cur = switch_prev;
+    bool detect_switch_zero = FALSE;
+    if (0 == switch_prev)
+    {
+        detect_switch_zero = TRUE;
+    }
     for (;;)
     {
         if (xQueueReceive(xSwitchVals, &switch_cur, portMAX_DELAY))
         {
-            if (switch_cur != switch_prev)
+            if (detect_switch_zero)
             {
-                /* elevator state changed */
-                if ((0x01 == switch_prev) && (0x03 == switch_cur))
+                if (0 != switch_cur)
                 {
-                    elev_increase();
-                }
-                else if ((0x02 == switch_prev) && (0x03 == switch_cur))
-                {
-                    elev_decrease();
-                }
+                    if (switch_cur != switch_prev)
+                    {
+                        TRACE("cur = %d, prev = %d\r\n", switch_cur, switch_prev);
+                        /* elevator state changed */
+                        if ((0x01 == switch_prev) && (0x03 == switch_cur))
+                        {
+                            elev_increase();
+                            detect_switch_zero = FALSE;
+                        }
+                        else if ((0x02 == switch_prev) && (0x03 == switch_cur))
+                        {
+                            elev_decrease();
+                            detect_switch_zero = FALSE;
+                        }
 
-                switch_prev = switch_cur;
+                        switch_prev = switch_cur;
+                    }
+                }
+            }
+            else
+            {
+                if (0 == switch_cur)
+                {
+                    TRACE("detect zero\r\n");
+                    switch_cur = 0x03;
+                    switch_prev = 0x03;
+                    detect_switch_zero = TRUE;
+                }
             }
         }
     }
