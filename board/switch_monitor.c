@@ -24,12 +24,16 @@
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
-static xQueueHandle xSwitchVals = NULL;
 static switch_status cur_status = switch_arrive;
 
 static uint8_t filter_step = 0;
 static uint8_t filter_prev = 0;
 static uint8_t filter_cur = 0;
+
+static bool detect_switch_zero = FALSE;
+static uint8_t switch_prev = 0x03;
+static uint8_t switch_cur = 0x03;
+static char cur_floor = 0;
 
 /**
  * @brief get switch value
@@ -99,8 +103,6 @@ uint8_t filter_switch_val(void)
  */
 void TIM2_IRQHandler(void)
 {
-    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-
     switch (filter_step)
     {
     case 0:
@@ -112,59 +114,21 @@ void TIM2_IRQHandler(void)
         filter_cur = filter_switch_val();
         if (filter_prev == filter_cur)
         {
-            xQueueSendFromISR(xSwitchVals, &filter_cur,
-                              &xHigherPriorityTaskWoken);
-        }
-        filter_step = 0;
-        break;
-    default:
-        break;
-    }
-
-    TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
-
-    /* check if there is any higher priority task need to wakeup */
-    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
-}
-
-
-/**
- * @brief switch monitor task
- * @param pvParameters - task parameter
- */
-static void vSwitchMonitor(void *pvParameters)
-{
-    /**
-     * 0-1-3: floor increase
-     * 0-2-3: floor decrese
-     */
-    uint8_t switch_prev = switch_val();
-    uint8_t switch_cur = switch_prev;
-    bool detect_switch_zero = FALSE;
-    if (0 == switch_prev)
-    {
-        detect_switch_zero = TRUE;
-    }
-    for (;;)
-    {
-        if (xQueueReceive(xSwitchVals, &switch_cur, portMAX_DELAY))
-        {
+            switch_cur = filter_cur;
             if (detect_switch_zero)
             {
                 if (0 != switch_cur)
                 {
                     if (switch_cur != switch_prev)
                     {
-                        TRACE("cur = %d, prev = %d\r\n", switch_cur, switch_prev);
-                        /* elevator state changed */
                         if ((0x01 == switch_prev) && (0x03 == switch_cur))
                         {
-                            elev_increase();
+                            cur_floor ++;
                             detect_switch_zero = FALSE;
                         }
                         else if ((0x02 == switch_prev) && (0x03 == switch_cur))
                         {
-                            elev_decrease();
+                            cur_floor --;
                             detect_switch_zero = FALSE;
                         }
 
@@ -176,13 +140,43 @@ static void vSwitchMonitor(void *pvParameters)
             {
                 if (0 == switch_cur)
                 {
-                    TRACE("detect zero\r\n");
                     switch_cur = 0x03;
                     switch_prev = 0x03;
                     detect_switch_zero = TRUE;
                 }
             }
         }
+        filter_step = 0;
+        break;
+    default:
+        break;
+    }
+
+    TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
+}
+
+
+/**
+ * @brief switch monitor task
+ * @param pvParameters - task parameter
+ */
+static void vSwitchMonitor(void *pvParameters)
+{
+    char prev_floor = cur_floor;
+    char delta = 0;
+    for (;;)
+    {
+        delta = cur_floor - prev_floor;
+        prev_floor = cur_floor;
+        if (delta > 0)
+        {
+            elev_increase();
+        }
+        else if (delta < 0)
+        {
+            elev_decrease();
+        }
+        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
 
@@ -194,7 +188,7 @@ void init_filter(void)
     /** timer count interval 100us */
     TIM_SetCntInterval(TIM2, 100);
     /** timer reload value 80(5ms) */
-    TIM_SetAutoReload(TIM2, 65);
+    TIM_SetAutoReload(TIM2, 50);
     TIM_SetCountMode(TIM2, TIM_COUNTMODE_UP);
     TIM_IntEnable(TIM2, TIM_INT_UPDATE, TRUE);
 
@@ -210,7 +204,6 @@ void init_filter(void)
 bool switch_monitor_init(void)
 {
     TRACE("initialize switch monitor...\r\n");
-    xSwitchVals = xQueueCreate(10, (UBaseType_t)sizeof(portCHAR));
     xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL,
                 SWITCH_MONITOR_PRIORITY, NULL);
     init_filter();

@@ -27,8 +27,8 @@
 #define ROBOT_STACK_SIZE             (configMINIMAL_STACK_SIZE)
 
 /* interrupt priority */
-#define USART1_PRIORITY        (14)
-#define TIM2_PRIORITY          (13)
+#define USART1_PRIORITY        (11)
+#define TIM2_PRIORITY          (9)
 
 #define ARRIVE_JUDGE    (0)
 
