@@ -511,23 +511,27 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
  */
 static void process_elev_checkin(const uint8_t *data, uint8_t len)
 {
-    uint8_t payload[7];
-    payload[0] = param_get_id_ctl();
-    payload[1] = param_get_id_elev();
-    payload[2] = data[1];
-    payload[3] = 31;
-    payload[4] = data[4];
-    payload[5] = data[5];
-
-    send_data(payload, 6);
     char dis_floor = floormap_phy_to_dis(data[4]);
-    robot_checkin_set(data[4]);
-    /* goto specified floor */
-    elev_go(dis_floor);
-    if (dis_floor == elev_floor())
+    if (INVALID_FLOOR != dis_floor)
     {
-        /* already arrive */
-        notify_arrive(dis_floor);
+        uint8_t payload[7];
+        payload[0] = param_get_id_ctl();
+        payload[1] = param_get_id_elev();
+        payload[2] = data[1];
+        payload[3] = 31;
+        payload[4] = data[4];
+        payload[5] = data[5];
+
+        send_data(payload, 6);
+
+        robot_checkin_set(data[4]);
+        /* goto specified floor */
+        elev_go(dis_floor);
+        if (dis_floor == elev_floor())
+        {
+            /* already arrive */
+            notify_arrive(dis_floor);
+        }
     }
 }
 
