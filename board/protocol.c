@@ -272,16 +272,28 @@ static void unpacket_param_data(const uint8_t *data, uint8_t len)
         calc_crc = crc16(data + 2, pkt_len - 5);
         if (recv_crc == calc_crc)
         {
-            if (param_update_all(data + 2))
+            if (0x06 == pkt_len)
             {
-                init_reply(TRUE);
-                TRACE("rebooting...\r\n");
-                SCB_SystemReset();
+                if (0xff == data[2])
+                {
+                    init_reply(TRUE);
+                    TRACE("rebooting...\r\n");
+                    SCB_SystemReset();
+                }
             }
             else
             {
-                init_reply(FALSE);
-                TRACE("initialize parameter failed!\r\n");
+                if (param_update_all(data + 2))
+                {
+                    init_reply(TRUE);
+                    TRACE("rebooting...\r\n");
+                    SCB_SystemReset();
+                }
+                else
+                {
+                    init_reply(FALSE);
+                    TRACE("initialize parameter failed!\r\n");
+                }
             }
         }
     }
