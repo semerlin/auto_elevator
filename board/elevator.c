@@ -105,16 +105,19 @@ static void vElevArrive(void *pvParameters)
         err_cnt = 0;
         if (xQueueReceive(xArriveQueue, &floor, portMAX_DELAY))
         {
-            while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
-                                            500 / portTICK_PERIOD_MS))
+            if (DEFAULT_CHECKIN != robot_checkin_get())
             {
-                err_cnt ++;
-                if (err_cnt > MAX_CHECK_CNT)
-                {
-                    robot_checkin_reset();
-                    break;
-                }
                 notify_arrive(floor);
+                while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
+                                                500 / portTICK_PERIOD_MS))
+                {
+                    err_cnt ++;
+                    if (err_cnt > MAX_CHECK_CNT)
+                    {
+                        robot_checkin_reset();
+                        break;
+                    }
+                }
             }
         }
     }
@@ -195,7 +198,6 @@ void elev_arrived(char floor)
             if (elev_cur_floor == floor)
             {
                 TRACE("floor arrive: %d\r\n", floor);
-                notify_arrive(floor);
                 xQueueOverwrite(xArriveQueue, &floor);
             }
         }
@@ -256,6 +258,11 @@ void elev_decrease(void)
     {
         run_state = run_stop;
     }
+    /** check led status */
+    if (!is_led_on(elev_cur_floor))
+    {
+        elev_arrived(elev_cur_floor);
+    }
 }
 
 /**
@@ -277,6 +284,11 @@ void elev_increase(void)
     else
     {
         run_state = run_stop;
+    }
+    /** check led status */
+    if (!is_led_on(elev_cur_floor))
+    {
+        elev_arrived(elev_cur_floor);
     }
 }
 
