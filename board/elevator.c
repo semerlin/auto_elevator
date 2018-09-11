@@ -116,7 +116,6 @@ static void vElevArrive(void *pvParameters)
                 }
                 notify_arrive(floor);
             }
-            robot_checkin_reset();
         }
     }
 }
@@ -128,6 +127,7 @@ static void vElevArrive(void *pvParameters)
  */
 void arrive_hook(const uint8_t *data, uint8_t len)
 {
+    robot_checkin_reset();
     xSemaphoreGive(xNotifySemaphore);
 }
 #endif
