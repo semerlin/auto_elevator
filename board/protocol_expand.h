@@ -15,6 +15,7 @@ BEGIN_DECLS
 bool process_expand_data(const uint8_t *data, uint8_t len);
 #ifdef __MASTER
 void expand_elev_go(uint8_t id_board, char floor);
+void expand_reboot(uint8_t id_board);
 #endif
 #ifdef __EXPAND
 typedef void (*register_cb_t)(uint8_t *data, uint8_t len);

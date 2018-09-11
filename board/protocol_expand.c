@@ -43,6 +43,7 @@ static void process_elev_led(const uint8_t *data, uint8_t len);
 #endif
 #ifdef __EXPAND
 static void process_elev_go(const uint8_t *data, uint8_t len);
+static void process_reboot(const uint8_t *data, uint8_t len);
 #endif
 
 #pragma pack(1)
@@ -51,12 +52,6 @@ typedef struct
     uint8_t id_board;
     char start_floor;
 } msg_board_register_t;
-
-typedef struct
-{
-    uint8_t status;
-    uint8_t id_board;
-} msg_board_register_status_t;
 
 typedef struct
 {
@@ -69,6 +64,18 @@ typedef struct
     uint8_t id_board;
     char floor;
 } msg_elev_go_t;
+
+typedef struct
+{
+    uint8_t status;
+    uint8_t id_board;
+} msg_board_register_status_t;
+
+typedef struct
+{
+    uint8_t id_board;
+} msg_reboot_t;
+
 #pragma pack()
 
 
@@ -83,7 +90,7 @@ typedef struct
 #define CMD_BOARD_REGISTER     0x01
 #define CMD_ELEV_LED           0x02
 #define CMD_ELEV_GO            0x03
-
+#define CMD_REBOOT             0x04
 
 static cmd_handle cmd_handles[] =
 {
@@ -93,6 +100,7 @@ static cmd_handle cmd_handles[] =
 #endif
 #ifdef __EXPAND
     {CMD_ELEV_GO, process_elev_go},
+    {CMD_REBOOT, process_reboot},
 #endif
 };
 
@@ -226,6 +234,15 @@ void expand_elev_go(uint8_t id_board, char floor)
     uint8_t data[2] = {id_board, floor};
     expand_ptl_send(CMD_ELEV_GO, data, 2);
 }
+
+/**
+ * @brief notify expand board to reboot
+ * @param[in] id_board: expand board id, 0xff means all board
+ */
+void expand_reboot(uint8_t id_board)
+{
+    expand_ptl_send(CMD_REBOOT, &id_board, 1);
+}
 #endif
 
 #ifdef __EXPAND
@@ -263,6 +280,22 @@ static void process_elev_go(const uint8_t *data, uint8_t len)
         }
     }
 }
+
+/**
+ * @brief process board reboot
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_reboot(const uint8_t *data, uint8_t len)
+{
+    msg_reboot_t *pmsg = (msg_reboot_t *)data;
+    if ((0xff == pmsg->id_board) ||
+        (pmsg->id_board == board_parameter.id_board))
+    {
+        SCB_SystemReset();
+    }
+}
+
 
 /**
  * @brief register board to master
