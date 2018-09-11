@@ -37,9 +37,9 @@
 #define EXPAND_STACK_SIZE            (configMINIMAL_STACK_SIZE)
 
 /* interrupt priority */
-#define CAN1_PRIORITY          (12)
-#define USART1_PRIORITY        (13)
-#define TIM2_PRIORITY          (14)
+#define CAN1_PRIORITY          (11)
+#define USART1_PRIORITY        (12)
+#define TIM2_PRIORITY          (9)
 
 #ifdef __MASTER
 #define ARRIVE_JUDGE    (0)

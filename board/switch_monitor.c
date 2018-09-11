@@ -25,11 +25,16 @@
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
-static xQueueHandle xSwitchVals = NULL;
-
 static uint8_t filter_step = 0;
 static uint8_t filter_prev = 0;
 static uint8_t filter_cur = 0;
+
+static char cur_floor = 0;
+static bool sequence_start = FALSE;
+static uint8_t switch_cur = 0x03;
+static uint8_t switch_prev = 0x03;
+
+#define SWITCH_MONITOR_INTERVAL     (400 / portTICK_PERIOD_MS)
 
 /**
  * @brief get switch value
@@ -61,7 +66,7 @@ uint8_t filter_switch_val(void)
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 8; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
@@ -90,8 +95,6 @@ uint8_t filter_switch_val(void)
  */
 void TIM2_IRQHandler(void)
 {
-    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-
     switch (filter_step)
     {
     case 0:
@@ -103,10 +106,41 @@ void TIM2_IRQHandler(void)
         filter_cur = filter_switch_val();
         if (filter_prev == filter_cur)
         {
-            if (0 != filter_cur)
+            /**
+             * 0-1-3: floor increase
+             * 0-2-3: floor decrese
+             */
+            switch_cur = filter_cur;
+            if (sequence_start)
             {
-                xQueueSendFromISR(xSwitchVals, &filter_cur,
-                                  &xHigherPriorityTaskWoken);
+                if (0 != switch_cur)
+                {
+                    if (switch_cur != switch_prev)
+                    {
+                        /* elevator state changed */
+                        if ((0x01 == switch_prev) && (0x03 == switch_cur))
+                        {
+                            cur_floor ++;
+                            sequence_start = FALSE;
+                        }
+                        else if ((0x02 == switch_prev) && (0x03 == switch_cur))
+                        {
+                            cur_floor --;
+                            sequence_start = FALSE;
+                        }
+
+                        switch_prev = switch_cur;
+                    }
+                }
+            }
+            else
+            {
+                if (0 == switch_cur)
+                {
+                    switch_cur = 0x03;
+                    switch_prev = 0x03;
+                    sequence_start = TRUE;
+                }
             }
         }
         filter_step = 0;
@@ -116,9 +150,6 @@ void TIM2_IRQHandler(void)
     }
 
     TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
-
-    /* check if there is any higher priority task need to wakeup */
-    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 }
 
 
@@ -128,27 +159,21 @@ void TIM2_IRQHandler(void)
  */
 static void vSwitchMonitor(void *pvParameters)
 {
-    uint8_t switch_prev = switch_val();
-    uint8_t switch_cur = switch_prev;
+    char prev_floor = cur_floor;
+    char delta = 0;
     for (;;)
     {
-        if (xQueueReceive(xSwitchVals, &switch_cur, portMAX_DELAY))
+        delta = cur_floor - prev_floor;
+        prev_floor = cur_floor;
+        if (delta > 0)
         {
-            if (switch_cur != switch_prev)
-            {
-                /* elevator state changed */
-                if ((0x01 == switch_prev) && (0x03 == switch_cur))
-                {
-                    elev_increase();
-                }
-                else if ((0x02 == switch_prev) && (0x03 == switch_cur))
-                {
-                    elev_decrease();
-                }
-
-                switch_prev = switch_cur;
-            }
+            elev_increase();
         }
+        else if (delta < 0)
+        {
+            elev_decrease();
+        }
+        vTaskDelay(SWITCH_MONITOR_INTERVAL);
     }
 }
 
@@ -157,9 +182,10 @@ static void vSwitchMonitor(void *pvParameters)
  */
 void init_filter(void)
 {
-    /* timeout interval 10ms */
+    /** timeout count interval 100us */
     TIM_SetCntInterval(TIM2, 100);
-    TIM_SetAutoReload(TIM2, 80);
+    /** timer interval 6.5ms */
+    TIM_SetAutoReload(TIM2, 65);
     TIM_SetCountMode(TIM2, TIM_COUNTMODE_UP);
     TIM_IntEnable(TIM2, TIM_INT_UPDATE, TRUE);
 
@@ -175,7 +201,6 @@ void init_filter(void)
 bool switch_monitor_init(void)
 {
     TRACE("initialize switch monitor...\r\n");
-    xSwitchVals = xQueueCreate(10, (UBaseType_t)sizeof(portCHAR));
     xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL,
                 SWITCH_MONITOR_PRIORITY, NULL);
     init_filter();

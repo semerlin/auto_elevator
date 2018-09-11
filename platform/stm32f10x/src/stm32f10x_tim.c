@@ -11,7 +11,7 @@
 #include "assert.h"
 
 /* flash register structure */
-typedef struct 
+typedef struct
 {
     volatile uint16_t CR1;
     uint16_t RESERVED1;
@@ -51,16 +51,17 @@ typedef struct
     uint16_t RESERVED19;
     volatile uint16_t DMAR;
     uint16_t RESERVED20;
-}TIM_T;
+} TIM_T;
 
 #define CEN    (1 << 0)
 #define DIR    (1 << 4)
 
 /* GPIO group array */
-static TIM_T * const TIMx[] = {(TIM_T *)TIM2_BASE, 
-                               (TIM_T *)TIM3_BASE,
-                               (TIM_T *)TIM4_BASE,
-                               (TIM_T *)TIM5_BASE};
+static TIM_T *const TIMx[] = {(TIM_T *)TIM2_BASE,
+                              (TIM_T *)TIM3_BASE,
+                              (TIM_T *)TIM4_BASE,
+                              (TIM_T *)TIM5_BASE
+                             };
 
 /**
  * @brief enable timer counter
@@ -70,8 +71,8 @@ static TIM_T * const TIMx[] = {(TIM_T *)TIM2_BASE,
 void TIM_Enable(TIM_Group group, bool flag)
 {
     assert_param(group < TIM_Count);
-    TIM_T * const tim = TIMx[group];
-    
+    TIM_T *const tim = TIMx[group];
+
     if (flag)
     {
         tim->CR1 |= CEN;
@@ -90,9 +91,9 @@ void TIM_Enable(TIM_Group group, bool flag)
 void TIM_SetCntInterval(TIM_Group group, uint32_t interval)
 {
     assert_param(group < TIM_Count);
-    TIM_T * const tim = TIMx[group];
-    
-    uint32_t pclk1 = RCC_GetPCLK1() * 2;
+    TIM_T *const tim = TIMx[group];
+
+    uint32_t pclk1 = RCC_GetPCLK1();
     uint16_t scale = (uint16_t)(interval * (pclk1 / 1000000));
     tim->PSC = scale - 1;
 }
@@ -105,8 +106,8 @@ void TIM_SetCntInterval(TIM_Group group, uint32_t interval)
 void TIM_SetAutoReload(TIM_Group group, uint16_t reload)
 {
     assert_param(group < TIM_Count);
-    TIM_T * const tim = TIMx[group];
-    
+    TIM_T *const tim = TIMx[group];
+
     tim->ARR = reload;
 }
 
@@ -119,8 +120,8 @@ void TIM_SetCountMode(TIM_Group group, uint8_t mode)
 {
     assert_param(group < TIM_Count);
     assert_param(IS_TIM_COUNTMODE(mode));
-    
-    TIM_T * const tim = TIMx[group];
+
+    TIM_T *const tim = TIMx[group];
     tim->CR1 &= ~DIR;
     tim->CR1 |= mode;
 }
@@ -135,8 +136,8 @@ void TIM_IntEnable(TIM_Group group, uint16_t itp, bool flag)
 {
     assert_param(group < TIM_Count);
     assert_param(IS_TIM_INT(itp));
-    
-    TIM_T * const tim = TIMx[group];
+
+    TIM_T *const tim = TIMx[group];
     if (flag)
     {
         tim->DIER |= itp;
@@ -156,8 +157,8 @@ void TIM_ClearIntFlag(TIM_Group group, uint16_t itp)
 {
     assert_param(group < TIM_Count);
     assert_param(IS_TIM_INT_FLAG(itp));
-    
-    TIM_T * const tim = TIMx[group];
+
+    TIM_T *const tim = TIMx[group];
     tim->SR &= ~itp;
 }
 
@@ -171,8 +172,8 @@ bool TIM_IsInitSet(TIM_Group group, uint16_t itp)
 {
     assert_param(group < TIM_Count);
     assert_param(IS_TIM_INT_FLAG(itp));
-    
-    TIM_T * const tim = TIMx[group];
+
+    TIM_T *const tim = TIMx[group];
     return (0 != (tim->SR & itp));
 }
 
@@ -183,7 +184,7 @@ bool TIM_IsInitSet(TIM_Group group, uint16_t itp)
 void TIM_ClearCountValue(TIM_Group group)
 {
     assert_param(group < TIM_Count);
-    TIM_T * const  tim = TIMx[group];
-    
+    TIM_T *const  tim = TIMx[group];
+
     tim->CNT = 0;
 }
