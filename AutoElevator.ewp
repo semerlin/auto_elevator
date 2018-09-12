@@ -89,7 +89,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>STM32F103xE	ST STM32F103xE</state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -149,7 +149,7 @@
         </option>
         <option>
           <name>GFPUDeviceSlave</name>
-          <state>STM32F103xE	ST STM32F103xE</state>
+          <state>STM32F103xC	ST STM32F103xC</state>
         </option>
         <option>
           <name>FPU2</name>
@@ -610,11 +610,11 @@
         </option>
         <option>
           <name>OCOutputOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>AutoElevator.hex</state>
+          <state>AutoElevator_Master.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1573,11 +1573,11 @@
         </option>
         <option>
           <name>OCOutputOverride</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>AutoElevator.hex</state>
+          <state>AutoElevator_Expand.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
