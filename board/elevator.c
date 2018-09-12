@@ -40,7 +40,7 @@ static xQueueHandle xQueueFloor = NULL;
 
 static xQueueHandle xArriveQueue = NULL;
 static xSemaphoreHandle xNotifySemaphore = NULL;
-#define MAX_CHECK_CNT 4
+#define MAX_CHECK_CNT 5
 
 /**
  * @brief elevator task
@@ -96,16 +96,19 @@ static void vElevArrive(void *pvParameters)
         err_cnt = 0;
         if (xQueueReceive(xArriveQueue, &floor, portMAX_DELAY))
         {
-            while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
-                                            500 / portTICK_PERIOD_MS))
+            if (DEFAULT_CHECKIN != robot_checkin_get())
             {
-                err_cnt ++;
-                if (err_cnt > MAX_CHECK_CNT)
+                while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
+                                                500 / portTICK_PERIOD_MS))
                 {
-                    robot_checkin_reset();
-                    break;
+                    err_cnt ++;
+                    if (err_cnt > MAX_CHECK_CNT)
+                    {
+                        robot_checkin_reset();
+                        break;
+                    }
+                    notify_arrive(floor);
                 }
-                notify_arrive(floor);
             }
         }
     }
@@ -166,7 +169,6 @@ void elev_arrived(char floor)
             if (elev_cur_floor == floor)
             {
                 TRACE("floor arrive: %d\r\n", floor);
-                notify_arrive(floor);
                 xQueueOverwrite(xArriveQueue, &floor);
             }
         }

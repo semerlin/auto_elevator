@@ -530,7 +530,7 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
         if (dis_floor == elev_floor())
         {
             /* already arrive */
-            notify_arrive(dis_floor);
+            elev_arrived(dis_floor);
         }
     }
 }
