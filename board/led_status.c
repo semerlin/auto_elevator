@@ -31,7 +31,7 @@ static __INLINE void sh_transition(void)
 }
 
 /**
- * @brief storage registers set 
+ * @brief storage registers set
  */
 static __INLINE void st_set(void)
 {
@@ -41,7 +41,7 @@ static __INLINE void st_set(void)
 }
 
 /**
- * @brief storage registers reset 
+ * @brief storage registers reset
  */
 static __INLINE void st_reset(void)
 {
@@ -83,9 +83,9 @@ static uint16_t hc166_readdata(void)
         if (is_pinset("LED_DATA"))
         {
             recvdata |= 0x01;
-        } 
+        }
     }
-    
+
     return recvdata;
 }
 
@@ -129,10 +129,6 @@ bool is_led_on(char floor)
  */
 bool is_down_led_on(char floor)
 {
-    if (floor > LED_NUM)
-    {
-        return FALSE;
-    }
     uint16_t status = hc166_readdata();
     clear_open_led(status);
     uint8_t key = keymap_floor_to_key(floor);
@@ -169,10 +165,6 @@ bool is_down_led_on(char floor)
  */
 bool is_up_led_on(char floor)
 {
-    if (floor > LED_NUM)
-    {
-        return FALSE;
-    }
     uint16_t status = hc166_readdata();
     clear_open_led(status);
     uint8_t key = keymap_floor_to_key(floor);
