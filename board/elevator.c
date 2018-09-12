@@ -107,7 +107,6 @@ static void vElevArrive(void *pvParameters)
         {
             if (DEFAULT_CHECKIN != robot_checkin_get())
             {
-                notify_arrive(floor);
                 while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
                                                 500 / portTICK_PERIOD_MS))
                 {
@@ -117,6 +116,7 @@ static void vElevArrive(void *pvParameters)
                         robot_checkin_reset();
                         break;
                     }
+                    notify_arrive(floor);
                 }
             }
         }
