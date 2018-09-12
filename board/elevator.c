@@ -37,7 +37,6 @@ static elev_work_state work_state = work_idle;
 
 /* key press queue */
 static xQueueHandle xQueueFloor = NULL;
-static xQueueHandle xQueueFloorChange = NULL;
 
 static xQueueHandle xArriveQueue = NULL;
 static xSemaphoreHandle xNotifySemaphore = NULL;
@@ -63,63 +62,6 @@ static void vElevHold(void *pvParameters)
         }
 
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-}
-
-/**
- * @brief elevator task
- * @param pvParameters - task parameters
- */
-static void vElevFloorChange(void *pvParameters)
-{
-    char dir = 0;
-    for (;;)
-    {
-        if (xQueueReceive(xQueueFloorChange, &dir, portMAX_DELAY))
-        {
-            if (dir > 0)
-            {
-                TRACE("floor++: %d\r\n", elev_cur_floor);
-                if (is_up_led_on(elev_cur_floor))
-                {
-                    run_state = run_up;
-                }
-                else if (is_down_led_on(elev_cur_floor))
-                {
-                    run_state = run_down;
-                }
-                else
-                {
-                    run_state = run_stop;
-                }
-                /** check led status */
-                if (!is_led_on(elev_cur_floor))
-                {
-                    elev_arrived(elev_cur_floor);
-                }
-            }
-            else if (dir < 0)
-            {
-                TRACE("floor--: %d\r\n", elev_cur_floor);
-                if (is_down_led_on(elev_cur_floor))
-                {
-                    run_state = run_down;
-                }
-                else if (is_up_led_on(elev_cur_floor))
-                {
-                    run_state = run_up;
-                }
-                else
-                {
-                    run_state = run_stop;
-                }
-                /** check led status */
-                if (!is_led_on(elev_cur_floor))
-                {
-                    elev_arrived(elev_cur_floor);
-                }
-            }
-        }
     }
 }
 
@@ -189,7 +131,6 @@ bool elev_init(void)
     TRACE("initialize elevator...\r\n");
     xQueueFloor = xQueueCreate(1, 1);
     xArriveQueue = xQueueCreate(1, 1);
-    xQueueFloorChange = xQueueCreate(10, 1);
     xNotifySemaphore = xSemaphoreCreateBinary();
     register_arrive_cb(arrive_hook);
     xTaskCreate(vElevHold, "elvhold", ELEV_STACK_SIZE, NULL,
@@ -197,8 +138,6 @@ bool elev_init(void)
     xTaskCreate(vElevControl, "elvctl", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
-                ELEV_PRIORITY, NULL);
-    xTaskCreate(vElevFloorChange, "elvfloor", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
     return TRUE;
 }
@@ -275,8 +214,24 @@ void elev_decrease(void)
     {
         elev_cur_floor --;
     }
-    char dir = -1;
-    xQueueSend(xQueueFloorChange, &dir, 0);
+    TRACE("floor--: %d\r\n", elev_cur_floor);
+    if (is_down_led_on(elev_cur_floor))
+    {
+        run_state = run_down;
+    }
+    else if (is_up_led_on(elev_cur_floor))
+    {
+        run_state = run_up;
+    }
+    else
+    {
+        run_state = run_stop;
+    }
+    /** check led status */
+    if (!is_led_on(elev_cur_floor))
+    {
+        elev_arrived(elev_cur_floor);
+    }
 }
 
 /**
@@ -289,8 +244,24 @@ void elev_increase(void)
     {
         elev_cur_floor ++;
     }
-    char dir = 1;
-    xQueueSend(xQueueFloorChange, &dir, 0);
+    TRACE("floor++: %d\r\n", elev_cur_floor);
+    if (is_up_led_on(elev_cur_floor))
+    {
+        run_state = run_up;
+    }
+    else if (is_down_led_on(elev_cur_floor))
+    {
+        run_state = run_down;
+    }
+    else
+    {
+        run_state = run_stop;
+    }
+    /** check led status */
+    if (!is_led_on(elev_cur_floor))
+    {
+        elev_arrived(elev_cur_floor);
+    }
 }
 
 /**

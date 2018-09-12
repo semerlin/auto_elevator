@@ -124,12 +124,40 @@ static void vLedWorkMonitor(void *pvParameters)
             if (DEFAULT_CHECKIN != robot_checkin_get())
             {
                 floor = floormap_phy_to_dis(robot_checkin_get());
-                if (!is_led_on(floor) && (floor != elev_floor()))
+                if (!floor_calculate)
                 {
-                    /** check elevator status */
-                    if (run_up == elev_state_run())
+                    if (!is_led_on(floor) && (floor != elev_floor()))
                     {
-                        if (floor > elev_floor())
+                        /** check elevator status */
+                        if (run_up == elev_state_run())
+                        {
+                            if (floor > elev_floor())
+                            {
+                                elev_go(floor);
+                                err_cnt ++;
+                                if (err_cnt > ELEV_ERR_CNT)
+                                {
+                                    err_cnt = 0;
+                                    floor_calculate = TRUE;
+                                    elev_go(1);
+                                }
+                            }
+                        }
+                        else if (run_down == elev_state_run())
+                        {
+                            if (floor < elev_floor())
+                            {
+                                elev_go(floor);
+                                err_cnt ++;
+                                if (err_cnt > ELEV_ERR_CNT)
+                                {
+                                    err_cnt = 0;
+                                    floor_calculate = TRUE;
+                                    elev_go(1);
+                                }
+                            }
+                        }
+                        else
                         {
                             elev_go(floor);
                             err_cnt ++;
@@ -139,31 +167,6 @@ static void vLedWorkMonitor(void *pvParameters)
                                 floor_calculate = TRUE;
                                 elev_go(1);
                             }
-                        }
-                    }
-                    else if (run_down == elev_state_run())
-                    {
-                        if (floor < elev_floor())
-                        {
-                            elev_go(floor);
-                            err_cnt ++;
-                            if (err_cnt > ELEV_ERR_CNT)
-                            {
-                                err_cnt = 0;
-                                floor_calculate = TRUE;
-                                elev_go(1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        elev_go(floor);
-                        err_cnt ++;
-                        if (err_cnt > ELEV_ERR_CNT)
-                        {
-                            err_cnt = 0;
-                            floor_calculate = TRUE;
-                            elev_go(1);
                         }
                     }
                 }
