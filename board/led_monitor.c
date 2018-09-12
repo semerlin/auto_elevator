@@ -58,7 +58,8 @@ static pwd_node pwds[PARAM_PWD_LEN] =
     {0, 0},
     {0, 0}
 };
-#define FLOOR_RESET_COUNT   4
+#define FLOOR_RESET_COUNT   5
+bool floor_calculate = FALSE;
 #endif
 
 #ifdef __MASTER
@@ -127,10 +128,57 @@ static void push_pwd_node(const pwd_node *node)
  * @brief led monitor task
  * @param pvParameters - task parameter
  */
+static void elev_pwd_go(char floor)
+{
+    static uint8_t err_cnt = 0;
+    if (!floor_calculate)
+    {
+        /** check elevator status */
+        if (run_up == elev_state_run())
+        {
+            if (floor > elev_floor())
+            {
+                elev_go(floor);
+                err_cnt ++;
+                if (err_cnt > FLOOR_RESET_COUNT)
+                {
+                    err_cnt = 0;
+                    floor_calculate = TRUE;
+                    elev_go(1);
+                }
+            }
+        }
+        else if (run_down == elev_state_run())
+        {
+            if (floor < elev_floor())
+            {
+                elev_go(floor);
+                err_cnt ++;
+                if (err_cnt > FLOOR_RESET_COUNT)
+                {
+                    err_cnt = 0;
+                    floor_calculate = TRUE;
+                    elev_go(1);
+                }
+            }
+        }
+        else
+        {
+            elev_go(floor);
+            err_cnt ++;
+            if (err_cnt > FLOOR_RESET_COUNT)
+            {
+                err_cnt = 0;
+                floor_calculate = TRUE;
+                elev_go(1);
+            }
+        }
+    }
+}
+
 static void vLedWorkMonitor(void *pvParameters)
 {
     char floor = 0;
-    uint8_t err_cnt = 0;
     for (;;)
     {
         /** check elevator status */
@@ -143,27 +191,12 @@ static void vLedWorkMonitor(void *pvParameters)
                 {
                     if (CALC_PWD == board_parameter.calc_type)
                     {
-                        err_cnt ++;
-                        if (err_cnt > FLOOR_RESET_COUNT)
-                        {
-                            err_cnt = 0;
-                            elev_set_floor(floor);
-                            /* notify floor arrived */
-                            elev_arrived(floor);
-                        }
-                        else
-                        {
-                            elev_go(floor);
-                        }
+                        elev_pwd_go(floor);
                     }
                     else
                     {
                         elev_go(floor);
                     }
-                }
-                else
-                {
-                    err_cnt = 0;
                 }
             }
         }
@@ -200,6 +233,15 @@ static void vLedProcess(void *pvParameters)
                         if (is_floor_arrive(led_status.prev_status, per_changed_bit))
                         {
                             TRACE("floor led off: %d\r\n", floor);
+                            /** check floor calculate */
+                            if (floor_calculate)
+                            {
+                                if (0x01 == floor)
+                                {
+                                    elev_set_floor(1);
+                                    floor_calculate = FALSE;
+                                }
+                            }
                             /** check altimter calculation */
                             if (altimeter_is_calculating())
                             {
