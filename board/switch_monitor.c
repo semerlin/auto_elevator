@@ -19,6 +19,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
 
+#define SIMPLE_FILTER  1
 
 /* switch 0->1 means arrive，1->0 means leave */
 #define UPPER_SWITCH     "SWITCH1"
@@ -26,9 +27,11 @@
 
 static switch_status cur_status = switch_arrive;
 
+#if (0 == SIMPLE_FILTER)
 static uint8_t filter_step = 0;
 static uint8_t filter_prev = 0;
 static uint8_t filter_cur = 0;
+#endif
 
 static bool detect_switch_zero = FALSE;
 static uint8_t switch_prev = 0x03;
@@ -74,7 +77,7 @@ uint8_t filter_switch_val(void)
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
 
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < 8; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
@@ -98,6 +101,7 @@ uint8_t filter_switch_val(void)
     return 0;
 }
 
+#if (0 == SIMPLE_FILTER)
 /**
  * @brief filter interrupt handler
  */
@@ -154,6 +158,49 @@ void TIM2_IRQHandler(void)
 
     TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
 }
+#endif
+
+#if SIMPLE_FILTER
+/**
+ * @brief filter interrupt handler
+ */
+void TIM2_IRQHandler(void)
+{
+    switch_cur = filter_switch_val();
+    if (detect_switch_zero)
+    {
+        if (0 != switch_cur)
+        {
+            if (switch_cur != switch_prev)
+            {
+                if ((0x01 == switch_prev) && (0x03 == switch_cur))
+                {
+                    cur_floor ++;
+                    detect_switch_zero = FALSE;
+                }
+                else if ((0x02 == switch_prev) && (0x03 == switch_cur))
+                {
+                    cur_floor --;
+                    detect_switch_zero = FALSE;
+                }
+
+                switch_prev = switch_cur;
+            }
+        }
+    }
+    else
+    {
+        if (0 == switch_cur)
+        {
+            switch_cur = 0x03;
+            switch_prev = 0x03;
+            detect_switch_zero = TRUE;
+        }
+    }
+
+    TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
+}
+#endif
 
 
 /**
