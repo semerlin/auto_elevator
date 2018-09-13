@@ -526,10 +526,10 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
 
         robot_checkin_set(data[4]);
         /* goto specified floor */
-        //elev_go(dis_floor);
         if (dis_floor == elev_floor())
         {
             /* already arrive */
+            elev_go(dis_floor);
             elev_arrived(dis_floor);
         }
     }
