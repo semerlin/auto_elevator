@@ -20,14 +20,16 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
 
-
+#define SIMPLE_FILTER   1
 /* switch 0->1 means arrive，1->0 means leave */
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
 
+#if (0 == SIMPLE_FILTER)
 static uint8_t filter_step = 0;
 static uint8_t filter_prev = 0;
 static uint8_t filter_cur = 0;
+#endif
 
 static char cur_floor = 0;
 static bool sequence_start = FALSE;
@@ -90,6 +92,7 @@ uint8_t filter_switch_val(void)
     return 0;
 }
 
+#if (0 == SIMPLE_FILTER)
 /**
  * @brief filter interrupt handler
  */
@@ -151,6 +154,52 @@ void TIM2_IRQHandler(void)
 
     TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
 }
+#else
+/**
+ * @brief filter interrupt handler
+ */
+void TIM2_IRQHandler(void)
+{
+    /**
+     * 0-1-3: floor increase
+     * 0-2-3: floor decrese
+     */
+    switch_cur = filter_switch_val();
+    if (sequence_start)
+    {
+        if (0 != switch_cur)
+        {
+            if (switch_cur != switch_prev)
+            {
+                /* elevator state changed */
+                if ((0x01 == switch_prev) && (0x03 == switch_cur))
+                {
+                    cur_floor ++;
+                    sequence_start = FALSE;
+                }
+                else if ((0x02 == switch_prev) && (0x03 == switch_cur))
+                {
+                    cur_floor --;
+                    sequence_start = FALSE;
+                }
+
+                switch_prev = switch_cur;
+            }
+        }
+    }
+    else
+    {
+        if (0 == switch_cur)
+        {
+            switch_cur = 0x03;
+            switch_prev = 0x03;
+            sequence_start = TRUE;
+        }
+    }
+
+    TIM_ClearIntFlag(TIM2, TIM_INT_FLAG_UPDATE);
+}
+#endif
 
 
 /**
