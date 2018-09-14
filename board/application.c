@@ -45,8 +45,10 @@ void ApplicationStartup()
 {
 #ifdef __MASTER
     TRACE("startup master application...\r\n");
+    TRACE("Copyright 2018, Huang Yang <elious.huang@gmail.com>\r\n");
 #else
     TRACE("startup expand application...\r\n");
+    TRACE("Copyright 2018, Huang Yang <elious.huang@gmail.com>\r\n");
 #endif
     TRACE("version = %s\r\n", VERSION);
     license_init();
