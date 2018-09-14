@@ -338,7 +338,7 @@ static void process_param_pwd(const uint8_t *data, uint8_t len)
         status = INVALID_PARAM;
     }
 
-    param_reply(CMD_SET, status);
+    param_reply(CMD_PWD, status);
     if (SUCCESS == status)
     {
         TRACE("rebooting...\r\n");
