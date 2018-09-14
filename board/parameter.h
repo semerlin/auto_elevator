@@ -27,6 +27,7 @@ typedef struct
     uint8_t id_elev;
     uint8_t id_board; /** fixed to 0x01 */
     char start_floor;
+    uint8_t total_floor;
     uint8_t calc_type;
     uint8_t pwd_window;
     uint8_t pwd[PARAM_PWD_LEN];

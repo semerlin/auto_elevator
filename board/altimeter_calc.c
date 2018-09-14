@@ -20,6 +20,8 @@
 #include "stm32f10x_cfg.h"
 #include "parameter.h"
 #include "protocol_param.h"
+#include "elevator.h"
+#include "floormap.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[altimeter_calc]"
@@ -27,18 +29,22 @@
 extern parameters_t board_parameter;
 static calc_action_t calc_action = CALC_STOP;
 static xQueueHandle xQueueCalc = NULL;
-#define HEIGHT_AVERAGE_COUNT    5
+#define HEIGHT_AVERAGE_COUNT       5
+#define ALTIMETER_IDLE_INTERVAL    (200 / portTICK_PERIOD_MS)
 
+/**
+ * @brief calculate floor height once
+ * @param[in ]current_floor: current floor
+ * @param[in] distance: distance to top
+ */
 static uint16_t calc_once(char current_floor, uint32_t distance)
 {
-    uint8_t floor_num = current_floor - board_parameter.start_floor;
-    if ((board_parameter.start_floor < 0) && (current_floor > 0))
-    {
-        floor_num --;
-    }
+    uint8_t current_phy_floor = floormap_dis_to_phy(current_floor);
+    uint8_t floor_num = board_parameter.total_floor - current_phy_floor;
 
     if (0 == floor_num)
     {
+        TRACE("reach top: %d(mm)\r\n", distance);
         return 0;
     }
     return (uint16_t)(distance / 10.0 / floor_num);
@@ -100,7 +106,7 @@ static void vAltimeterCalc(void *pvParameters)
         }
         else
         {
-            vTaskDelay(100 / portTICK_PERIOD_MS);
+            vTaskDelay(ALTIMETER_IDLE_INTERVAL);
         }
     }
 }
@@ -123,14 +129,37 @@ void altimeter_calc_once(char floor)
     xQueueOverwrite(xQueueCalc, &floor);
 }
 
-bool altimeter_calc_run(calc_action_t action)
+bool altimeter_calc_run(calc_action_t action, char start_floor, char end_floor)
 {
-    TRACE("set calculate action(%d)\r\n", action);
+    TRACE("set calculate %d-%d-%d\r\n", action, start_floor, end_floor);
     calc_action = action;
+    char calc_start_floor, calc_end_floor;
+    if (start_floor >= end_floor)
+    {
+        calc_start_floor = start_floor;
+        calc_end_floor = end_floor;
+    }
+    else
+    {
+        calc_start_floor = end_floor;
+        calc_end_floor = start_floor;
+    }
     if (CALC_STOP == action)
     {
         TRACE("rebooting...\r\n");
         SCB_SystemReset();
+    }
+    else
+    {
+        while (calc_start_floor <= calc_end_floor)
+        {
+            elev_go(calc_start_floor);
+            calc_start_floor ++;
+            if (0 == calc_start_floor)
+            {
+                calc_start_floor ++;
+            }
+        }
     }
     return TRUE;
 }

@@ -86,9 +86,10 @@ typedef struct
 
 #ifdef __MASTER
 
-#define IS_PWD_SCAN_WINDOW_VALID(window) (0x00 != window)
-#define IS_CALC_TYPE_VALID(type) ((CALC_PWD == (type)) || (CALC_ALTIMETER == (type)))
-#define IS_ACTION_VALID(action) ((0x01 == action) || (0x02 == action))
+#define IS_PWD_SCAN_WINDOW_VALID(window)    (0x00 != window)
+#define IS_CALC_TYPE_VALID(type)            ((CALC_PWD == (type)) || (CALC_ALTIMETER == (type)))
+#define IS_ACTION_VALID(action)             ((0x01 == action) || (0x02 == action))
+#define IS_TOTAL_FLOOR_VALID(floor)         (floor > 0)
 
 #pragma pack(1)
 typedef struct
@@ -96,6 +97,7 @@ typedef struct
     uint8_t id_ctl;
     uint8_t id_elev;
     char start_floor;
+    uint8_t total_floor;
     calc_type_t calc_type;
 } msg_param_t;
 
@@ -108,6 +110,8 @@ typedef struct
 typedef struct
 {
     uint8_t action; /** 0x01: start 0x02: stop */
+    char start_floor;
+    char end_floor;
 } msg_calc_t;
 
 typedef struct
@@ -211,6 +215,12 @@ static void process_param_set(const uint8_t *data, uint8_t len)
 #ifdef __MASTER
         param.id_ctl = msg->id_ctl;
         param.id_elev = msg->id_elev;
+        param.total_floor = msg->total_floor;
+        if (!IS_TOTAL_FLOOR_VALID(msg->total_floor))
+        {
+            status = INVALID_PARAM;
+            goto END;
+        }
         param.calc_type = msg->calc_type;
         if (!IS_CALC_TYPE_VALID(msg->calc_type))
         {
@@ -359,11 +369,7 @@ static void process_param_calc(const uint8_t *data, uint8_t len)
         if (len == sizeof(msg_calc_t))
         {
             msg_calc_t *calc = (msg_calc_t *)data;
-            if (IS_ACTION_VALID(calc->action))
-            {
-                altimeter_calc_run((calc_action_t)(calc->action));
-            }
-            else
+            if (!IS_ACTION_VALID(calc->action))
             {
                 status = INVALID_PARAM;
             }
@@ -379,6 +385,12 @@ static void process_param_calc(const uint8_t *data, uint8_t len)
     }
 
     param_reply(CMD_CALC, status);
+
+    if (SUCCESS == status)
+    {
+        msg_calc_t *calc = (msg_calc_t *)data;
+        altimeter_calc_run((calc_action_t)(calc->action), calc->start_floor, calc->end_floor);
+    }
 }
 
 /**

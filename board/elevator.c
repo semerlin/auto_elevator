@@ -142,7 +142,7 @@ void arrive_hook(const uint8_t *data, uint8_t len)
 bool elev_init(void)
 {
     TRACE("initialize elevator...\r\n");
-    xQueueFloor = xQueueCreate(1, 1);
+    xQueueFloor = xQueueCreate(10, 1);
 #ifdef __MASTER
     xArriveQueue = xQueueCreate(1, 1);
     xNotifySemaphore = xSemaphoreCreateBinary();
@@ -173,7 +173,7 @@ void elev_go(char floor)
         {
             /** self control */
             uint8_t key = boardmap_floor_to_key(floor);
-            xQueueOverwrite(xQueueFloor, &key);
+            xQueueSend(xQueueFloor, &key, 10 / portTICK_PERIOD_MS);
         }
 #ifdef __MASTER
         else

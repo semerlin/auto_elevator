@@ -26,6 +26,7 @@
 
 typedef struct
 {
+    /** unit is mm and distance to top of the building */
     uint32_t range;
     uint8_t id_tag;
     uint8_t id_base_station;
@@ -171,7 +172,7 @@ static void vAltimeter(void *pvParameters)
             {
                 if (tof.range > 0)
                 {
-                    /** calculate physical floor */
+                    /** calculate physical floor to top */
                     floor = tof.range / 10.0 / board_parameter.floor_height;
                     floor_cur = (uint8_t)floor;
                     floor -= (uint8_t)floor;
@@ -179,7 +180,7 @@ static void vAltimeter(void *pvParameters)
                     {
                         floor_cur ++;
                     }
-                    floor_cur++;
+                    floor_cur = board_parameter.total_floor - floor_cur;
                     if (floor_cur != floor_prev)
                     {
                         /** floor changed */
