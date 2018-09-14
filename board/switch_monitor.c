@@ -19,8 +19,9 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
 
-#define SIMPLE_FILTER  1
+#define SIMPLE_FILTER  0
 
+#define SWITCH_MONITOR_INTERVAL   (300 / portTICK_PERIOD_MS)
 /* switch 0->1 means arrive，1->0 means leave */
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
@@ -77,7 +78,7 @@ uint8_t filter_switch_val(void)
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 6; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
@@ -223,7 +224,7 @@ static void vSwitchMonitor(void *pvParameters)
         {
             elev_decrease();
         }
-        vTaskDelay(500 / portTICK_PERIOD_MS);
+        vTaskDelay(SWITCH_MONITOR_INTERVAL);
     }
 }
 
