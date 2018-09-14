@@ -20,7 +20,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
 
-#define SIMPLE_FILTER   1
+#define SIMPLE_FILTER   0
 /* switch 0->1 means arrive，1->0 means leave */
 #define UPPER_SWITCH     "SWITCH1"
 #define LOWER_SWITCH     "SWITCH2"
@@ -36,7 +36,7 @@ static bool sequence_start = FALSE;
 static uint8_t switch_cur = 0x03;
 static uint8_t switch_prev = 0x03;
 
-#define SWITCH_MONITOR_INTERVAL     (400 / portTICK_PERIOD_MS)
+#define SWITCH_MONITOR_INTERVAL     (300 / portTICK_PERIOD_MS)
 
 /**
  * @brief get switch value
@@ -68,7 +68,7 @@ uint8_t filter_switch_val(void)
     uint8_t switch_cnt[4] = {0, 0, 0, 0};
     uint8_t max = 0;
 
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < 6; ++i)
     {
         switch_cnt[switch_val()] += 1;
     }
@@ -233,8 +233,8 @@ void init_filter(void)
 {
     /** timeout count interval 100us */
     TIM_SetCntInterval(TIM2, 100);
-    /** timer interval 6.5ms */
-    TIM_SetAutoReload(TIM2, 65);
+    /** timer interval 5ms */
+    TIM_SetAutoReload(TIM2, 50);
     TIM_SetCountMode(TIM2, TIM_COUNTMODE_UP);
     TIM_IntEnable(TIM2, TIM_INT_UPDATE, TRUE);
 
