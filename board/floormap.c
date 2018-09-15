@@ -14,16 +14,16 @@
 #include "parameter.h"
 #include "boardmap.h"
 #include "dbgserial.h"
+#include "config.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[FLOORMAP]"
 
-#define DUMP_MESSAGE  1
 
 extern parameters_t board_parameter;
 static char floormap[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
 
-#if DUMP_MESSAGE
+#if DUMP_FLOORMAP
 /**
  * @brief dump message
  * @param data - message to dump
@@ -72,7 +72,7 @@ void floormap_update(void)
         }
     }
 
-#if DUMP_MESSAGE
+#if DUMP_FLOORMAP
     dump_message((uint8_t *)floormap, MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1));
 #endif
 }

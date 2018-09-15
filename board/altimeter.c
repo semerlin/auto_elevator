@@ -18,11 +18,10 @@
 #include "elevator.h"
 #include "parameter.h"
 #include "altimeter_calc.h"
+#include "config.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[altimeter]"
-
-#define DUMP_MESSAGE 0
 
 typedef struct
 {
@@ -190,7 +189,7 @@ static void vAltimeter(void *pvParameters)
                 }
             }
             recv_data[len] = 0x00;
-#if DUMP_MESSAGE
+#if DUMP_ALTIMETER_DATA
             TRACE("recv data: %s\r\n", recv_data);
 #endif
         }

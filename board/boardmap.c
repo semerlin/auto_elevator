@@ -12,15 +12,13 @@
 #include "global.h"
 #include "expand.h"
 #include "dbgserial.h"
-
+#include "config.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[board_info]"
 
 extern parameters_t board_parameter;
 boardmap_t boardmaps[MAX_BOARD_NUM];
-
-#define DUMP_MESSAGE   1
 
 
 #ifdef __MASTER
@@ -73,7 +71,7 @@ static void boardmap_sort(void)
     }
 }
 
-#if DUMP_MESSAGE
+#if DUMP_BOARDMAP
 /**
  * @brief dump message
  * @param data - message to dump
@@ -135,7 +133,7 @@ bool boardmap_add(uint8_t id_board, uint8_t start_key, char start_floor,
             boardmaps[i].floor_num = floor_num;
             boardmaps[i].led_status = led_status;
             boardmap_sort();
-#if DUMP_MESSAGE
+#if DUMP_BOARDMAP
             dump_message();
 #endif
             return TRUE;

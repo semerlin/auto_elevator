@@ -1961,6 +1961,9 @@
       <name>$PROJ_DIR$\board\boardmap.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\config.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\crc.c</name>
     </file>
     <file>

@@ -13,11 +13,11 @@
 #include "global.h"
 #include "dbgserial.h"
 #include "stm32f10x_cfg.h"
+#include "config.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
 
-#define DUMP_MESSAGE 1
 
 typedef bool (*ptl_process)(const uint8_t *data, uint8_t len);
 static ptl_process ptls[] =
@@ -66,7 +66,7 @@ void ptl_send_data(const uint8_t *data, uint8_t len)
 {
     assert_param(NULL != g_serial);
     serial_putstring(g_serial, (const char *)data, len);
-#if DUMP_MESSAGE
+#if DUMP_PROTOCOL
     dump_message(1, data, len);
 #endif
 }
@@ -101,7 +101,7 @@ static void vProtocol(void *pvParameters)
                     break;
                 }
             }
-#if DUMP_MESSAGE
+#if DUMP_PROTOCOL
             dump_message(0, recv_data, len);
 #endif
             for (uint8_t index = 0; index < sizeof(ptls) / sizeof(ptls[0]); ++index)

@@ -28,7 +28,7 @@ typedef struct
 
 static flash_map_t flash_map;
 
-bool param_setted = FALSE;
+static bool param_setted = FALSE;
 
 /**
  * @brief reset parameter

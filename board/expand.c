@@ -16,11 +16,10 @@
 #include "parameter.h"
 #include "protocol_expand.h"
 #include "boardmap.h"
+#include "config.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[EXPAND]"
-
-#define LOOP_BACK_TEST 0
 
 typedef struct
 {
@@ -29,8 +28,6 @@ typedef struct
 } expand_data;
 
 extern parameters_t board_parameter;
-
-#define USE_SPEED_100K 1
 
 #ifdef __EXPAND
 typedef enum
