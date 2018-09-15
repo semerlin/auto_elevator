@@ -98,6 +98,7 @@ typedef struct
     uint8_t id_elev;
     char start_floor;
     uint8_t total_floor;
+    uint8_t bt_name[BT_NAME_LEN];
     calc_type_t calc_type;
 } msg_param_t;
 
@@ -228,6 +229,8 @@ static void process_param_set(const uint8_t *data, uint8_t len)
             goto END;
         }
         param.id_board = 0x01;
+
+        memcpy(param.bt_name, msg->bt_name, BT_NAME_LEN);
 #endif
 
 #ifdef __EXPAND

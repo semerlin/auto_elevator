@@ -21,6 +21,7 @@ typedef enum
 
 #ifdef __MASTER
 #define PARAM_PWD_LEN            4
+#define BT_NAME_LEN              8
 typedef struct
 {
     uint8_t id_ctl;
@@ -28,6 +29,7 @@ typedef struct
     uint8_t id_board; /** fixed to 0x01 */
     char start_floor;
     uint8_t total_floor;
+    uint8_t bt_name[BT_NAME_LEN];
     uint8_t calc_type;
     uint8_t pwd_window;
     uint8_t pwd[PARAM_PWD_LEN];

@@ -6,6 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifdef __MASTER
+#include <string.h>
 #include "protocol.h"
 #include "protocol_robot.h"
 #include "trace.h"
@@ -233,7 +234,7 @@ bool process_robot_data(const uint8_t *data, uint8_t len)
  */
 static void send_data(const uint8_t *data, uint8_t len)
 {
-    uint8_t buffer[36];
+    uint8_t buffer[48];
     uint8_t *pdata = buffer;
     *pdata ++ = ROBOT_HEAD;
     uint16_t sum = 0;
@@ -283,7 +284,7 @@ static void send_data(const uint8_t *data, uint8_t len)
  */
 static void process_elev_apply(const uint8_t *data, uint8_t len)
 {
-    uint8_t payload[8];
+    uint8_t payload[20];
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
@@ -306,8 +307,9 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[6] = status.status;
+    memcpy(payload + 7, board_parameter.bt_name, BT_NAME_LEN);
 
-    send_data(payload, 7);
+    send_data(payload, 15);
     robot_id_set(data[1]);
     elevator_set_state_work(work_robot);
     robot_monitor_start();
