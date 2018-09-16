@@ -8,6 +8,8 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#define CAN_REMAP               0
+
 #define SIMPLE_FILTER           0
 #define AUTO_ADJUST             0
 
