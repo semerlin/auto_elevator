@@ -31,7 +31,7 @@
 #define __TRACE_MODULE  "[app]"
 
 #ifdef __MASTER
-#define VERSION  ("v1.1.0.3")
+#define VERSION  ("v1.1.0.4")
 #else
 #define VERSION  ("v1.1.0.0")
 #endif

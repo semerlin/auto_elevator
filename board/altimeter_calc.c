@@ -136,13 +136,13 @@ bool altimeter_calc_run(calc_action_t action, char start_floor, char end_floor)
     char calc_start_floor, calc_end_floor;
     if (start_floor >= end_floor)
     {
-        calc_start_floor = start_floor;
-        calc_end_floor = end_floor;
+        calc_start_floor = end_floor;
+        calc_end_floor = start_floor;
     }
     else
     {
-        calc_start_floor = end_floor;
-        calc_end_floor = start_floor;
+        calc_start_floor = start_floor;
+        calc_end_floor = end_floor;
     }
     if (CALC_STOP == action)
     {

@@ -329,7 +329,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
     payload[3] = 53;
     payload[4] = data[4];
     payload[5] = 0x00;
-    ptl_send_data(payload, 6);
+    send_data(payload, 6);
 
     elev_hold_open(FALSE);
     robot_id_reset();
@@ -362,11 +362,13 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
         robot_checkin_set(data[4]);
         /* goto specified floor */
         elev_go(dis_floor);
+#if 0
         if (dis_floor == elev_floor())
         {
             /* already arrive */
             elev_arrived(dis_floor);
         }
+#endif
     }
 }
 
