@@ -69,6 +69,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len);
 static void process_elev_door_open(const uint8_t *data, uint8_t len);
 static void process_elev_door_close(const uint8_t *data, uint8_t len);
 static void process_elev_arrive(const uint8_t *data, uint8_t len);
+static void process_elev_bt_name(const uint8_t *data, uint8_t len);
 static void notify_busy(uint8_t id);
 
 /* process handle */
@@ -79,13 +80,23 @@ typedef struct
 } cmd_handle;
 
 /* protocol command */
-#define CMD_APPLY         50
-#define CMD_RELEASE       52
-#define CMD_CHECKIN       30
-#define CMD_INQUIRE       32
-#define CMD_DOOR_OPEN     34
-#define CMD_DOOR_CLOSE    36
-#define CMD_ARRIVE        40
+#define CMD_CHECKIN             30
+#define CMD_CHECKIN_REPLY       31
+#define CMD_INQUIRE             32
+#define CMD_INQUIRE_REPLY       33
+#define CMD_DOOR_OPEN           34
+#define CMD_DOOR_OPEN_REPLY     35
+#define CMD_DOOR_CLOSE          36
+#define CMD_DOOR_CLOSE_REPLY    37
+#define CMD_NOTIFY_ARRIVE       39
+#define CMD_ARRIVE              40
+#define CMD_BT_NAME             41
+#define CMD_BT_NAME_REPLY       42
+#define CMD_APPLY               50
+#define CMD_APPLY_REPLY         51
+#define CMD_RELEASE             52
+#define CMD_RELEASE_REPLY       53
+#define CMD_BUSY                55
 
 static cmd_handle cmd_handles[] =
 {
@@ -96,6 +107,7 @@ static cmd_handle cmd_handles[] =
     {CMD_DOOR_OPEN, process_elev_door_open},
     {CMD_DOOR_CLOSE, process_elev_door_close},
     {CMD_ARRIVE, process_elev_arrive},
+    {CMD_BT_NAME, process_elev_bt_name},
 };
 
 /**
@@ -234,7 +246,7 @@ bool process_robot_data(const uint8_t *data, uint8_t len)
  */
 static void send_data(const uint8_t *data, uint8_t len)
 {
-    uint8_t buffer[48];
+    uint8_t buffer[33];
     uint8_t *pdata = buffer;
     *pdata ++ = ROBOT_HEAD;
     uint16_t sum = 0;
@@ -288,7 +300,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
-    payload[3] = 51;
+    payload[3] = CMD_APPLY_REPLY;
     payload[4] = floormap_dis_to_phy(elev_floor());
     payload[5] = data[4];
 
@@ -307,9 +319,8 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     status._status.reserve = 0x00;
     status._status.state = elev_state_work();
     payload[6] = status.status;
-    memcpy(payload + 7, board_parameter.bt_name, BT_NAME_LEN);
 
-    send_data(payload, 15);
+    send_data(payload, 7);
     robot_id_set(data[1]);
     elevator_set_state_work(work_robot);
     robot_monitor_start();
@@ -326,7 +337,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
-    payload[3] = 53;
+    payload[3] = CMD_RELEASE_REPLY;
     payload[4] = data[4];
     payload[5] = 0x00;
     send_data(payload, 6);
@@ -353,7 +364,7 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
         payload[0] = board_parameter.id_ctl;
         payload[1] = board_parameter.id_elev;
         payload[2] = data[1];
-        payload[3] = 31;
+        payload[3] = CMD_CHECKIN_REPLY;
         payload[4] = data[4];
         payload[5] = data[5];
 
@@ -383,7 +394,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
-    payload[3] = 33;
+    payload[3] = CMD_INQUIRE_REPLY;
     payload[4] = floormap_dis_to_phy(elev_floor());
     payload[5] = robot_checkin_get();
 
@@ -417,7 +428,7 @@ static void process_elev_door_open(const uint8_t *data, uint8_t len)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
-    payload[3] = 35;
+    payload[3] = CMD_DOOR_OPEN_REPLY;
 
     send_data(payload, 4);
 
@@ -437,7 +448,7 @@ static void process_elev_door_close(const uint8_t *data, uint8_t len)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
-    payload[3] = 37;
+    payload[3] = CMD_DOOR_CLOSE_REPLY;
 
     send_data(payload, 4);
 
@@ -458,6 +469,25 @@ static void process_elev_arrive(const uint8_t *data, uint8_t len)
     }
 }
 
+/**
+ * @brief process elevator bluetooth name request
+ * @param data - data to process
+ * @param len - data length
+ */
+static void process_elev_bt_name(const uint8_t *data, uint8_t len)
+{
+    uint8_t payload[6 + BT_NAME_MAX_LEN + 1];
+    memset(payload, 0, BT_NAME_MAX_LEN + 7);
+    payload[0] = board_parameter.id_ctl;
+    payload[1] = board_parameter.id_elev;
+    payload[2] = data[1];
+    payload[3] = CMD_DOOR_CLOSE_REPLY;
+
+    uint8_t name_len = strlen((const char *)(board_parameter.bt_name));
+    memcpy(payload + 4, board_parameter.bt_name, name_len + 1);
+
+    send_data(payload, 4 + name_len + 1);
+}
 
 /**
  * @brief process elevator arrive
@@ -469,7 +499,7 @@ void notify_arrive(char floor)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = robot_id_get();
-    payload[3] = 39;
+    payload[3] = CMD_NOTIFY_ARRIVE;
     payload[4] = floormap_dis_to_phy(elev_floor());
     elev_status status;
     status._status.dir = elev_state_run();
@@ -491,7 +521,7 @@ static void notify_busy(uint8_t id)
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = id;
-    payload[3] = 55;
+    payload[3] = CMD_BUSY;
     payload[4] = floormap_dis_to_phy(elev_floor());
     payload[5] = robot_id_get();
 

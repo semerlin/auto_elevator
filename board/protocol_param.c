@@ -31,6 +31,7 @@ static void process_param_set(const uint8_t *data, uint8_t len);
 #ifdef __MASTER
 static void process_param_pwd(const uint8_t *data, uint8_t len);
 static void process_param_calc(const uint8_t *data, uint8_t len);
+static void process_param_bt_name(const uint8_t *data, uint8_t len);
 #endif
 static void process_reboot(const uint8_t *data, uint8_t len);
 
@@ -54,6 +55,7 @@ typedef struct
 #ifdef __MASTER
 #define CMD_PWD            0x02
 #define CMD_CALC           0x03
+#define CMD_BT_NAME        0x04
 #define CMD_CALC_NOTIFY    0x80
 #endif
 #define CMD_REBOOT         0x04
@@ -64,6 +66,7 @@ static cmd_handle_t cmd_handles[] =
 #ifdef __MASTER
     {CMD_PWD, process_param_pwd},
     {CMD_CALC, process_param_calc},
+    {CMD_BT_NAME, process_param_bt_name},
 #endif
     {CMD_REBOOT, process_reboot},
 };
@@ -90,6 +93,7 @@ typedef struct
 #define IS_CALC_TYPE_VALID(type)            ((CALC_PWD == (type)) || (CALC_ALTIMETER == (type)))
 #define IS_ACTION_VALID(action)             ((0x01 == action) || (0x02 == action))
 #define IS_TOTAL_FLOOR_VALID(floor)         (floor > 0)
+#define IS_BT_NAME_LEN_VALID(len)           ((len > 0) && (len <= BT_NAME_MAX_LEN))
 
 #pragma pack(1)
 typedef struct
@@ -98,7 +102,6 @@ typedef struct
     uint8_t id_elev;
     char start_floor;
     uint8_t total_floor;
-    uint8_t bt_name[BT_NAME_LEN];
     calc_type_t calc_type;
 } msg_param_t;
 
@@ -114,6 +117,12 @@ typedef struct
     char start_floor;
     char end_floor;
 } msg_calc_t;
+
+typedef struct
+{
+    uint8_t len;
+    uint8_t bt_name[BT_NAME_MAX_LEN];
+} msg_bt_name_t;
 
 typedef struct
 {
@@ -229,8 +238,6 @@ static void process_param_set(const uint8_t *data, uint8_t len)
             goto END;
         }
         param.id_board = 0x01;
-
-        memcpy(param.bt_name, msg->bt_name, BT_NAME_LEN);
 #endif
 
 #ifdef __EXPAND
@@ -393,6 +400,41 @@ static void process_param_calc(const uint8_t *data, uint8_t len)
     {
         msg_calc_t *calc = (msg_calc_t *)data;
         altimeter_calc_run((calc_action_t)(calc->action), calc->start_floor, calc->end_floor);
+    }
+}
+
+/**
+ * @brief process bluetooth name
+ * @param data - bluetooth name
+ * @param len - data length
+ */
+static void process_param_bt_name(const uint8_t *data, uint8_t len)
+{
+    param_status_t status = SUCCESS;
+    if (len <= sizeof(msg_bt_name_t))
+    {
+        msg_bt_name_t *name = (msg_bt_name_t *)data;
+        if (IS_BT_NAME_LEN_VALID(name->len))
+        {
+            if (!param_store_bt_name(name->len, name->bt_name))
+            {
+                status = OPERATION_FAIL;
+            }
+        }
+        else
+        {
+            status = INVALID_PARAM;
+        }
+    }
+    else
+    {
+        status = OPERATION_FAIL;
+    }
+
+    param_reply(CMD_BT_NAME, status);
+    if (SUCCESS == status)
+    {
+        /** TODO: set bt name */
     }
 }
 

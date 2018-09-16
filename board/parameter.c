@@ -54,6 +54,7 @@ bool param_init(void)
             return FALSE;
         }
         param_setted = (0 == memcmp(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN));
+        flash_map.parameters.bt_name[BT_NAME_MAX_LEN] = '\0';
         TRACE("parameter status(%d)\r\n", param_setted);
         return TRUE;
     }
@@ -90,6 +91,15 @@ bool param_store_floor_height(uint16_t height)
 {
     uint32_t offset = OFFSET_OF(flash_map_t, parameters.floor_height);
     return fm_write(PARAM_START_ADDRESS + offset, (uint8_t *)&height, sizeof(uint16_t));
+}
+
+bool param_store_bt_name(uint8_t len, const uint8_t *name)
+{
+    uint8_t bt_name[BT_NAME_MAX_LEN + 1];
+    memset(bt_name, 0, BT_NAME_MAX_LEN + 1);
+    memcpy(bt_name, name, len);
+    uint32_t offset = OFFSET_OF(flash_map_t, parameters.bt_name);
+    return fm_write(PARAM_START_ADDRESS + offset, bt_name, len + 1);
 }
 #endif
 
