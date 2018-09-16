@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>1057635711</fileChecksum>
+  <fileChecksum>2685709601</fileChecksum>
   <configuration>
     <name>expand</name>
     <outputs>
@@ -1829,6 +1829,8 @@
       <file>$PROJ_DIR$\platform\stm32f10x\inc\stm32f10x_map.h</file>
       <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_flash.c</file>
       <file>$PROJ_DIR$\platform\stm32f10x\src\stm32f10x_systick.c</file>
+      <file>$PROJ_DIR$\board\bluetooth.h</file>
+      <file>$PROJ_DIR$\board\bluetooth.c</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\board\license.c</name>
@@ -3174,6 +3176,10 @@
         </tool>
       </inputs>
     </file>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>ILINK</tool>
+    </forcedrebuild>
   </configuration>
 </project>
 

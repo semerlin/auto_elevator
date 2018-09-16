@@ -1949,6 +1949,12 @@
       <name>$PROJ_DIR$\board\application.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\bluetooth.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\bluetooth.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\board.c</name>
     </file>
     <file>
