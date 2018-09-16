@@ -54,7 +54,9 @@ bool param_init(void)
             return FALSE;
         }
         param_setted = (0 == memcmp(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN));
+#ifdef __MASTER
         flash_map.parameters.bt_name[BT_NAME_MAX_LEN] = '\0';
+#endif
         TRACE("parameter status(%d)\r\n", param_setted);
         return TRUE;
     }

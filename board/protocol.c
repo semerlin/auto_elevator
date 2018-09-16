@@ -14,6 +14,7 @@
 #include "dbgserial.h"
 #include "stm32f10x_cfg.h"
 #include "config.h"
+#include "bluetooth.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
