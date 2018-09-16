@@ -17,6 +17,7 @@
 #define DUMP_FLOORMAP           1
 #define DUMP_BOARDMAP           1
 #define DUMP_PROTOCOL           1
+#define DUMP_BT                 1
 
 #define LOOP_BACK_TEST          0
 #define USE_SPEED_100K          1

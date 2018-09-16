@@ -172,8 +172,9 @@ static void param_reply(uint8_t cmd, uint8_t status)
  * @param data - data to analyze
  * @param len - data length
  */
-bool process_param_data(const uint8_t *data, uint8_t len)
+bool process_param_data(const uint8_t *data, uint8_t len, void *args)
 {
+    UNUSED(args);
     if (PARAM_HEAD != data[0])
     {
         return FALSE;

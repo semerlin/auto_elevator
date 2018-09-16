@@ -13,9 +13,15 @@
 
 BEGIN_DECLS
 
+typedef enum
+{
+    ROBOT_WN,
+    ROBOT_BT
+} robot_wn_type_t;
+
 typedef void (*process_robot_cb)(const uint8_t *data, uint8_t len);
-bool process_robot_data(const uint8_t *data, uint8_t len);
-void notify_arrive(char floor);
+bool process_robot_data(const uint8_t *data, uint8_t len, void *pargs);
+void notify_arrive(char floor, void *pargs);
 void register_arrive_cb(process_robot_cb cb);
 
 END_DECLS

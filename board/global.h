@@ -16,6 +16,7 @@
 #define ROBOT_PRIORITY               (tskIDLE_PRIORITY + 1)
 #define ALTIMETER_PRIORITY           (tskIDLE_PRIORITY + 4)
 #define ALTIMETER_CALC_PRIORITY      (tskIDLE_PRIORITY + 3)
+#define BLUETOOTH_PRIORITY           (tskIDLE_PRIORITY + 4)
 #endif
 #define LICENSE_PRIORITY             (tskIDLE_PRIORITY + 1)
 #define LED_MONITOR_PRIORITY         (tskIDLE_PRIORITY + 2)
@@ -29,6 +30,7 @@
 #define ROBOT_STACK_SIZE             (configMINIMAL_STACK_SIZE)
 #define ALTIMETER_STACK_SIZE         (configMINIMAL_STACK_SIZE * 2)
 #define ALTIMETER_CALC_STACK_SIZE    (configMINIMAL_STACK_SIZE)
+#define BLUETOOTH_STACK_SIZE         (configMINIMAL_STACK_SIZE)
 #endif
 #define LICENSE_STACK_SIZE           (configMINIMAL_STACK_SIZE)
 #define LED_MONITOR_STACK_SIZE       (configMINIMAL_STACK_SIZE)

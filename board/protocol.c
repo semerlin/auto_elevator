@@ -14,13 +14,12 @@
 #include "dbgserial.h"
 #include "stm32f10x_cfg.h"
 #include "config.h"
-#include "bluetooth.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl]"
 
 
-typedef bool (*ptl_process)(const uint8_t *data, uint8_t len);
+typedef bool (*ptl_process)(const uint8_t *data, uint8_t len, void *args);
 static ptl_process ptls[] =
 {
 #ifdef __MASTER
@@ -33,6 +32,7 @@ static ptl_process ptls[] =
 /* serial handle */
 static serial *g_serial = NULL;
 
+#if DUMP_PROTOCOL
 /**
  * @brief dump message
  * @param data - message to dump
@@ -57,6 +57,7 @@ static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
     dbg_putchar('\r');
     dbg_putchar('\n');
 }
+#endif
 
 /**
  * @brief send protocol data
@@ -84,6 +85,9 @@ static void vProtocol(void *pvParameters)
     uint8_t *pdata = recv_data;
     char data = 0;
     uint8_t len = 0;
+#ifdef __MASTER
+    robot_wn_type_t wn_type = ROBOT_WN;
+#endif
     for (;;)
     {
         len = 0;
@@ -107,10 +111,17 @@ static void vProtocol(void *pvParameters)
 #endif
             for (uint8_t index = 0; index < sizeof(ptls) / sizeof(ptls[0]); ++index)
             {
-                if (ptls[index](recv_data, len))
+#ifdef __MASTER
+                if (ptls[index](recv_data, len, &wn_type))
                 {
                     break;
                 }
+#else
+                if (ptls[index](recv_data, len, NULL))
+                {
+                    break;
+                }
+#endif
             }
         }
     }

@@ -16,6 +16,7 @@
 #include "robot.h"
 #include "floormap.h"
 #include "elevator.h"
+#include "bluetooth.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_robot]"
@@ -62,21 +63,21 @@ typedef union
     } _status;
 } elev_status;
 
-static void process_elev_apply(const uint8_t *data, uint8_t len);
-static void process_elev_release(const uint8_t *data, uint8_t len);
-static void process_elev_checkin(const uint8_t *data, uint8_t len);
-static void process_elev_inquire(const uint8_t *data, uint8_t len);
-static void process_elev_door_open(const uint8_t *data, uint8_t len);
-static void process_elev_door_close(const uint8_t *data, uint8_t len);
-static void process_elev_arrive(const uint8_t *data, uint8_t len);
-static void process_elev_bt_name(const uint8_t *data, uint8_t len);
-static void notify_busy(uint8_t id);
+static void process_elev_apply(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_release(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_checkin(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_inquire(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_door_open(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_door_close(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_arrive(const uint8_t *data, uint8_t len, void *pargs);
+static void process_elev_bt_name(const uint8_t *data, uint8_t len, void *pargs);
+static void notify_busy(uint8_t id, void *pargs);
 
 /* process handle */
 typedef struct
 {
     uint8_t cmd;
-    void (*process)(const uint8_t *data, uint8_t len);
+    void (*process)(const uint8_t *data, uint8_t len, void *pargs);
 } cmd_handle;
 
 /* protocol command */
@@ -140,7 +141,7 @@ static bool sum_check(const uint8_t *data, uint8_t len)
  * @param data - data to analyze
  * @param len - data length
  */
-bool process_robot_data(const uint8_t *data, uint8_t len)
+bool process_robot_data(const uint8_t *data, uint8_t len, void *pargs)
 {
     if ((ROBOT_HEAD != data[0]))
     {
@@ -203,18 +204,18 @@ bool process_robot_data(const uint8_t *data, uint8_t len)
                                 robot_monitor_reset();
                                 if (CMD_APPLY != head.cmd)
                                 {
-                                    cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
+                                    cmd_handles[i].process(payload, (uint8_t)(pdata - payload), pargs);
                                 }
                                 else
                                 {
                                     /* notify busy */
-                                    notify_busy(head.robot_id);
+                                    notify_busy(head.robot_id, pargs);
                                 }
                             }
                             else
                             {
                                 /* notify busy */
-                                notify_busy(head.robot_id);
+                                notify_busy(head.robot_id, pargs);
                             }
                         }
                         else
@@ -222,11 +223,11 @@ bool process_robot_data(const uint8_t *data, uint8_t len)
                             /* only process apply command */
                             if (CMD_APPLY == head.cmd)
                             {
-                                cmd_handles[i].process(payload, (uint8_t)(pdata - payload));
+                                cmd_handles[i].process(payload, (uint8_t)(pdata - payload), pargs);
                             }
                             else
                             {
-                                notify_busy(head.robot_id);
+                                notify_busy(head.robot_id, pargs);
                             }
                         }
                     }
@@ -244,7 +245,7 @@ bool process_robot_data(const uint8_t *data, uint8_t len)
  * @param data - data to analyze
  * @param len - data length
  */
-static void send_data(const uint8_t *data, uint8_t len)
+static void send_data(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t buffer[33];
     uint8_t *pdata = buffer;
@@ -286,7 +287,15 @@ static void send_data(const uint8_t *data, uint8_t len)
     pdata[2] = ROBOT_TAIL;
     pdata += 3;
 
-    ptl_send_data(buffer, pdata - buffer);
+    robot_wn_type_t *type = pargs;
+    if (ROBOT_BT == *type)
+    {
+        bt_send_data(buffer, pdata - buffer);
+    }
+    else
+    {
+        ptl_send_data(buffer, pdata - buffer);
+    }
 }
 
 /**
@@ -294,7 +303,7 @@ static void send_data(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_apply(const uint8_t *data, uint8_t len)
+static void process_elev_apply(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t payload[20];
     payload[0] = board_parameter.id_ctl;
@@ -320,7 +329,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
     status._status.state = elev_state_work();
     payload[6] = status.status;
 
-    send_data(payload, 7);
+    send_data(payload, 7, pargs);
     robot_id_set(data[1]);
     elevator_set_state_work(work_robot);
     robot_monitor_start();
@@ -331,7 +340,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_release(const uint8_t *data, uint8_t len)
+static void process_elev_release(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t payload[7];
     payload[0] = board_parameter.id_ctl;
@@ -340,7 +349,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
     payload[3] = CMD_RELEASE_REPLY;
     payload[4] = data[4];
     payload[5] = 0x00;
-    send_data(payload, 6);
+    send_data(payload, 6, pargs);
 
     elev_hold_open(FALSE);
     robot_id_reset();
@@ -354,7 +363,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_checkin(const uint8_t *data, uint8_t len)
+static void process_elev_checkin(const uint8_t *data, uint8_t len, void *pargs)
 {
     char dis_floor = floormap_phy_to_dis(data[4]);
     if (0 != dis_floor)
@@ -368,7 +377,7 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
         payload[4] = data[4];
         payload[5] = data[5];
 
-        send_data(payload, 6);
+        send_data(payload, 6, pargs);
 
         robot_checkin_set(data[4]);
         /* goto specified floor */
@@ -388,7 +397,7 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_inquire(const uint8_t *data, uint8_t len)
+static void process_elev_inquire(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t payload[8];
     payload[0] = board_parameter.id_ctl;
@@ -414,7 +423,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
     status._status.state = elev_state_work();
     payload[6] = status.status;
 
-    send_data(payload, 7);
+    send_data(payload, 7, pargs);
 }
 
 /**
@@ -422,7 +431,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_door_open(const uint8_t *data, uint8_t len)
+static void process_elev_door_open(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t payload[6];
     payload[0] = board_parameter.id_ctl;
@@ -430,7 +439,7 @@ static void process_elev_door_open(const uint8_t *data, uint8_t len)
     payload[2] = data[1];
     payload[3] = CMD_DOOR_OPEN_REPLY;
 
-    send_data(payload, 4);
+    send_data(payload, 4, pargs);
 
     /* open */
     elev_hold_open(TRUE);
@@ -442,7 +451,7 @@ static void process_elev_door_open(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_door_close(const uint8_t *data, uint8_t len)
+static void process_elev_door_close(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t payload[6];
     payload[0] = board_parameter.id_ctl;
@@ -450,7 +459,7 @@ static void process_elev_door_close(const uint8_t *data, uint8_t len)
     payload[2] = data[1];
     payload[3] = CMD_DOOR_CLOSE_REPLY;
 
-    send_data(payload, 4);
+    send_data(payload, 4, pargs);
 
     /* release */
     elev_hold_open(FALSE);
@@ -461,8 +470,9 @@ static void process_elev_door_close(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_arrive(const uint8_t *data, uint8_t len)
+static void process_elev_arrive(const uint8_t *data, uint8_t len, void *pargs)
 {
+    UNUSED(pargs);
     if (NULL != arrive_cb)
     {
         arrive_cb(data, len);
@@ -474,7 +484,7 @@ static void process_elev_arrive(const uint8_t *data, uint8_t len)
  * @param data - data to process
  * @param len - data length
  */
-static void process_elev_bt_name(const uint8_t *data, uint8_t len)
+static void process_elev_bt_name(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t payload[6 + BT_NAME_MAX_LEN + 1];
     memset(payload, 0, BT_NAME_MAX_LEN + 7);
@@ -486,14 +496,14 @@ static void process_elev_bt_name(const uint8_t *data, uint8_t len)
     uint8_t name_len = strlen((const char *)(board_parameter.bt_name));
     memcpy(payload + 4, board_parameter.bt_name, name_len + 1);
 
-    send_data(payload, 4 + name_len + 1);
+    send_data(payload, 4 + name_len + 1, pargs);
 }
 
 /**
  * @brief process elevator arrive
  * @param floor - arrive floor
  */
-void notify_arrive(char floor)
+void notify_arrive(char floor, void *pargs)
 {
     uint8_t payload[7];
     payload[0] = board_parameter.id_ctl;
@@ -509,13 +519,13 @@ void notify_arrive(char floor)
     status._status.state = elev_state_work();
     payload[5] = status.status;
 
-    send_data(payload, 6);
+    send_data(payload, 6, pargs);
 }
 
 /**
  * @brief process elevator busy message
  */
-static void notify_busy(uint8_t id)
+static void notify_busy(uint8_t id, void *pargs)
 {
     uint8_t payload[8];
     payload[0] = board_parameter.id_ctl;
@@ -541,7 +551,7 @@ static void notify_busy(uint8_t id)
     status._status.state = elev_state_work();
     payload[6] = status.status;
 
-    send_data(payload, 7);
+    send_data(payload, 7, pargs);
 }
 
 /**

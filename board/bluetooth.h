@@ -13,9 +13,9 @@
 
 BEGIN_DECLS
 
+
 bool bt_init(void);
-bool bt_set_name(const char *name);
-bool bt_is_connected(void);
+void bt_send_data(const uint8_t *data, uint8_t len);
 
 END_DECLS
 

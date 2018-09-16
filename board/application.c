@@ -5,6 +5,7 @@
 *
 * See the COPYING file for the terms of usage and distribution.
 */
+#include <string.h>
 #include "stm32f10x_cfg.h"
 #include "global.h"
 #include "FreeRTOS.h"
@@ -31,7 +32,7 @@
 #define __TRACE_MODULE  "[app]"
 
 #ifdef __MASTER
-#define VERSION  ("v1.1.0.5")
+#define VERSION  ("v1.1.1.5")
 #else
 #define VERSION  ("v1.1.0.0")
 #endif
@@ -71,7 +72,12 @@ void ApplicationStartup()
         {
             board_parameter.floor_height = DEFAULT_FLOOR_HEIGHT;
         }
-        /** TODO: get bluetooth name from cc2540 */
+
+        if ((0xff == board_parameter.bt_name[0]) ||
+            ('\0' == board_parameter.bt_name[0]))
+        {
+            strcpy((char *)board_parameter.bt_name, "HC-08");
+        }
 #endif
         keyctl_init();
 #ifdef __MASTER

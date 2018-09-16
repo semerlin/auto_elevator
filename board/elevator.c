@@ -100,6 +100,7 @@ static void vElevArrive(void *pvParameters)
 {
     uint8_t err_cnt = 0;
     char floor = 0;
+    robot_wn_type_t wn_type = ROBOT_WN;
     for (;;)
     {
         err_cnt = 0;
@@ -116,7 +117,7 @@ static void vElevArrive(void *pvParameters)
                         robot_checkin_reset();
                         break;
                     }
-                    notify_arrive(floor);
+                    notify_arrive(floor, &wn_type);
                 }
             }
         }
