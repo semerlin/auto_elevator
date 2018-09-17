@@ -27,7 +27,7 @@ typedef struct
     uint8_t id_ctl;
     uint8_t id_elev;
     uint8_t id_board; /** fixed to 0x01 */
-    char start_floor;
+    uint8_t start_floor;
     uint8_t total_floor;
     uint8_t calc_type;
     uint8_t bt_name[BT_NAME_MAX_LEN + 1];
@@ -39,7 +39,7 @@ typedef struct
 typedef struct
 {
     uint8_t id_board; /** valid range is 0x02-0xff */
-    char start_floor;
+    uint8_t start_floor;
 } parameters_t;
 #endif
 

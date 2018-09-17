@@ -148,33 +148,22 @@ bool boardmap_add(uint8_t id_board, uint8_t start_key, char start_floor,
  * @param floor - floor number
  * @return key number, 0xff means error happened
  */
-uint8_t boardmap_floor_to_key(char floor)
+uint8_t boardmap_floor_to_key(uint8_t floor)
 {
     if (0 == floor)
     {
         return INVALID_KEY;
     }
 
-    char start_floor, end_floor;
+    uint8_t start_floor, end_floor;
     uint8_t key = INVALID_KEY;
     for (uint8_t i = 0; i < MAX_BOARD_NUM; ++i)
     {
         start_floor = boardmaps[i].start_floor;
         end_floor = boardmaps[i].start_floor + boardmaps[i].floor_num;
-        if ((start_floor < 0) && (end_floor >= 0))
-        {
-            end_floor ++;
-        }
         if ((floor >= start_floor) && (floor <= end_floor))
         {
-            if ((floor > 0) && (start_floor < 0))
-            {
-                key = floor - start_floor - 1;
-            }
-            else
-            {
-                key = floor - start_floor;
-            }
+            key = floor - start_floor;
             key += boardmaps[i].start_key;
             break;
         }
@@ -188,9 +177,9 @@ uint8_t boardmap_floor_to_key(char floor)
  * @param floor - floor number
  * @return floor number, 0x7f means error happened
  */
-char boardmap_key_to_floor(uint8_t id_board, uint8_t key)
+uint8_t boardmap_key_to_floor(uint8_t id_board, uint8_t key)
 {
-    char floor = INVALID_FLOOR;
+    uint8_t floor = INVALID_FLOOR;
     for (int i = 0; i < MAX_BOARD_NUM; ++i)
     {
         if (id_board == boardmaps[i].id_board)
@@ -212,7 +201,7 @@ char boardmap_key_to_floor(uint8_t id_board, uint8_t key)
  * @param floor - floor number
  * @return board id, 0xff means error happened
  */
-uint8_t boardmap_get_floor_board_id(char floor)
+uint8_t boardmap_get_floor_board_id(uint8_t floor)
 {
     if (0 == floor)
     {
@@ -220,15 +209,11 @@ uint8_t boardmap_get_floor_board_id(char floor)
     }
 
     uint8_t id_board = ID_BOARD_INVALID;
-    char start_floor, end_floor;
+    uint8_t start_floor, end_floor;
     for (uint8_t i = 0; i < MAX_BOARD_NUM; ++i)
     {
         start_floor = boardmaps[i].start_floor;
         end_floor = boardmaps[i].start_floor + boardmaps[i].floor_num;
-        if ((start_floor < 0) && (end_floor >= 0))
-        {
-            end_floor ++;
-        }
         if ((floor >= start_floor) && (floor <= end_floor))
         {
             id_board = boardmaps[i].id_board;

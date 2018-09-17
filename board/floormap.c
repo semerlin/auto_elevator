@@ -21,7 +21,7 @@
 
 
 extern parameters_t board_parameter;
-static char floormap[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
+static uint8_t floormap[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
 
 #if DUMP_FLOORMAP
 /**
@@ -52,21 +52,14 @@ void floormap_update(void)
     TRACE("updating floormap...\r\n");
 
     /** fill floormap */
-    char *pfloor = floormap;
-    char delta = 0;
+    uint8_t *pfloor = floormap;
     for (uint8_t i = 0; i < MAX_BOARD_NUM; ++i)
     {
-        delta = 0;
         if (0 != boardmaps[i].start_floor)
         {
             for (uint8_t j = 0; j < boardmaps[i].floor_num; ++j)
             {
-                *pfloor = boardmaps[i].start_floor + j + delta;
-                if (0 == *pfloor)
-                {
-                    delta = 1;
-                    *pfloor += 1;
-                }
+                *pfloor = boardmaps[i].start_floor + j;
                 pfloor ++;
             }
         }
@@ -75,34 +68,6 @@ void floormap_update(void)
 #if DUMP_FLOORMAP
     dump_message((uint8_t *)floormap, MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1));
 #endif
-}
-
-/**
- * @brief convert display floor to physical floor
- * @param floor - display floor
- * @return physical floor
- */
-uint8_t floormap_dis_to_phy(char floor)
-{
-    for (uint16_t i = 0; i < MAX_FLOOR_NUM +
-         MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
-    {
-        if (floor == floormap[i])
-        {
-            return i + 1;
-        }
-    }
-    return 0;
-}
-
-/**
- * @brief convert physical floor to display floor
- * @param floor - physical floor
- * @return display floor
- */
-char floormap_phy_to_dis(uint8_t floor)
-{
-    return floormap[floor - 1];
 }
 
 /**

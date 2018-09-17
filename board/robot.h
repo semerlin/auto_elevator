@@ -13,7 +13,7 @@
 
 BEGIN_DECLS
 
-#define DEFAULT_CHECKIN   0xf7
+#define DEFAULT_CHECKIN   0
 
 void robot_init(void);
 void robot_id_set(uint8_t id);

@@ -21,9 +21,9 @@ typedef enum
 
 
 bool altimeter_calc_init(void);
-bool altimeter_calc_run(calc_action_t action, char start_floor, char end_floor);
+bool altimeter_calc_run(calc_action_t action);
 bool altimeter_is_calculating(void);
-void altimeter_calc_once(char floor);
+void altimeter_calc_once(uint8_t floor);
 uint16_t alitmeter_floor_height(void);
 
 END_DECLS

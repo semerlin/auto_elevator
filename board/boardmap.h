@@ -12,7 +12,7 @@
 
 BEGIN_DECLS
 
-#define INVALID_FLOOR    125
+#define INVALID_FLOOR    0
 #define INVALID_KEY      0xff
 
 #define ID_BOARD_MASTER          0x01
@@ -35,7 +35,7 @@ typedef struct
     /** 0 means empty */
     uint8_t id_board;
     uint8_t start_key;
-    char start_floor;
+    uint8_t start_floor;
     uint8_t floor_num;
     uint16_t led_status;
 } boardmap_t;
@@ -43,9 +43,9 @@ extern boardmap_t boardmaps[MAX_BOARD_NUM];
 
 bool boardmap_add(uint8_t id_board, uint8_t start_key, char start_floor,
                   uint8_t floor_num, uint16_t led_status);
-uint8_t boardmap_floor_to_key(char floor);
-char boardmap_key_to_floor(uint8_t id_board, uint8_t key);
-uint8_t boardmap_get_floor_board_id(char floor);
+uint8_t boardmap_floor_to_key(uint8_t floor);
+uint8_t boardmap_key_to_floor(uint8_t id_board, uint8_t key);
+uint8_t boardmap_get_floor_board_id(uint8_t floor);
 void boardmap_update_led_status(uint8_t id_board, uint16_t led_status);
 uint16_t boardmap_get_led_status(uint8_t id_board);
 #ifdef __MASTER

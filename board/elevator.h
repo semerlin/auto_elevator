@@ -31,15 +31,14 @@ typedef enum
 
 
 bool elev_init(void);
-void elev_go(char floor);
+void elev_go(uint8_t floor);
 #ifdef __MASTER
-void elev_arrived(char floor);
+void elev_arrived(uint8_t floor);
 void elev_hold_open(bool flag);
 char elev_floor(void);
 void elev_decrease(void);
 void elev_increase(void);
-void elev_set_floor(char floor);
-void elev_set_phy_floor(uint8_t cur_floor, uint8_t prev_floor);
+void elev_set_floor(uint8_t cur_floor, uint8_t prev_floor);
 elev_run_state elev_state_run(void);
 elev_work_state elev_state_work(void);
 void elevator_set_state_work(elev_work_state state);

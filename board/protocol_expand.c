@@ -199,7 +199,6 @@ static void process_board_register(const uint8_t *data, uint8_t len)
     else
     {
         floormap_update();
-        elevator_floor_update();
         expand_ptl_reply(CMD_BOARD_REGISTER, SUCCESS, &pmsg->id_board, 1);
     }
 }
@@ -229,7 +228,7 @@ static void process_elev_led(const uint8_t *data, uint8_t len)
  * @param[in] id_board: expand board id
  * @param[in] floor: floot to go
  */
-void expand_elev_go(uint8_t id_board, char floor)
+void expand_elev_go(uint8_t id_board, uint8_t floor)
 {
     uint8_t data[2] = {id_board, floor};
     expand_ptl_send(CMD_ELEV_GO, data, 2);
@@ -302,7 +301,7 @@ static void process_reboot(const uint8_t *data, uint8_t len)
  * @param[in] id_board: expand board id
  * @param[in] start_floor: expand board start floor
  */
-void register_board(uint8_t id_board, char start_floor)
+void register_board(uint8_t id_board, uint8_t start_floor)
 {
     msg_board_register_t msg;
     msg.id_board = id_board;

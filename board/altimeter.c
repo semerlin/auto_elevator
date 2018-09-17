@@ -183,7 +183,7 @@ static void vAltimeter(void *pvParameters)
                     if (floor_cur != floor_prev)
                     {
                         /** floor changed */
-                        elev_set_phy_floor(floor_cur, floor_prev);
+                        elev_set_floor(floor_cur, floor_prev);
                         floor_prev = floor_cur;
                     }
                 }

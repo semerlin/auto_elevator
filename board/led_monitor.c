@@ -116,7 +116,7 @@ static void push_pwd_node(const pwd_node *node)
                     return ;
                 }
             }
-            elev_set_floor(1);
+            elev_set_floor(1, 0);
         }
     }
 }
@@ -134,15 +134,15 @@ static void elev_pwd_go(char floor)
 
 static void vLedWorkMonitor(void *pvParameters)
 {
-    char floor = 0;
+    uint8_t floor = 0;
     for (;;)
     {
         /** check elevator status */
         if (work_robot == elev_state_work())
         {
-            if (DEFAULT_CHECKIN != robot_checkin_get())
+            floor = robot_checkin_get();
+            if (DEFAULT_CHECKIN != floor)
             {
-                floor = floormap_phy_to_dis(robot_checkin_get());
                 if (!is_led_on(floor) && (floor != elev_floor()))
                 {
                     if (CALC_PWD == board_parameter.calc_type)

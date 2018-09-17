@@ -109,7 +109,7 @@ uint16_t led_status_get(void)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_led_on(char floor)
+bool is_led_on(uint8_t floor)
 {
     uint8_t key = INVALID_KEY;
     uint16_t status = 0;
@@ -139,9 +139,9 @@ bool is_led_on(char floor)
  * @param[in] floor: floor to process
  * @return floot in boardmap index
  */
-static uint8_t get_floor_map_index(char floor)
+static uint8_t get_floor_map_index(uint8_t floor)
 {
-    char start_floor, end_floor;
+    uint8_t start_floor, end_floor;
     uint8_t i = 0;
     for (; i < MAX_BOARD_NUM; ++i)
     {
@@ -149,10 +149,6 @@ static uint8_t get_floor_map_index(char floor)
         {
             start_floor = boardmaps[i].start_floor;
             end_floor = boardmaps[i].start_floor + boardmaps[i].floor_num;
-            if ((start_floor < 0) && (end_floor >= 0))
-            {
-                end_floor ++;
-            }
 
             if ((floor >= start_floor) && (floor <= end_floor))
             {
@@ -168,7 +164,7 @@ static uint8_t get_floor_map_index(char floor)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_down_led_on(char floor)
+bool is_down_led_on(uint8_t floor)
 {
     uint8_t index = get_floor_map_index(floor);
     if (index >= MAX_BOARD_NUM)
@@ -180,15 +176,12 @@ bool is_down_led_on(char floor)
     uint16_t *pdata = led_status;
     for (uint8_t i = 0; i <= index; ++i)
     {
-        if (0 != boardmaps[i].start_floor)
+        *pdata = boardmaps[i].led_status;
+        if (ID_BOARD_MASTER == boardmaps[i].id_board)
         {
-            *pdata = boardmaps[i].led_status;
-            if (ID_BOARD_MASTER == boardmaps[i].id_board)
-            {
-                CLEAR_OPEN_LED(*pdata);
-            }
-            pdata++;
+            CLEAR_OPEN_LED(*pdata);
         }
+        pdata++;
     }
 
     /** check lower index led status */
@@ -220,7 +213,7 @@ bool is_down_led_on(char floor)
  * @param floor - specified floor
  * @return floor led on/off status
  */
-bool is_up_led_on(char floor)
+bool is_up_led_on(uint8_t floor)
 {
     uint8_t index = get_floor_map_index(floor);
     if (index >= MAX_BOARD_NUM)
@@ -232,15 +225,12 @@ bool is_up_led_on(char floor)
     uint16_t *pdata = led_status;
     for (uint8_t i = index; i < MAX_BOARD_NUM; ++i)
     {
-        if (0 != boardmaps[i].start_floor)
+        *pdata = boardmaps[i].led_status;
+        if (ID_BOARD_MASTER == boardmaps[i].id_board)
         {
-            *pdata = boardmaps[i].led_status;
-            if (ID_BOARD_MASTER == boardmaps[i].id_board)
-            {
-                CLEAR_OPEN_LED(*pdata);
-            }
-            pdata++;
+            CLEAR_OPEN_LED(*pdata);
         }
+        pdata++;
     }
 
     /** check upper index led status */

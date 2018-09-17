@@ -32,9 +32,9 @@
 #define __TRACE_MODULE  "[app]"
 
 #ifdef __MASTER
-#define VERSION  ("v1.1.1.5")
+#define VERSION  ("v1.1.2.5")
 #else
-#define VERSION  ("v1.1.0.0")
+#define VERSION  ("v1.1.1.0")
 #endif
 
 parameters_t board_parameter;

@@ -94,13 +94,14 @@ typedef struct
 #define IS_ACTION_VALID(action)             ((0x01 == action) || (0x02 == action))
 #define IS_TOTAL_FLOOR_VALID(floor)         (floor > 0)
 #define IS_BT_NAME_LEN_VALID(len)           ((len > 0) && (len <= BT_NAME_MAX_LEN))
+#define IS_FLOOR_VALID(floor)               (floor > 0)
 
 #pragma pack(1)
 typedef struct
 {
     uint8_t id_ctl;
     uint8_t id_elev;
-    char start_floor;
+    uint8_t start_floor;
     uint8_t total_floor;
     calc_type_t calc_type;
 } msg_param_t;
@@ -114,8 +115,6 @@ typedef struct
 typedef struct
 {
     uint8_t action; /** 0x01: start 0x02: stop */
-    char start_floor;
-    char end_floor;
 } msg_calc_t;
 
 typedef struct
@@ -139,7 +138,7 @@ typedef struct
 {
     /** valid range id 0x02-0xfe */
     uint8_t id_board;
-    char start_floor;
+    uint8_t start_floor;
 } msg_param_t;
 #pragma pack()
 
@@ -227,11 +226,18 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         param.id_ctl = msg->id_ctl;
         param.id_elev = msg->id_elev;
         param.total_floor = msg->total_floor;
+        if (!IS_FLOOR_VALID(msg->start_floor))
+        {
+            status = INVALID_PARAM;
+            goto END;
+        }
+
         if (!IS_TOTAL_FLOOR_VALID(msg->total_floor))
         {
             status = INVALID_PARAM;
             goto END;
         }
+
         param.calc_type = msg->calc_type;
         if (!IS_CALC_TYPE_VALID(msg->calc_type))
         {
@@ -400,7 +406,7 @@ static void process_param_calc(const uint8_t *data, uint8_t len)
     if (SUCCESS == status)
     {
         msg_calc_t *calc = (msg_calc_t *)data;
-        altimeter_calc_run((calc_action_t)(calc->action), calc->start_floor, calc->end_floor);
+        altimeter_calc_run((calc_action_t)(calc->action));
     }
 }
 

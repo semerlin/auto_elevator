@@ -21,7 +21,7 @@ typedef enum
 
 typedef void (*process_robot_cb)(const uint8_t *data, uint8_t len);
 bool process_robot_data(const uint8_t *data, uint8_t len, void *pargs);
-void notify_arrive(char floor, void *pargs);
+void notify_arrive(uint8_t floor, void *pargs);
 void register_arrive_cb(process_robot_cb cb);
 
 END_DECLS

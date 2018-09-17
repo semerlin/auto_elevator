@@ -14,13 +14,13 @@ BEGIN_DECLS
 
 bool process_expand_data(const uint8_t *data, uint8_t len);
 #ifdef __MASTER
-void expand_elev_go(uint8_t id_board, char floor);
+void expand_elev_go(uint8_t id_board, uint8_t floor);
 void expand_reboot(uint8_t id_board);
 #endif
 #ifdef __EXPAND
 typedef void (*register_cb_t)(uint8_t *data, uint8_t len);
 void set_register_cb(register_cb_t register_cb);
-void register_board(uint8_t id_board, char start_floor);
+void register_board(uint8_t id_board, uint8_t start_floor);
 void notify_led_status(uint8_t id_board, uint16_t led_status);
 #endif
 

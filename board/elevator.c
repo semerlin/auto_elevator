@@ -30,7 +30,6 @@ extern parameters_t board_parameter;
 #ifdef __MASTER
 /* elevator current floor */
 static char elev_cur_floor = 1;
-static char elev_cur_phy_floor = 1;
 
 static bool hold_door = FALSE;
 static uint8_t hold_cnt = 0;
@@ -87,18 +86,19 @@ static void vElevControl(void *pvParameters)
             keyctl_press(key);
             vTaskDelay(500 / portTICK_PERIOD_MS);
             keyctl_release(key);
+#ifdef __MASTER
             vTaskDelay(100 / portTICK_PERIOD_MS);
-            uint8_t phy_floor = robot_checkin_get();
-            if (DEFAULT_CHECKIN != phy_floor)
+            uint8_t checkin_floor = robot_checkin_get();
+            if (DEFAULT_CHECKIN != checkin_floor)
             {
-                char dis_floor = floormap_phy_to_dis(phy_floor);
-                if ((dis_floor == elev_floor()) &&
-                    (!is_led_on(dis_floor)))
+                if ((checkin_floor == elev_cur_floor) &&
+                    (!is_led_on(checkin_floor)))
                 {
                     /* already arrive */
-                    elev_arrived(dis_floor);
+                    elev_arrived(checkin_floor);
                 }
             }
+#endif
         }
     }
 }
@@ -176,7 +176,7 @@ bool elev_init(void)
  * @brief elevator going floor
  * @param floor - going floor
  */
-void elev_go(char floor)
+void elev_go(uint8_t floor)
 {
     TRACE("elevator go floor: %d\r\n", floor);
     uint8_t id_board = boardmap_get_floor_board_id(floor);
@@ -202,11 +202,11 @@ void elev_go(char floor)
  * @brief indicate elevator arrive
  * @param floor - arrive floor
  */
-void elev_arrived(char floor)
+void elev_arrived(uint8_t floor)
 {
     if (work_robot == work_state)
     {
-        if (robot_is_checkin(floormap_dis_to_phy(floor)))
+        if (robot_is_checkin(floor))
         {
             if (elev_cur_floor == floor)
             {
@@ -249,83 +249,14 @@ void elev_hold_open(bool flag)
 }
 
 /**
- * @brief decrease current floor
- */
-void elev_decrease(void)
-{
-    if (elev_cur_phy_floor > 1)
-    {
-        elev_cur_phy_floor --;
-    }
-    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);
-    TRACE("decrease floor: %d\r\n", elev_cur_floor);
-    if (is_down_led_on(elev_cur_floor))
-    {
-        run_state = run_down;
-    }
-    else if (is_up_led_on(elev_cur_floor))
-    {
-        run_state = run_up;
-    }
-    else
-    {
-        run_state = run_stop;
-    }
-    /** check led status */
-    if (!is_led_on(elev_cur_floor))
-    {
-        elev_arrived(elev_cur_floor);
-    }
-}
-
-/**
- * @brief increase current floor
- */
-void elev_increase(void)
-{
-    elev_cur_phy_floor ++;
-    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);
-    TRACE("increase floor: %d\r\n", elev_cur_floor);
-    if (is_up_led_on(elev_cur_floor))
-    {
-        run_state = run_up;
-    }
-    else if (is_down_led_on(elev_cur_floor))
-    {
-        run_state = run_down;
-    }
-    else
-    {
-        run_state = run_stop;
-    }
-    /** check led status */
-    if (!is_led_on(elev_cur_floor))
-    {
-        elev_arrived(elev_cur_floor);
-    }
-}
-
-/**
- * @brief set elevator floor
- * @param[in] floor: floor number
- */
-void elev_set_floor(char floor)
-{
-    TRACE("set elevator floor: %d\r\n", floor);
-    elev_cur_floor = floor;
-    elev_cur_phy_floor = floormap_dis_to_phy(elev_cur_floor);
-}
-
-/**
  * @brief set elevator physical floor
  * @param[in] cur_floor: current physical floor
  * @param[in] prev_floor: previous physical floor
  */
-void elev_set_phy_floor(uint8_t cur_floor, uint8_t prev_floor)
+void elev_set_floor(uint8_t cur_floor, uint8_t prev_floor)
 {
-    elev_cur_floor = floormap_phy_to_dis(cur_floor);
-    elev_cur_phy_floor = cur_floor;
-    TRACE("set elevator floor: phy = %d, dis = %d\r\n", cur_floor, elev_cur_floor);
+    elev_cur_floor = cur_floor;
+    TRACE("set elevator floor: current = %d, previous = %d\r\n", cur_floor, prev_floor);
     if (0 == prev_floor)
     {
         /** first set, perhaps after power on */
@@ -345,7 +276,39 @@ void elev_set_phy_floor(uint8_t cur_floor, uint8_t prev_floor)
         {
             run_state = run_stop;
         }
+
+        /** check led status */
+        if (!is_led_on(elev_cur_floor))
+        {
+            elev_arrived(elev_cur_floor);
+        }
     }
+}
+
+/**
+ * @brief decrease current floor
+ */
+void elev_decrease(void)
+{
+    uint8_t prev_floor = elev_cur_floor;
+    if (elev_cur_floor > 1)
+    {
+        elev_cur_floor --;
+    }
+    elev_set_floor(elev_cur_floor, prev_floor);
+}
+
+/**
+ * @brief increase current floor
+ */
+void elev_increase(void)
+{
+    uint8_t prev_floor = elev_cur_floor;
+    if (elev_cur_floor < board_parameter.total_floor)
+    {
+        elev_cur_floor ++;
+    }
+    elev_set_floor(elev_cur_floor, prev_floor);
 }
 
 /**
@@ -382,14 +345,6 @@ void elevator_set_state_work(elev_work_state state)
 char elev_floor(void)
 {
     return elev_cur_floor;
-}
-
-/**
- * @brief update elevator floor
- */
-void elevator_floor_update(void)
-{
-    elev_cur_floor = floormap_phy_to_dis(elev_cur_phy_floor);
 }
 #endif
 

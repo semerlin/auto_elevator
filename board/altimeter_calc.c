@@ -37,10 +37,9 @@ static xQueueHandle xQueueCalc = NULL;
  * @param[in ]current_floor: current floor
  * @param[in] distance: distance to top
  */
-static uint16_t calc_once(char current_floor, uint32_t distance)
+static uint16_t calc_once(uint8_t current_floor, uint32_t distance)
 {
-    uint8_t current_phy_floor = floormap_dis_to_phy(current_floor);
-    uint8_t floor_num = board_parameter.total_floor - current_phy_floor;
+    uint8_t floor_num = board_parameter.total_floor - current_floor;
 
     if (0 == floor_num)
     {
@@ -56,7 +55,7 @@ static uint16_t calc_once(char current_floor, uint32_t distance)
  */
 static void vAltimeterCalc(void *pvParameters)
 {
-    char floor = 1;
+    uint8_t floor = 1;
     uint16_t heights[HEIGHT_AVERAGE_COUNT];
     memset(heights, 0, HEIGHT_AVERAGE_COUNT * sizeof(uint16_t));
     uint8_t index = 0;
@@ -123,27 +122,16 @@ bool altimeter_calc_init(void)
     return TRUE;
 }
 
-void altimeter_calc_once(char floor)
+void altimeter_calc_once(uint8_t floor)
 {
     TRACE("calculate once: %d\r\n", floor);
     xQueueOverwrite(xQueueCalc, &floor);
 }
 
-bool altimeter_calc_run(calc_action_t action, char start_floor, char end_floor)
+bool altimeter_calc_run(calc_action_t action)
 {
-    TRACE("set calculate %d-%d-%d\r\n", action, start_floor, end_floor);
+    TRACE("set calculate %d\r\n", action);
     calc_action = action;
-    char calc_start_floor, calc_end_floor;
-    if (start_floor >= end_floor)
-    {
-        calc_start_floor = end_floor;
-        calc_end_floor = start_floor;
-    }
-    else
-    {
-        calc_start_floor = start_floor;
-        calc_end_floor = end_floor;
-    }
     if (CALC_STOP == action)
     {
         TRACE("rebooting...\r\n");
@@ -151,14 +139,10 @@ bool altimeter_calc_run(calc_action_t action, char start_floor, char end_floor)
     }
     else
     {
-        while (calc_start_floor <= calc_end_floor)
+        uint8_t floor = 1;
+        while (floor <= board_parameter.total_floor)
         {
-            elev_go(calc_start_floor);
-            calc_start_floor ++;
-            if (0 == calc_start_floor)
-            {
-                calc_start_floor ++;
-            }
+            elev_go(floor);
         }
     }
     return TRUE;

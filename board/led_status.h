@@ -14,9 +14,9 @@ BEGIN_DECLS
 
 uint16_t led_status_get(void);
 #ifdef __MASTER
-bool is_led_on(char floor);
-bool is_down_led_on(char floor);
-bool is_up_led_on(char floor);
+bool is_led_on(uint8_t floor);
+bool is_down_led_on(uint8_t floor);
+bool is_up_led_on(uint8_t floor);
 #endif
 
 END_DECLS

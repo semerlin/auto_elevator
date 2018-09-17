@@ -310,7 +310,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len, void *pargs)
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
     payload[3] = CMD_APPLY_REPLY;
-    payload[4] = floormap_dis_to_phy(elev_floor());
+    payload[4] = elev_floor();
     payload[5] = data[4];
 
     elev_status status;
@@ -321,8 +321,7 @@ static void process_elev_apply(const uint8_t *data, uint8_t len, void *pargs)
     }
     else
     {
-        char dis_floor = floormap_phy_to_dis(data[5]);
-        status._status.led = (is_led_on(dis_floor) ? LED_ON : LED_OFF);
+        status._status.led = (is_led_on(data[5]) ? LED_ON : LED_OFF);
     }
     status._status.door = DOOR_ON;
     status._status.reserve = 0x00;
@@ -365,8 +364,8 @@ static void process_elev_release(const uint8_t *data, uint8_t len, void *pargs)
  */
 static void process_elev_checkin(const uint8_t *data, uint8_t len, void *pargs)
 {
-    char dis_floor = floormap_phy_to_dis(data[4]);
-    if (0 != dis_floor)
+    uint8_t floor = data[4];
+    if ((floor > 0) && (floor < board_parameter.total_floor))
     {
         /** checkin invalid floor */
         uint8_t payload[7];
@@ -379,9 +378,9 @@ static void process_elev_checkin(const uint8_t *data, uint8_t len, void *pargs)
 
         send_data(payload, 6, pargs);
 
-        robot_checkin_set(data[4]);
+        robot_checkin_set(floor);
         /* goto specified floor */
-        elev_go(dis_floor);
+        elev_go(floor);
     }
 }
 
@@ -397,7 +396,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len, void *pargs)
     payload[1] = board_parameter.id_elev;
     payload[2] = data[1];
     payload[3] = CMD_INQUIRE_REPLY;
-    payload[4] = floormap_dis_to_phy(elev_floor());
+    payload[4] = elev_floor();
     payload[5] = robot_checkin_get();
 
     elev_status status;
@@ -408,8 +407,7 @@ static void process_elev_inquire(const uint8_t *data, uint8_t len, void *pargs)
     }
     else
     {
-        char dis_floor = floormap_phy_to_dis(payload[5]);
-        status._status.led = (is_led_on(dis_floor) ? LED_ON : LED_OFF);
+        status._status.led = (is_led_on(payload[5]) ? LED_ON : LED_OFF);
     }
     status._status.door = DOOR_ON;
     status._status.reserve = 0x00;
@@ -496,14 +494,14 @@ static void process_elev_bt_name(const uint8_t *data, uint8_t len, void *pargs)
  * @brief process elevator arrive
  * @param floor - arrive floor
  */
-void notify_arrive(char floor, void *pargs)
+void notify_arrive(uint8_t floor, void *pargs)
 {
     uint8_t payload[7];
     payload[0] = board_parameter.id_ctl;
     payload[1] = board_parameter.id_elev;
     payload[2] = robot_id_get();
     payload[3] = CMD_NOTIFY_ARRIVE;
-    payload[4] = floormap_dis_to_phy(elev_floor());
+    payload[4] = elev_floor();
     elev_status status;
     status._status.dir = elev_state_run();
     status._status.led = (is_led_on(floor) ? LED_ON : LED_OFF);
@@ -525,7 +523,7 @@ static void notify_busy(uint8_t id, void *pargs)
     payload[1] = board_parameter.id_elev;
     payload[2] = id;
     payload[3] = CMD_BUSY;
-    payload[4] = floormap_dis_to_phy(elev_floor());
+    payload[4] = elev_floor();
     payload[5] = robot_id_get();
 
     elev_status status;
@@ -536,8 +534,7 @@ static void notify_busy(uint8_t id, void *pargs)
     }
     else
     {
-        char dis_floor = floormap_phy_to_dis(robot_checkin_get());
-        status._status.led = (is_led_on(dis_floor) ? LED_ON : LED_OFF);
+        status._status.led = (is_led_on(robot_checkin_get()) ? LED_ON : LED_OFF);
     }
     status._status.door = DOOR_ON;
     status._status.reserve = 0x00;
