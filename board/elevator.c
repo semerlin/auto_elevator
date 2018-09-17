@@ -87,6 +87,18 @@ static void vElevControl(void *pvParameters)
             keyctl_press(key);
             vTaskDelay(500 / portTICK_PERIOD_MS);
             keyctl_release(key);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+            uint8_t phy_floor = robot_checkin_get();
+            if (DEFAULT_CHECKIN != phy_floor)
+            {
+                char dis_floor = floormap_phy_to_dis(phy_floor);
+                if ((dis_floor == elev_floor()) &&
+                    (!is_led_on(dis_floor)))
+                {
+                    /* already arrive */
+                    elev_arrived(dis_floor);
+                }
+            }
         }
     }
 }
