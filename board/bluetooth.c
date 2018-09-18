@@ -134,7 +134,7 @@ bool bt_init(void)
     g_serial = serial_request(COM5);
     if (NULL == g_serial)
     {
-        TRACE("initialize failed, can't open serial \'COM1\'\r\n");
+        TRACE("initialize failed, can't open serial \'COM5\'\r\n");
         return FALSE;
     }
     serial_open(g_serial);

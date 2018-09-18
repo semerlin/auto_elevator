@@ -72,12 +72,6 @@ static cmd_handle_t cmd_handles[] =
     {CMD_REBOOT, process_reboot},
 };
 
-#ifdef __MASTER
-#define IS_REBOOT_VALID(reboot) ((0x01 == reboot) || (0x02 == reboot) || (0x03 == reboot))
-#else
-#define IS_REBOOT_VALID(reboot) (0x01 == reboot)
-#endif
-
 typedef struct
 {
     /**
@@ -88,6 +82,8 @@ typedef struct
     uint8_t reboot_type;
 } msg_reboot_t;
 
+#define IS_FLOOR_VALID(floor)               (floor > 0)
+
 #ifdef __MASTER
 
 #define IS_PWD_SCAN_WINDOW_VALID(window)    (0x00 != window)
@@ -95,7 +91,7 @@ typedef struct
 #define IS_ACTION_VALID(action)             ((0x01 == action) || (0x02 == action))
 #define IS_TOTAL_FLOOR_VALID(floor)         (floor > 0)
 #define IS_BT_NAME_LEN_VALID(len)           ((len > 0) && (len <= BT_NAME_MAX_LEN))
-#define IS_FLOOR_VALID(floor)               (floor > 0)
+#define IS_REBOOT_VALID(reboot) ((0x01 == reboot) || (0x02 == reboot) || (0x03 == reboot))
 
 #pragma pack(1)
 typedef struct
@@ -145,6 +141,7 @@ typedef struct
 #pragma pack()
 
 #define IS_BOARD_ID_VALID(id) (((id) >= 0x02) && ((id) <= 0xfe))
+#define IS_REBOOT_VALID(reboot) (0x01 == reboot)
 
 #endif
 

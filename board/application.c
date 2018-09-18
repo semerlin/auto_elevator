@@ -24,6 +24,7 @@
 #include "altimeter.h"
 #include "altimeter_calc.h"
 #include "floormap.h"
+#include "bluetooth.h"
 #endif
 #include "led_status.h"
 #include "expand.h"
@@ -85,6 +86,7 @@ void ApplicationStartup()
             altimeter_init();
             altimeter_calc_init();
         }
+        bt_init();
 #endif
         led_monitor_init();
         elev_init();
