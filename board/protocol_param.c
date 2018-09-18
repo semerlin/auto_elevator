@@ -15,6 +15,7 @@
 #include "altimeter.h"
 #include "altimeter_calc.h"
 #include "protocol_expand.h"
+#include "bluetooth.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_param]"
@@ -120,8 +121,7 @@ typedef struct
 
 typedef struct
 {
-    uint8_t len;
-    uint8_t bt_name[BT_NAME_MAX_LEN];
+    uint8_t bt_name[0];
 } msg_bt_name_t;
 
 typedef struct
@@ -408,31 +408,25 @@ static void process_param_calc(const uint8_t *data, uint8_t len)
 static void process_param_bt_name(const uint8_t *data, uint8_t len)
 {
     param_status_t status = SUCCESS;
-    if (len <= sizeof(msg_bt_name_t))
+    uint8_t bt_name[BT_NAME_MAX_LEN + 1];
+    if (IS_BT_NAME_LEN_VALID(len))
     {
-        msg_bt_name_t *name = (msg_bt_name_t *)data;
-        if (IS_BT_NAME_LEN_VALID(name->len))
+        memset(bt_name, 0, BT_NAME_MAX_LEN + 1);
+        memcpy(bt_name, data, len);
+        if (!param_store_bt_name(len, bt_name))
         {
-            if (!param_store_bt_name(name->len, name->bt_name))
-            {
-                status = OPERATION_FAIL;
-            }
-        }
-        else
-        {
-            status = INVALID_PARAM;
+            status = OPERATION_FAIL;
         }
     }
     else
     {
-        status = OPERATION_FAIL;
+        status = INVALID_PARAM;
     }
 
     param_reply(CMD_BT_NAME, status);
     if (SUCCESS == status)
     {
-        /** TODO: set bt name */
-        //bt_set_name();
+        bt_set_name((const char *)bt_name);
     }
 }
 
