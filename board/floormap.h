@@ -14,7 +14,7 @@
 BEGIN_DECLS
 
 void floormap_update(void);
-bool floormap_contains_floor(char floor);
+bool floormap_contains_floor(uint8_t floor);
 
 END_DECLS
 #endif

@@ -9,26 +9,9 @@
 #define _BOARDMAP_H_
 
 #include "types.h"
+#include "config.h"
 
 BEGIN_DECLS
-
-#define INVALID_FLOOR    0
-#define INVALID_KEY      0xff
-
-#define ID_BOARD_MASTER          0x01
-#define ID_BOARD_INVALID         0xff
-
-#ifdef __MASTER
-#define MAX_FLOOR_NUM           15
-#define MAX_EXPAND_FLOOR_NUM    16
-#define MAX_BOARD_NUM           6
-#define START_KEY               1
-#define EXPAND_START_KEY        0
-#else
-#define MAX_BOARD_NUM           1
-#define MAX_FLOOR_NUM           16
-#define START_KEY               0
-#endif
 
 typedef struct
 {

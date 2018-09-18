@@ -29,24 +29,36 @@
 extern parameters_t board_parameter;
 static calc_action_t calc_action = CALC_STOP;
 static xQueueHandle xQueueCalc = NULL;
-#define HEIGHT_AVERAGE_COUNT       5
 #define ALTIMETER_IDLE_INTERVAL    (200 / portTICK_PERIOD_MS)
 
-/**
- * @brief calculate floor height once
- * @param[in ]current_floor: current floor
- * @param[in] distance: distance to top
- */
-static uint16_t calc_once(uint8_t current_floor, uint32_t distance)
-{
-    uint8_t floor_num = board_parameter.total_floor - current_floor;
 
-    if (0 == floor_num)
+/**
+ * @brief update specified floor height
+ * @param[in] floor: floor number
+ * @param[in] height: floor height
+ */
+static uint16_t update_floor_height(uint8_t floor, uint32_t height)
+{
+    uint16_t ret = 0;
+    for (uint8_t i = 0; i < MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
     {
-        TRACE("reach top: %d(mm)\r\n", distance);
-        return 0;
+        if (board_parameter.floor_height[i].floor == floor)
+        {
+            if (board_parameter.floor_height[i].height > 0)
+            {
+                board_parameter.floor_height[i].height += (height / 10);
+                board_parameter.floor_height[i].height /= 2;
+            }
+            else
+            {
+                board_parameter.floor_height[i].height = height / 10;
+            }
+            ret = board_parameter.floor_height[i].height;
+            TRACE("update floor height: %d-%d(cm)", floor, board_parameter.floor_height[i].height);
+        }
     }
-    return (uint16_t)(distance / 10.0 / floor_num);
+
+    return ret;
 }
 
 /**
@@ -56,10 +68,7 @@ static uint16_t calc_once(uint8_t current_floor, uint32_t distance)
 static void vAltimeterCalc(void *pvParameters)
 {
     uint8_t floor = 1;
-    uint16_t heights[HEIGHT_AVERAGE_COUNT];
-    memset(heights, 0, HEIGHT_AVERAGE_COUNT * sizeof(uint16_t));
-    uint8_t index = 0;
-    uint16_t cur_height = 0;
+    uint16_t average_height = 0;
     uint32_t distance = 0;
     for (;;)
     {
@@ -68,39 +77,9 @@ static void vAltimeterCalc(void *pvParameters)
             if (xQueueReceive(xQueueCalc, &floor, portMAX_DELAY))
             {
                 distance = altimeter_get_distance();
-                cur_height = calc_once(floor, distance);
-                TRACE("calculated height: %d(cm), %d(mm)\r\n", cur_height, distance);
-                if (0 != cur_height)
-                {
-                    heights[index] = cur_height;
-                    index ++;
-                    if (HEIGHT_AVERAGE_COUNT == index)
-                    {
-                        index = 0;
-                    }
-                }
+                average_height = update_floor_height(floor, distance);
 
-                uint32_t sum = 0;
-                uint32_t valid = 0;
-                for (uint8_t i = 0; i < HEIGHT_AVERAGE_COUNT; ++i)
-                {
-                    if (0 != heights[i])
-                    {
-                        valid ++;
-                        sum += heights[i];
-                    }
-                }
-                if (valid > 0)
-                {
-                    board_parameter.floor_height = sum / valid;
-                    param_store_floor_height(board_parameter.floor_height);
-                    TRACE("average height: %d\r\n", board_parameter.floor_height);
-                }
-                else
-                {
-                    TRACE("no valid data, use default height: %d\r\n", board_parameter.floor_height);
-                }
-                notify_calc(board_parameter.floor_height, distance / 10);
+                notify_calc(floor, average_height, distance / 10);
             }
         }
         else
@@ -134,16 +113,20 @@ bool altimeter_calc_run(calc_action_t action)
     calc_action = action;
     if (CALC_STOP == action)
     {
+        param_store_floor_height(MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1),
+                                 board_parameter.floor_height);
+
         TRACE("rebooting...\r\n");
         SCB_SystemReset();
     }
     else
     {
-        uint8_t floor = 1;
-        while (floor <= board_parameter.total_floor)
-        {
-            elev_go(floor);
-        }
+        uint16_t average_height = 0;
+        uint32_t distance = 0;
+        distance = altimeter_get_distance();
+        average_height = update_floor_height(1, distance);
+        notify_calc(1, average_height, distance / 10);
+        elev_go(2);
     }
     return TRUE;
 }
@@ -151,11 +134,6 @@ bool altimeter_calc_run(calc_action_t action)
 bool altimeter_is_calculating(void)
 {
     return (CALC_START == calc_action);
-}
-
-uint16_t alitmeter_floor_height(void)
-{
-    return board_parameter.floor_height;
 }
 
 #endif

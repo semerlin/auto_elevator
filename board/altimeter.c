@@ -131,6 +131,27 @@ static void msg2tof(const uint8_t *data, uint8_t len)
     }
 }
 
+/**
+ * @brief get height floor
+ * @param[in] height: floor height
+ * @return floor
+ */
+uint8_t altimeter_get_height_floor(uint16_t height)
+{
+    uint16_t floor_height_high, floor_height_low;
+    for (uint8_t i = 0; i < MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
+    {
+        floor_height_high = board_parameter.floor_height[i].height + board_parameter.threshold;
+        floor_height_low = board_parameter.floor_height[i].height - board_parameter.threshold;
+
+        if ((height > floor_height_low) && (height < floor_height_high))
+        {
+            return board_parameter.floor_height[i].floor;
+        }
+    }
+
+    return INVALID_FLOOR;
+}
 
 /**
  * @brief altimeter receive distance task
@@ -146,7 +167,6 @@ static void vAltimeter(void *pvParameters)
     uint8_t len = 0;
     uint8_t floor_cur = 0;
     uint8_t floor_prev = 0;
-    float floor = 0;
     for (;;)
     {
         len = 0;
@@ -171,15 +191,9 @@ static void vAltimeter(void *pvParameters)
             {
                 if (tof.range > 0)
                 {
-                    /** calculate physical floor to top */
-                    floor = tof.range / 10.0 / board_parameter.floor_height;
-                    floor_cur = (uint8_t)floor;
-                    floor -= (uint8_t)floor;
-                    if (floor > 0.75)
-                    {
-                        floor_cur ++;
-                    }
-                    floor_cur = board_parameter.total_floor - floor_cur;
+                    /** calculate physical floor */
+                    floor_cur = altimeter_get_height_floor(tof.range / 10);
+
                     if (floor_cur != floor_prev)
                     {
                         /** floor changed */

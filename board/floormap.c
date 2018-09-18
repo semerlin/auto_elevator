@@ -19,8 +19,8 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[FLOORMAP]"
 
-
 extern parameters_t board_parameter;
+
 static uint8_t floormap[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
 
 #if DUMP_FLOORMAP
@@ -73,9 +73,9 @@ void floormap_update(void)
 /**
  * @brief check whether contains specified floor
  * @param[in] floor: floor to check
- *@return check status
+ * @return check status
  */
-bool floormap_contains_floor(char floor)
+bool floormap_contains_floor(uint8_t floor)
 {
     for (uint16_t i = 0; i < MAX_FLOOR_NUM +
          MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
@@ -87,4 +87,5 @@ bool floormap_contains_floor(char floor)
     }
     return 0;
 }
+
 #endif

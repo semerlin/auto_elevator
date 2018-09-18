@@ -103,6 +103,7 @@ typedef struct
     uint8_t id_elev;
     uint8_t start_floor;
     uint8_t total_floor;
+    uint16_t threshold;
     calc_type_t calc_type;
 } msg_param_t;
 
@@ -126,6 +127,7 @@ typedef struct
 typedef struct
 {
     uint8_t opcode;
+    uint8_t floor;
     uint16_t floor_height;
     uint16_t distance;
 } msg_calc_data;
@@ -222,47 +224,35 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         msg_param_t *msg = (msg_param_t *)data;
 
         parameters_t param = param_get();
-#ifdef __MASTER
-        param.id_ctl = msg->id_ctl;
-        param.id_elev = msg->id_elev;
-        param.total_floor = msg->total_floor;
         if (!IS_FLOOR_VALID(msg->start_floor))
         {
             status = INVALID_PARAM;
             goto END;
         }
-
-        if (!IS_TOTAL_FLOOR_VALID(msg->total_floor))
+#ifdef __MASTER
+        if ((!IS_TOTAL_FLOOR_VALID(msg->total_floor)) ||
+            (!IS_CALC_TYPE_VALID(msg->calc_type)))
         {
             status = INVALID_PARAM;
             goto END;
         }
 
+        param.id_ctl = msg->id_ctl;
+        param.id_elev = msg->id_elev;
+        param.total_floor = msg->total_floor;
+        param.threshold = msg->threshold;
         param.calc_type = msg->calc_type;
-        if (!IS_CALC_TYPE_VALID(msg->calc_type))
-        {
-            status = INVALID_PARAM;
-            goto END;
-        }
         param.id_board = 0x01;
 #endif
 
 #ifdef __EXPAND
-        if (IS_BOARD_ID_VALID(msg->id_board))
-        {
-            param.id_board = msg->id_board;
-        }
-        else
+        if (!IS_BOARD_ID_VALID(msg->id_board))
         {
             status = INVALID_PARAM;
             goto END;
         }
+        param.id_board = msg->id_board;
 #endif
-        if (0 == msg->start_floor)
-        {
-            status = INVALID_PARAM;
-            goto END;
-        }
         param.start_floor = msg->start_floor;
 
         if (!param_store(param))
@@ -442,13 +432,14 @@ static void process_param_bt_name(const uint8_t *data, uint8_t len)
     if (SUCCESS == status)
     {
         /** TODO: set bt name */
+        //bt_set_name();
     }
 }
 
 /**
  * @brief notify calculation data to user
  */
-void notify_calc(uint16_t floor_height, uint16_t distance)
+void notify_calc(uint8_t floor, uint16_t floor_height, uint16_t distance)
 {
     msg_calc_data msg;
     msg.opcode = CMD_CALC_NOTIFY;
@@ -459,13 +450,14 @@ void notify_calc(uint16_t floor_height, uint16_t distance)
     rsp[0] = PARAM_HEAD;
     rsp[1] = 5 + sizeof(msg);
     rsp[2] = msg.opcode;
-    rsp[3] = (uint8_t)(msg.floor_height >> 8);
-    rsp[4] = (uint8_t)(msg.floor_height & 0xff);
-    rsp[5] = (uint8_t)(msg.distance >> 8);
-    rsp[6] = (uint8_t)(msg.distance & 0xff);
-    rsp[7] = (uint8_t)((crc >> 8) & 0xff);
-    rsp[8] = (uint8_t)(crc & 0xff);
-    rsp[9] = PARAM_TAIL;
+    rsp[3] = floor;
+    rsp[4] = (uint8_t)(msg.floor_height >> 8);
+    rsp[5] = (uint8_t)(msg.floor_height & 0xff);
+    rsp[6] = (uint8_t)(msg.distance >> 8);
+    rsp[7] = (uint8_t)(msg.distance & 0xff);
+    rsp[8] = (uint8_t)((crc >> 8) & 0xff);
+    rsp[9] = (uint8_t)(crc & 0xff);
+    rsp[10] = PARAM_TAIL;
 
     ptl_send_data(rsp, 5 + sizeof(msg));
 }

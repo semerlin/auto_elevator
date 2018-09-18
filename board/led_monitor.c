@@ -194,9 +194,20 @@ static void vLedProcess(void *pvParameters)
                             if (altimeter_is_calculating())
                             {
                                 altimeter_calc_once(floor);
+                                if (floor < board_parameter.total_floor)
+                                {
+                                    elev_go(floor + 1);
+                                }
+                                else
+                                {
+                                    elev_go(1);
+                                }
                             }
-                            /* notify floor arrived */
-                            elev_arrived(floor);
+                            else
+                            {
+                                /* notify floor arrived */
+                                elev_arrived(floor);
+                            }
                         }
                         else
                         {

@@ -32,13 +32,12 @@
 #define __TRACE_MODULE  "[app]"
 
 #ifdef __MASTER
-#define VERSION  ("v1.1.2.5")
+#define VERSION  ("v1.1.3.5")
 #else
 #define VERSION  ("v1.1.1.0")
 #endif
 
 parameters_t board_parameter;
-#define DEFAULT_FLOOR_HEIGHT    260
 /**
  * @brief start system
  */
@@ -67,11 +66,6 @@ void ApplicationStartup()
                      MAX_FLOOR_NUM, 0);
 #ifdef __MASTER
         floormap_update();
-        if ((0 == board_parameter.floor_height) ||
-            (0xff == board_parameter.floor_height))
-        {
-            board_parameter.floor_height = DEFAULT_FLOOR_HEIGHT;
-        }
 
         if ((0xff == board_parameter.bt_name[0]) ||
             ('\0' == board_parameter.bt_name[0]))

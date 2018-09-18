@@ -22,4 +22,24 @@
 #define LOOP_BACK_TEST          0
 #define USE_SPEED_100K          1
 
+#ifdef __MASTER
+#define MAX_FLOOR_NUM           15
+#define MAX_EXPAND_FLOOR_NUM    16
+#define MAX_BOARD_NUM           6
+#define START_KEY               1
+#define EXPAND_START_KEY        0
+#define PARAM_PWD_LEN           4
+#define BT_NAME_MAX_LEN         16
+#else
+#define MAX_BOARD_NUM           1
+#define MAX_FLOOR_NUM           16
+#define START_KEY               0
+#endif
+
+#define INVALID_FLOOR           0
+#define INVALID_KEY             0xff
+
+#define ID_BOARD_MASTER         0x01
+#define ID_BOARD_INVALID        0xff
+
 #endif /** _CONFIG_H_ */

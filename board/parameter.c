@@ -89,10 +89,11 @@ bool param_store_pwd(uint8_t interval, uint8_t *pwd)
     return fm_write(PARAM_START_ADDRESS + offset, buf, PARAM_PWD_LEN + 1);
 }
 
-bool param_store_floor_height(uint16_t height)
+bool param_store_floor_height(uint8_t len, const floor_height_t *floor_height)
 {
     uint32_t offset = OFFSET_OF(flash_map_t, parameters.floor_height);
-    return fm_write(PARAM_START_ADDRESS + offset, (uint8_t *)&height, sizeof(uint16_t));
+    return fm_write(PARAM_START_ADDRESS + offset, (uint8_t *)floor_height,
+                    sizeof(floor_height_t) * len);
 }
 
 bool param_store_bt_name(uint8_t len, const uint8_t *name)
@@ -103,6 +104,7 @@ bool param_store_bt_name(uint8_t len, const uint8_t *name)
     uint32_t offset = OFFSET_OF(flash_map_t, parameters.bt_name);
     return fm_write(PARAM_START_ADDRESS + offset, bt_name, len + 1);
 }
+
 #endif
 
 parameters_t param_get(void)

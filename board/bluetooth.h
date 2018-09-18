@@ -16,6 +16,7 @@ BEGIN_DECLS
 
 bool bt_init(void);
 void bt_send_data(const uint8_t *data, uint8_t len);
+bool bt_set_name(const char *name);
 
 END_DECLS
 
