@@ -48,12 +48,6 @@ static void vLicense(void *pvParameters)
 void license_init(void)
 {
     TRACE("initialise license system...\r\n");
-    xTaskCreate(vLicense, "license", LICENSE_STACK_SIZE, NULL, 
+    xTaskCreate(vLicense, "license", LICENSE_STACK_SIZE, NULL,
                 LICENSE_PRIORITY, NULL);
 }
-
-
-
-
-
-

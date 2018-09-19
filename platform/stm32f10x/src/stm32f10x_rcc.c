@@ -9,7 +9,6 @@
 #include "stm32f10x_map.h"
 #include "stm32f10x_cfg.h"
 
-
 /* RCC structure definition */
 typedef struct
 {
@@ -23,8 +22,8 @@ typedef struct
     volatile uint32_t APB2ENR;
     volatile uint32_t APB1ENR;
     volatile uint32_t BDCR;
-    volatile uint32_t CSR;  
-}RCC_T;
+    volatile uint32_t CSR;
+} RCC_T;
 
 static RCC_T *RCC = (RCC_T *)RCC_BASE;
 
@@ -44,14 +43,14 @@ static RCC_T *RCC = (RCC_T *)RCC_BASE;
 #define CR_PLLRDY  (PERIPH_BB_BASE + CR_OFFSET * 32 + 25 * 4)
 
 
-/*  CFGRR寄存器位带别名区定义 */
+/*  CFGRR bitmap */
 #define CFGR_OFFSET (RCC_OFFSET + 0x04)
 #define CFGR_USBPRE (PERIPH_BB_BASE + CFGR_OFFSET * 32 + 22 * 4)
 #define CFGR_PLLSRC (PERIPH_BB_BASE + CFGR_OFFSET * 32 + 16 * 4)
 #define CFGR_PLLXTPRE (PERIPH_BB_BASE + CFGR_OFFSET * 32 + 17 * 4)
 
 
-/*  CIR寄存器位带别名区定义 */
+/*  CIR bitmap */
 #define CIR_OFFSET (RCC_OFFSET + 0x08)
 #define CIR_CSSC (PERIPH_BB_BASE + CIR_OFFSET * 32 + 23 * 4)
 #define CIR_PLLRDYC (PERIPH_BB_BASE + CIR_OFFSET * 32 + 20 * 4)
@@ -71,7 +70,7 @@ static RCC_T *RCC = (RCC_T *)RCC_BASE;
 #define CIR_LSERDYF (PERIPH_BB_BASE + CIR_OFFSET * 32 + 1 * 4)
 #define CIR_LSIRDYF (PERIPH_BB_BASE + CIR_OFFSET * 32 + 0 * 4)
 
-/*  BDCR寄存器位带别名区定义 */
+/*  BDCR bitmap */
 #define BDCR_OFFSET (RCC_OFFSET + 0x20)
 #define BDCR_BDRST (PERIPH_BB_BASE + BDCR_OFFSET * 32 + 16 * 4)
 #define BDCR_RTCEN (PERIPH_BB_BASE + BDCR_OFFSET * 32 + 15 * 4)
@@ -80,7 +79,7 @@ static RCC_T *RCC = (RCC_T *)RCC_BASE;
 #define BDCR_LSEON (PERIPH_BB_BASE + BDCR_OFFSET * 32 + 0 * 4)
 
 
-/*  CSR寄存器位带别名区定义 */
+/*  CSR bitmap */
 #define CSR_OFFSET (RCC_OFFSET + 0x24)
 #define CSR_RMVF (PERIPH_BB_BASE + CSR_OFFSET * 32 + 24 * 4)
 #define CSR_LSIRDY (PERIPH_BB_BASE + CSR_OFFSET * 32 + 1 * 4)
@@ -93,12 +92,12 @@ static RCC_T *RCC = (RCC_T *)RCC_BASE;
 /* osc ready cycle */
 #define OSC_StableCycle    20
 
-//CR register
+/* CR register */
 #define CR_HSITRIM        (0x1f << 3)
 #define CR_HSICAL         (0xff << 8)
 
 
-//CFGR寄存器
+/* CFGR register */
 #define CFGR_MCO     (0x07 << 24)
 #define CFGR_SW      (0x03)
 #define CFGR_SWS     (0x03 << 2)
@@ -108,10 +107,10 @@ static RCC_T *RCC = (RCC_T *)RCC_BASE;
 #define CFGR_ADCPRE  (0x03 << 14)
 #define CFGR_PLLMUL  (0x0f << 18)
 
-//BDCR寄存器
+/* BDCR register */
 #define BDCR_RTCSEL  (0x03 << 8)
 
-//CSR寄存器
+/* CSR register */
 #define CSR_RESET    (0x3f << 26)
 
 #define HSI_CLOCK   (8000000)
@@ -171,49 +170,49 @@ void RCC_DeInit(void)
 bool RCC_StartupHSI(void)
 {
     uint32_t waitCount = 0;
-	volatile uint32_t i = 0;
-	
+    volatile uint32_t i = 0;
+
     //check if already enabled
-    if((*((volatile uint32_t*)CR_HSION) == 0x01) && 
-       (*((volatile uint32_t*)CR_HSIRDY) == 0x01))
+    if ((*((volatile uint32_t *)CR_HSION) == 0x01) &&
+        (*((volatile uint32_t *)CR_HSIRDY) == 0x01))
     {
         return TRUE;
     }
-    
+
     //start hsi
-    *((volatile uint32_t*)CR_HSION) = 0x01;
-    while((!(*((volatile uint32_t*)CR_HSIRDY))) && 
-          (waitCount < OSC_StableCycle))
+    *((volatile uint32_t *)CR_HSION) = 0x01;
+    while ((!(*((volatile uint32_t *)CR_HSIRDY))) &&
+           (waitCount < OSC_StableCycle))
     {
         //wait for ready
-        for(i = 0; i < 128; i++);
+        for (i = 0; i < 128; i++);
         waitCount ++;
     }
 
-    if(waitCount >= OSC_StableCycle)
+    if (waitCount >= OSC_StableCycle)
     {
         //start failed
         return FALSE;
     }
 
 
-    return TRUE;  
+    return TRUE;
 }
 
 
 /**
  * @brief stop hsi
- * @note this bit cannot be reset if the internal 8MHz RC is used directy or 
+ * @note this bit cannot be reset if the internal 8MHz RC is used directy or
  *        indirecty as system clock or is selected to become the system clock
  */
 void RCC_StopHSI(void)
 {
     //stop hsi
-    *((volatile uint32_t*)CR_HSION) = 0x00;
-    
+    *((volatile uint32_t *)CR_HSION) = 0x00;
+
     //wait for stop
     volatile uint8_t i = 0;
-    for(i = 0; i < 128; i++);
+    for (i = 0; i < 128; i++);
 }
 
 /**
@@ -227,7 +226,7 @@ uint8_t RCC_GetHSICalValue(void)
 
 /**
  * @brief set hsi trim value, this is a user-programmable trimming value that
- *        added to the CAL value. It can be programmed to adjust variations in 
+ *        added to the CAL value. It can be programmed to adjust variations in
  *        voltage and temperature that influence the frequency the HSI RC
  * @param value: trim value, this value cannot be bigger than 16
  */
@@ -257,8 +256,10 @@ uint8_t RCC_GetHSITrimValue(void)
  */
 bool RCC_IsHSIOn(void)
 {
-    if(*((volatile uint32_t*)CR_HSION))
+    if (*((volatile uint32_t *)CR_HSION))
+    {
         return TRUE;
+    }
 
     return FALSE;
 }
@@ -271,26 +272,26 @@ bool RCC_IsHSIOn(void)
 bool RCC_StartupHSE(void)
 {
     uint32_t waitCount = 0;
-	volatile uint16_t i = 0;
-	
+    volatile uint16_t i = 0;
+
     //check if already enabled
-    if((*((volatile uint32_t*)CR_HSERDY) == 0x01) 
-       && (*((volatile uint32_t*)CR_HSEON) == 0x01))
+    if ((*((volatile uint32_t *)CR_HSERDY) == 0x01)
+        && (*((volatile uint32_t *)CR_HSEON) == 0x01))
     {
         return TRUE;
     }
-    
+
     //start up HSE
-    *((volatile uint32_t*)CR_HSEON) = 0x01;
-    while((!(*((volatile uint32_t*)CR_HSERDY))) && 
-          (waitCount < OSC_StableCycle))
+    *((volatile uint32_t *)CR_HSEON) = 0x01;
+    while ((!(*((volatile uint32_t *)CR_HSERDY))) &&
+           (waitCount < OSC_StableCycle))
     {
         //wait for ready
-        for(i = 0; i < 128; i++);
+        for (i = 0; i < 128; i++);
         waitCount ++;
     }
 
-    if(waitCount >= OSC_StableCycle)
+    if (waitCount >= OSC_StableCycle)
     {
         //startup failed
         return FALSE;
@@ -306,11 +307,11 @@ bool RCC_StartupHSE(void)
 void RCC_StopHSE(void)
 {
     //stop HSE
-    *((volatile uint32_t*)CR_HSEON) = 0x00;
-    
+    *((volatile uint32_t *)CR_HSEON) = 0x00;
+
     //wait for stop
     volatile uint8_t i = 0;
-    for(i = 0; i < 128; i++);
+    for (i = 0; i < 128; i++);
 }
 
 /**
@@ -319,11 +320,13 @@ void RCC_StopHSE(void)
  */
 bool RCC_BypassHSE(bool flag)
 {
-    *((volatile uint32_t*)CR_HSEON) = 0x00;
-    *((volatile uint32_t*)CR_HSEBYP) = 0x00;
-    
-    if(flag)
-        *((volatile uint32_t*)CR_HSEBYP) = 0x01;
+    *((volatile uint32_t *)CR_HSEON) = 0x00;
+    *((volatile uint32_t *)CR_HSEBYP) = 0x00;
+
+    if (flag)
+    {
+        *((volatile uint32_t *)CR_HSEBYP) = 0x01;
+    }
 
     //start HSE
     return RCC_StartupHSE();
@@ -335,8 +338,10 @@ bool RCC_BypassHSE(bool flag)
  */
 bool RCC_IsHSEOn(void)
 {
-    if(*((volatile uint32_t*)CR_HSEON))
+    if (*((volatile uint32_t *)CR_HSEON))
+    {
         return TRUE;
+    }
 
     return FALSE;
 }
@@ -347,25 +352,31 @@ bool RCC_IsHSEOn(void)
  */
 bool RCC_IsHSEBypassed(void)
 {
-    if(*((volatile uint32_t*)CR_HSEBYP))
+    if (*((volatile uint32_t *)CR_HSEBYP))
+    {
         return TRUE;
+    }
 
     return FALSE;
 }
 
 
 /**
- * @brief enable or disable ccs. When CSSON is set, the clock detector is 
+ * @brief enable or disable ccs. When CSSON is set, the clock detector is
  *        enabled by hardware when the HSE oscillator is ready, and disabled by
  *        hardware if a HSE clock failure is detected
  * @param flag: TRUE:enable FALSE:disable
 */
 void RCC_EnableClockSecurityConfig(bool flag)
 {
-    if(flag)
-        *((volatile uint32_t*)CR_CSSON) = 0x01;
+    if (flag)
+    {
+        *((volatile uint32_t *)CR_CSSON) = 0x01;
+    }
     else
-        *((volatile uint32_t*)CR_CSSON) = 0x00;
+    {
+        *((volatile uint32_t *)CR_CSSON) = 0x00;
+    }
 }
 
 
@@ -376,27 +387,27 @@ void RCC_EnableClockSecurityConfig(bool flag)
 bool RCC_StartupPLL(void)
 {
     uint32_t waitCount = 0;
-	volatile uint16_t i = 0;
-    
+    volatile uint16_t i = 0;
+
     //check if pll has already been started
-    if((*((volatile uint32_t*)CR_PLLRDY) == 0x01) && 
-       (*(volatile uint32_t*)CR_PLLON == 0x01))
+    if ((*((volatile uint32_t *)CR_PLLRDY) == 0x01) &&
+        (*(volatile uint32_t *)CR_PLLON == 0x01))
     {
         return TRUE;
     }
 
     //start pll
-    *((volatile uint32_t*)CR_PLLON) = 0x01;
+    *((volatile uint32_t *)CR_PLLON) = 0x01;
 
-    while((!*((volatile uint32_t*)CR_PLLRDY)) && 
-          (waitCount < OSC_StableCycle))
+    while ((!*((volatile uint32_t *)CR_PLLRDY)) &&
+           (waitCount < OSC_StableCycle))
     {
         //wait for stable
-        for(i = 0; i < 128; i++);
+        for (i = 0; i < 128; i++);
         waitCount ++;
     }
 
-    if(waitCount >= OSC_StableCycle)
+    if (waitCount >= OSC_StableCycle)
     {
         return FALSE;
     }
@@ -409,11 +420,11 @@ bool RCC_StartupPLL(void)
  */
 void RCC_StopPLL(void)
 {
-    *((volatile uint32_t*)CR_PLLON) = 0x00;
-    
+    *((volatile uint32_t *)CR_PLLON) = 0x00;
+
     //wait for stop
     volatile uint8_t i = 0;
-    for(i = 0; i < 128; i++); 
+    for (i = 0; i < 128; i++);
 }
 
 
@@ -423,8 +434,10 @@ void RCC_StopPLL(void)
  */
 bool RCC_GetPLLONFlag(void)
 {
-    if(*((volatile uint32_t*)CR_PLLON))
+    if (*((volatile uint32_t *)CR_PLLON))
+    {
         return TRUE;
+    }
 
     return FALSE;
 }
@@ -442,7 +455,7 @@ void RCC_MCOConfig(uint32_t method)
     RCC->CFGR &= ~CFGR_MCO;
 
     RCC->CFGR |= method;
-    
+
 }
 
 /**
@@ -453,7 +466,7 @@ void RCC_USBPrescalerFromPLL(uint8_t config)
 {
     assert_param(IS_RCC_USBPRE_PARAM(config));
 
-    *((volatile uint32_t*)CFGR_USBPRE) = config;
+    *((volatile uint32_t *)CFGR_USBPRE) = config;
 }
 
 /**
@@ -462,13 +475,13 @@ void RCC_USBPrescalerFromPLL(uint8_t config)
  * @param clockOut: output clock
  * @param div: div factor
  * @param needDiv2: return whether need div by 2
- * @return acturally output clock 
+ * @return acturally output clock
  */
 static uint32_t calcPllFactor(uint32_t clockIn, uint32_t clockOut,
-                               uint32_t *div, uint8_t *needDiv2)
+                              uint32_t *div, uint8_t *needDiv2)
 {
     uint8_t tempDiv = 0;
-    if(clockOut % clockIn == 0)
+    if (clockOut % clockIn == 0)
     {
         tempDiv = clockOut / clockIn;
         *div = (tempDiv & 0xff);
@@ -477,7 +490,7 @@ static uint32_t calcPllFactor(uint32_t clockIn, uint32_t clockOut,
     else
     {
         tempDiv = clockOut / clockIn;
-        if(tempDiv > 16)
+        if (tempDiv > 16)
         {
             *div = (tempDiv & 0xff);
             *needDiv2 = 0;
@@ -488,7 +501,7 @@ static uint32_t calcPllFactor(uint32_t clockIn, uint32_t clockOut,
             tempDiv = clockOut * 2 / clockIn;
             tempDiv &= 0xff;
             uint32_t delta2 = clockOut - tempDiv * clockIn;
-            if(delta1 > delta2)
+            if (delta1 > delta2)
             {
                 *div = tempDiv;
                 *needDiv2 = 1;
@@ -500,7 +513,7 @@ static uint32_t calcPllFactor(uint32_t clockIn, uint32_t clockOut,
             }
         }
     }
-    
+
     return *div * clockIn / (*needDiv2 + 1);
 }
 
@@ -509,20 +522,20 @@ static uint32_t calcPllFactor(uint32_t clockIn, uint32_t clockOut,
 * @param clock: output clock
 * @param useHse: whether use hse or hsi
 * @param hse clock
-* @return acturally output clock 
+* @return acturally output clock
 */
-uint32_t RCC_SetSysclkUsePLL(uint32_t clock, bool useHSE, 
+uint32_t RCC_SetSysclkUsePLL(uint32_t clock, bool useHSE,
                              uint32_t hseClock)
 {
     assert_param(clock > hseClock);
-    
+
     uint32_t div = 0;
     uint8_t needDiv2 = 0;
     uint32_t ret;
     RCC->CFGR &= ~CFGR_PLLMUL;
     RCC->CFGR &= ~CFGR_SW;
 
-    if(useHSE)
+    if (useHSE)
     {
         *((volatile uint32_t *)CFGR_PLLSRC) = 0x01;
         ret = calcPllFactor(hseClock, clock, &div, &needDiv2);
@@ -530,16 +543,16 @@ uint32_t RCC_SetSysclkUsePLL(uint32_t clock, bool useHSE,
     else
     {
         *((volatile uint32_t *)CFGR_PLLSRC) = 0x00;
-       ret = calcPllFactor(HSI_CLOCK / 2, clock, &div, &needDiv2); 
+        ret = calcPllFactor(HSI_CLOCK / 2, clock, &div, &needDiv2);
     }
-    
+
     *((volatile uint32_t *)CFGR_PLLXTPRE) = needDiv2;
-    
+
     assert_param(div >= 2);
     RCC->CFGR |= ((div - 2) << 18);
-    
+
     RCC_StartupPLL();
-    
+
     g_sysclk = ret;
 
     return ret;
@@ -549,7 +562,7 @@ uint32_t RCC_SetSysclkUsePLL(uint32_t clock, bool useHSE,
 
 /**
  * @brief set hclk prescaler
- * @param config: prescaler value 
+ * @param config: prescaler value
  */
 void RCC_HCLKPrescalerFromSYSCLK(uint8_t config)
 {
@@ -557,14 +570,14 @@ void RCC_HCLKPrescalerFromSYSCLK(uint8_t config)
 
     RCC->CFGR &= ~CFGR_HPRE;
     RCC->CFGR |= config;
-    
+
     uint8_t div = (config == 0) ? 0 : ((config >> 4) - 7);
     g_hclk = (g_sysclk >> div);
 }
 
 /**
  * @brief set pclk1 prescaler
- * @param config: prescaler value 
+ * @param config: prescaler value
  */
 void RCC_PCLK1PrescalerHCLK(uint32_t config)
 {
@@ -572,14 +585,14 @@ void RCC_PCLK1PrescalerHCLK(uint32_t config)
 
     RCC->CFGR &= ~CFGR_PPRE1;
     RCC->CFGR |= config;
-    
+
     uint8_t div = (config == 0) ? 0 : ((config >> 8) - 3);
     g_pclk1 = (g_hclk >> div);
 }
 
 /**
  * @brief set pclk2 prescaler
- * @param config: prescaler value 
+ * @param config: prescaler value
  */
 void RCC_PCLK2PrescalerFromHCLK(uint32_t config)
 {
@@ -587,14 +600,14 @@ void RCC_PCLK2PrescalerFromHCLK(uint32_t config)
 
     RCC->CFGR &= ~CFGR_PPRE2;
     RCC->CFGR |= config;
-    
+
     uint8_t div = (config == 0) ? 0 : ((config >> 11) - 3);
     g_pclk2 = (g_hclk >> div);
 }
 
 /**
  * @brief get system clock
- * @return system clock 
+ * @return system clock
  */
 uint32_t RCC_GetSysclk(void)
 {
@@ -603,7 +616,7 @@ uint32_t RCC_GetSysclk(void)
 
 /**
  * @brief get hclk
- * @return hclk value 
+ * @return hclk value
  */
 uint32_t RCC_GetHCLK(void)
 {
@@ -612,7 +625,7 @@ uint32_t RCC_GetHCLK(void)
 
 /**
  * @brief get pclk1
- * @return pclk1 value 
+ * @return pclk1 value
  */
 uint32_t RCC_GetPCLK1(void)
 {
@@ -621,7 +634,7 @@ uint32_t RCC_GetPCLK1(void)
 
 /**
  * @brief get pclk2
- * @return pclk2 value 
+ * @return pclk2 value
  */
 uint32_t RCC_GetPCLK2(void)
 {
@@ -641,21 +654,21 @@ void RCC_SystemClockSwitch(uint8_t clock)
 }
 /**
  * @brief get system clock source prescaler
- * @return 0: HSI 1: HSE 2: PLL other: invalid 
+ * @return 0: HSI 1: HSE 2: PLL other: invalid
  */
 uint8_t RCC_GetSystemClock(void)
 {
-    return ((RCC->CFGR & CFGR_SWS)>>2);
+    return ((RCC->CFGR & CFGR_SWS) >> 2);
 }
 
 /**
  * @brief set adc prescaler
- * @param config: prescaler value 
+ * @param config: prescaler value
  */
 void RCC_ADCPrescalerFromPCLK2(uint32_t config)
 {
     assert_param(IS_RCC_ADC_PARAM(config));
-    
+
     RCC->CFGR &= ~CFGR_ADCPRE;
     RCC->CFGR |= config;
 }
@@ -667,29 +680,29 @@ void RCC_ADCPrescalerFromPCLK2(uint32_t config)
  */
 void RCC_ClrClockIntFlag(uint8_t intSrc)
 {
-    if(intSrc == RCC_INT_ClockSecuty)
+    if (intSrc == RCC_INT_ClockSecuty)
     {
-        *(volatile uint32_t*)CIR_CSSC = 0x01;
+        *(volatile uint32_t *)CIR_CSSC = 0x01;
     }
-    else if(intSrc == RCC_INT_PLLReady)
+    else if (intSrc == RCC_INT_PLLReady)
     {
-        *(volatile uint32_t*)CIR_PLLRDYC = 0x01;
+        *(volatile uint32_t *)CIR_PLLRDYC = 0x01;
     }
-    else if(intSrc == RCC_INT_HSEReady)
+    else if (intSrc == RCC_INT_HSEReady)
     {
-        *(volatile uint32_t*)CIR_HSERDYC = 0x01;
+        *(volatile uint32_t *)CIR_HSERDYC = 0x01;
     }
-    else if(intSrc == RCC_INT_HSIReady)
+    else if (intSrc == RCC_INT_HSIReady)
     {
-        *(volatile uint32_t*)CIR_HSIRDYC = 0x01;
+        *(volatile uint32_t *)CIR_HSIRDYC = 0x01;
     }
-    else if(intSrc == RCC_INT_LSEReady)
+    else if (intSrc == RCC_INT_LSEReady)
     {
-        *(volatile uint32_t*)CIR_LSERDYC = 0x01;
+        *(volatile uint32_t *)CIR_LSERDYC = 0x01;
     }
-    else if(intSrc == RCC_INT_LSIReady)
+    else if (intSrc == RCC_INT_LSIReady)
     {
-        *(volatile uint32_t*)CIR_LSIRDYC = 0x01;
+        *(volatile uint32_t *)CIR_LSIRDYC = 0x01;
     }
 }
 
@@ -700,25 +713,25 @@ void RCC_ClrClockIntFlag(uint8_t intSrc)
 */
 void RCC_EnableClockInt(uint8_t intSrc, bool flag)
 {
-    if(intSrc == RCC_INT_PLLReady)
+    if (intSrc == RCC_INT_PLLReady)
     {
-        *(volatile uint32_t*)CIR_PLLRDYIE = (uint8_t)flag;
+        *(volatile uint32_t *)CIR_PLLRDYIE = (uint8_t)flag;
     }
-    else if(intSrc == RCC_INT_HSEReady)
+    else if (intSrc == RCC_INT_HSEReady)
     {
-        *(volatile uint32_t*)CIR_HSERDYIE = (uint8_t)flag;
+        *(volatile uint32_t *)CIR_HSERDYIE = (uint8_t)flag;
     }
-    else if(intSrc == RCC_INT_HSIReady)
+    else if (intSrc == RCC_INT_HSIReady)
     {
-        *(volatile uint32_t*)CIR_HSIRDYIE = (uint8_t)flag;
+        *(volatile uint32_t *)CIR_HSIRDYIE = (uint8_t)flag;
     }
-    else if(intSrc == RCC_INT_LSEReady)
+    else if (intSrc == RCC_INT_LSEReady)
     {
-        *(volatile uint32_t*)CIR_LSERDYIE = (uint8_t)flag;
+        *(volatile uint32_t *)CIR_LSERDYIE = (uint8_t)flag;
     }
-    else if(intSrc == RCC_INT_LSIReady)
+    else if (intSrc == RCC_INT_LSIReady)
     {
-        *(volatile uint32_t*)CIR_LSIRDYIE = (uint8_t)flag;
+        *(volatile uint32_t *)CIR_LSIRDYIE = (uint8_t)flag;
     }
 
 }
@@ -730,38 +743,38 @@ void RCC_EnableClockInt(uint8_t intSrc, bool flag)
 uint8_t RCC_GetClockIntFlag(uint8_t intSrc)
 {
     uint8_t flag = 0;
-    
-    if(*(volatile uint32_t*)CIR_CSSF)
+
+    if (*(volatile uint32_t *)CIR_CSSF)
     {
         flag |= RCC_INT_ClockSecuty;
     }
 
-    if(*(volatile uint32_t*)CIR_PLLRDYF)
+    if (*(volatile uint32_t *)CIR_PLLRDYF)
     {
         flag |= RCC_INT_PLLReady;
     }
 
-    if(*(volatile uint32_t*)CIR_HSERDYF)
+    if (*(volatile uint32_t *)CIR_HSERDYF)
     {
         flag |= RCC_INT_HSEReady;
     }
 
-    if(*(volatile uint32_t*)CIR_HSIRDYF)
+    if (*(volatile uint32_t *)CIR_HSIRDYF)
     {
         flag |= RCC_INT_HSIReady;
     }
 
-    if(*(volatile uint32_t*)CIR_LSERDYF)
+    if (*(volatile uint32_t *)CIR_LSERDYF)
     {
         flag |= RCC_INT_LSEReady;
     }
 
-    if(*(volatile uint32_t*)CIR_LSIRDYF)
+    if (*(volatile uint32_t *)CIR_LSIRDYF)
     {
         flag |= RCC_INT_LSIReady;
     }
-	
-	return flag;
+
+    return flag;
 }
 
 /**
@@ -771,10 +784,14 @@ uint8_t RCC_GetClockIntFlag(uint8_t intSrc)
  */
 void RCC_APB2PeriphReset(uint32_t reg, bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         RCC->APB2RSTR |= reg;
+    }
     else
+    {
         RCC->APB2RSTR &= ~reg;
+    }
 }
 
 /**
@@ -784,10 +801,14 @@ void RCC_APB2PeriphReset(uint32_t reg, bool flag)
  */
 void RCC_APB1PeriphReset(uint32_t reg, bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         RCC->APB1RSTR |= reg;
+    }
     else
+    {
         RCC->APB1RSTR &= ~reg;
+    }
 }
 
 
@@ -798,10 +819,14 @@ void RCC_APB1PeriphReset(uint32_t reg, bool flag)
  */
 void RCC_AHBPeripClockEnable(uint32_t reg, bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         RCC->AHBENR |= reg;
+    }
     else
+    {
         RCC->AHBENR &= ~reg;
+    }
 }
 
 /**
@@ -811,10 +836,14 @@ void RCC_AHBPeripClockEnable(uint32_t reg, bool flag)
  */
 void RCC_APB2PeripClockEnable(uint16_t reg, bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         RCC->APB2ENR |= reg;
+    }
     else
+    {
         RCC->APB2ENR &= ~reg;
+    }
 }
 
 
@@ -825,23 +854,31 @@ void RCC_APB2PeripClockEnable(uint16_t reg, bool flag)
  */
 void RCC_APB1PeripClockEnable(uint32_t reg, bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         RCC->APB1ENR |= reg;
+    }
     else
-        RCC->APB1ENR &= ~reg; 
+    {
+        RCC->APB1ENR &= ~reg;
+    }
 }
 
 
 /**
- * @brief reset backup domain 
+ * @brief reset backup domain
  * @param reset flag
  */
 void RCC_BackUpRegisterReset(bool flag)
 {
-    if(flag)
-        *(volatile uint32_t*)BDCR_BDRST = 0x01;
+    if (flag)
+    {
+        *(volatile uint32_t *)BDCR_BDRST = 0x01;
+    }
     else
-        *(volatile uint32_t*)BDCR_BDRST = 0x00;  
+    {
+        *(volatile uint32_t *)BDCR_BDRST = 0x00;
+    }
 }
 
 /**
@@ -850,8 +887,10 @@ void RCC_BackUpRegisterReset(bool flag)
  */
 bool RCC_IsRTCEnabled(void)
 {
-    if(*(volatile uint32_t*)BDCR_RTCEN)
+    if (*(volatile uint32_t *)BDCR_RTCEN)
+    {
         return TRUE;
+    }
 
     return FALSE;
 }
@@ -883,27 +922,27 @@ uint8_t RCC_GetRTCClockSource(void)
 bool RCC_StartupLSE(void)
 {
     uint32_t waitCount = 0;
-	volatile uint32_t i = 0;
-	
-    if((*(volatile uint32_t*)BDCR_LSERDY == 0x01) && 
-       (*(volatile uint32_t*)BDCR_LSEON== 0x01))
+    volatile uint32_t i = 0;
+
+    if ((*(volatile uint32_t *)BDCR_LSERDY == 0x01) &&
+        (*(volatile uint32_t *)BDCR_LSEON == 0x01))
     {
         return TRUE;
     }
-    
-    *(volatile uint32_t*)BDCR_LSEON = 0x01;
-    while((!(*(volatile uint32_t*)BDCR_LSERDY)) && (waitCount < OSC_StableCycle))
+
+    *(volatile uint32_t *)BDCR_LSEON = 0x01;
+    while ((!(*(volatile uint32_t *)BDCR_LSERDY)) && (waitCount < OSC_StableCycle))
     {
-        for(i = 0; i < 128; i++);
+        for (i = 0; i < 128; i++);
         waitCount ++;
     }
 
-    if(waitCount >= OSC_StableCycle)
+    if (waitCount >= OSC_StableCycle)
     {
         return FALSE;
     }
 
-    return TRUE;  
+    return TRUE;
 
 }
 
@@ -913,11 +952,13 @@ bool RCC_StartupLSE(void)
  */
 bool RCC_BypassLSE(bool flag)
 {
-    *(volatile uint32_t*)BDCR_LSEON = 0x00;
-    *(volatile uint32_t*)BDCR_LSEBYP = 0x00;
-    
-    if(flag)  //旁路HSE
-        *(volatile uint32_t*)BDCR_LSEBYP = 0x01;
+    *(volatile uint32_t *)BDCR_LSEON = 0x00;
+    *(volatile uint32_t *)BDCR_LSEBYP = 0x00;
+
+    if (flag)
+    {
+        *(volatile uint32_t *)BDCR_LSEBYP = 0x01;
+    }
 
     return RCC_StartupHSE();
 }
@@ -928,10 +969,10 @@ bool RCC_BypassLSE(bool flag)
  */
 void RCC_StopLSE(void)
 {
-	volatile uint32_t i = 0;
-    
-    *(volatile uint32_t*)BDCR_LSEON = 0x00;
-    for(i = 0; i < 128; i++);
+    volatile uint32_t i = 0;
+
+    *(volatile uint32_t *)BDCR_LSEON = 0x00;
+    for (i = 0; i < 128; i++);
 }
 
 
@@ -942,40 +983,40 @@ void RCC_StopLSE(void)
 bool RCC_StartupLSI(void)
 {
     uint32_t waitCount = 0;
-	volatile uint32_t i = 0;
-	
-    if((*(volatile uint32_t*)CSR_LSIRDY == 0x01) && 
-       (*(volatile uint32_t*)CSR_LSION== 0x01))
+    volatile uint32_t i = 0;
+
+    if ((*(volatile uint32_t *)CSR_LSIRDY == 0x01) &&
+        (*(volatile uint32_t *)CSR_LSION == 0x01))
     {
         return TRUE;
     }
-    
-    *(volatile uint32_t*)CSR_LSION = 0x01;
-    while((!(*(volatile uint32_t*)CSR_LSIRDY)) && (waitCount < OSC_StableCycle))
+
+    *(volatile uint32_t *)CSR_LSION = 0x01;
+    while ((!(*(volatile uint32_t *)CSR_LSIRDY)) && (waitCount < OSC_StableCycle))
     {
-        for(i = 0; i < 128; i++);
+        for (i = 0; i < 128; i++);
         waitCount ++;
     }
 
-    if(waitCount >= OSC_StableCycle)
+    if (waitCount >= OSC_StableCycle)
     {
         return FALSE;
     }
 
-    return TRUE;  
+    return TRUE;
 
 }
-    
-  
+
+
 /**
  * @brief stop lsi
  */
 void RCC_CloseLSI(void)
 {
-	volatile uint32_t i = 0;
-    
-    *(volatile uint32_t*)CSR_LSION = 0x00;
-    for(i = 0; i < 128; i++);
+    volatile uint32_t i = 0;
+
+    *(volatile uint32_t *)CSR_LSION = 0x00;
+    for (i = 0; i < 128; i++);
 }
 
 
@@ -993,55 +1034,5 @@ uint8_t RCC_GetResetFlag(void)
  */
 void RCC_ClrResetFlag(void)
 {
-    *(volatile uint32_t*)CSR_RMVF = 0x01;
+    *(volatile uint32_t *)CSR_RMVF = 0x01;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

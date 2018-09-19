@@ -13,6 +13,7 @@
 #include "global.h"
 #include "elevator.h"
 
+
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[robot]"
 

@@ -10,18 +10,19 @@
 #include "stm32f10x_map.h"
 #include "stm32f10x_cfg.h"
 
+
 /* flash register structure */
-typedef struct 
+typedef struct
 {
-	volatile uint32_t ACR;
-	volatile uint32_t KEYR;
-	volatile uint32_t OPTKEYR;
-	volatile uint32_t SR;
-	volatile uint32_t CR;
-	volatile uint32_t AR;
-	volatile uint32_t OBR;
-	volatile uint32_t WRPR;
-}FLASH_T;
+    volatile uint32_t ACR;
+    volatile uint32_t KEYR;
+    volatile uint32_t OPTKEYR;
+    volatile uint32_t SR;
+    volatile uint32_t CR;
+    volatile uint32_t AR;
+    volatile uint32_t OBR;
+    volatile uint32_t WRPR;
+} FLASH_T;
 
 static FLASH_T *FLASH = (FLASH_T *)FLASH_BASE;
 
@@ -48,7 +49,7 @@ static FLASH_T *FLASH = (FLASH_T *)FLASH_BASE;
 #define KEY2        0xCDEF89AB
 
 /******************************************************/
-//ACR latency 
+//ACR latency
 #define ACR_LATENCY   0x03
 
 
@@ -67,7 +68,7 @@ static void FLASH_Unlock(void)
  */
 static void FLASH_Lock(void)
 {
-    *((volatile uint32_t*)CR_LOCK) = 0x01;
+    *((volatile uint32_t *)CR_LOCK) = 0x01;
 }
 
 /**
@@ -76,10 +77,14 @@ static void FLASH_Lock(void)
  */
 void FLASH_EnablePrefetch(bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         *((volatile uint32_t *)ACR_PRFTBE) = 0x01;
+    }
     else
+    {
         *((volatile uint32_t *)ACR_PRFTBE) = 0x00;
+    }
 }
 
 
@@ -89,7 +94,7 @@ void FLASH_EnablePrefetch(bool flag)
  */
 bool FLASH_IsPrefetchEnabled(void)
 {
-    if(*((volatile uint32_t*)ACR_PRFTBS))
+    if (*((volatile uint32_t *)ACR_PRFTBS))
     {
         return TRUE;
     }
@@ -105,10 +110,14 @@ bool FLASH_IsPrefetchEnabled(void)
  */
 void FLASH_EnableHalfCycleAccess(bool flag)
 {
-    if(flag)
-        *((volatile uint32_t*)ACR_HLFCYA) = 0x01;
+    if (flag)
+    {
+        *((volatile uint32_t *)ACR_HLFCYA) = 0x01;
+    }
     else
-        *((volatile uint32_t*)ACR_HLFCYA) = 0x00;
+    {
+        *((volatile uint32_t *)ACR_HLFCYA) = 0x00;
+    }
 }
 
 /**
@@ -117,7 +126,7 @@ void FLASH_EnableHalfCycleAccess(bool flag)
  */
 bool FLASH_IsHalfCycleAccessEnabled(void)
 {
-    if(*((volatile uint32_t*)ACR_HLFCYA))
+    if (*((volatile uint32_t *)ACR_HLFCYA))
     {
         return TRUE;
     }
@@ -146,7 +155,7 @@ void FLASH_SetLatency(uint8_t latency)
  */
 bool FLASH_Is_FlagSet(uint8_t flag)
 {
-    assert_param(IS_FLASH_FLAG_PARAM(flag)); 
+    assert_param(IS_FLASH_FLAG_PARAM(flag));
     return (0 != (FLASH->SR & flag));
 }
 
@@ -167,13 +176,13 @@ void FLASH_ErasePage(uint32_t addr)
 {
     FLASH_Unlock();
     FLASH_ClrFlag(FLAH_FLAG_EOP | FLAH_FLAG_WRPRTERR | FLAH_FLAG_PGERR);
-    
-    *((volatile uint32_t*)CR_PER) = 0x01;
+
+    *((volatile uint32_t *)CR_PER) = 0x01;
     FLASH->AR = addr;
-    *((volatile uint32_t*)CR_STRT) = 0x01;
-    while (FLASH->SR & FLAH_FLAG_BSY); 
-    *((volatile uint32_t*)CR_PER) = 0x00;
-    
+    *((volatile uint32_t *)CR_STRT) = 0x01;
+    while (FLASH->SR & FLAH_FLAG_BSY);
+    *((volatile uint32_t *)CR_PER) = 0x00;
+
     FLASH_Lock();
 }
 /**
@@ -186,21 +195,21 @@ uint32_t FLASH_Write(uint32_t addr, uint8_t *data, uint32_t len)
 {
     FLASH_Unlock();
     FLASH_ClrFlag(FLAH_FLAG_EOP | FLAH_FLAG_WRPRTERR | FLAH_FLAG_PGERR);
-    
-    *((volatile uint32_t*)CR_PG) = 0x01;
-    
+
+    *((volatile uint32_t *)CR_PG) = 0x01;
+
     for (uint32_t i = 0; i < len; i += 2)
     {
-        *(uint16_t*)addr = *(uint16_t *)data;
+        *(uint16_t *)addr = *(uint16_t *)data;
         addr += 2;
         data += 2;
         while (FLASH->SR & FLAH_FLAG_BSY);
     }
 
-    *((volatile uint32_t*)CR_PG) = 0x00;
-    
+    *((volatile uint32_t *)CR_PG) = 0x00;
+
     FLASH_Lock();
-    
+
     return len;
 }
 

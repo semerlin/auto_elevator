@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_RCC_H_
-  #define _STM32F10X_RCC_H_
+#define _STM32F10X_RCC_H_
 
 #include "types.h"
 
@@ -39,7 +39,7 @@
 #define RCC_SW_INVALID  (0x03)
 
 #define IS_RCC_SW_PARAM(param)  ((param == RCC_SW_HSI) || (param == RCC_SW_HSE) || \
-                                  (param == RCC_SW_PLL) || (param == RCC_SW_INVALID))
+                                 (param == RCC_SW_PLL) || (param == RCC_SW_INVALID))
 
 /******************************************************/
 #define RCC_HPRE_SYSCLK        (0x00)
@@ -57,7 +57,7 @@
                                   (param == RCC_HPRE_SYSCLK_DIV16) || (param == RCC_HPRE_SYSCLK_DIV64) || \
                                   (param == RCC_HPRE_SYSCLK_DIV128) || (param == RCC_HPRE_SYSCLK_DIV256) || \
                                   (param == RCC_HPRE_SYSCLK_DIV512))
-                                  
+
 
 /******************************************************/
 #define RCC_PPRE1_HCLK        (0x00)
@@ -68,8 +68,8 @@
 
 
 #define IS_RCC_PPRE1_PARAM(param) ((param == RCC_PPRE1_HCLK) || (param == RCC_PPRE1_HCLK_DIV2) || \
-                                  (param == RCC_PPRE1_HCLK_DIV4) || (param == RCC_PPRE1_HCLK_DIV8) || \
-                                  (param == RCC_PPRE1_HCLK_DIV16))
+                                   (param == RCC_PPRE1_HCLK_DIV4) || (param == RCC_PPRE1_HCLK_DIV8) || \
+                                   (param == RCC_PPRE1_HCLK_DIV16))
 
 
 /******************************************************/
@@ -81,8 +81,8 @@
 
 
 #define IS_RCC_PPRE2_PARAM(param) ((param == RCC_PPRE2_HCLK) || (param == RCC_PPRE2_HCLK_DIV2) || \
-                                  (param == RCC_PPRE2_HCLK_DIV4) || (param == RCC_PPRE2_HCLK_DIV8) || \
-                                  (param == RCC_PPRE2_HCLK_DIV16))
+                                   (param == RCC_PPRE2_HCLK_DIV4) || (param == RCC_PPRE2_HCLK_DIV8) || \
+                                   (param == RCC_PPRE2_HCLK_DIV16))
 
 
 
@@ -93,7 +93,7 @@
 #define RCC_ADC_PCLK_DIV8    (0x03 << 14)
 
 #define IS_RCC_ADC_PARAM(param) ((param == RCC_ADC_PCLK_DIV2) || (param == RCC_ADC_PCLK_DIV4) || \
-                                  (param == RCC_ADC_PCLK_DIV6) || (param == RCC_ADC_PCLK_DIV8))
+                                 (param == RCC_ADC_PCLK_DIV6) || (param == RCC_ADC_PCLK_DIV8))
 
 
 
@@ -249,7 +249,7 @@ void RCC_StopPLL(void);
 bool RCC_GetPLLONFlag(void);
 void RCC_MCOConfig(uint32_t method);
 void RCC_USBPrescalerFromPLL(uint8_t config);
-uint32_t RCC_SetSysclkUsePLL(uint32_t clock, bool useHSE, 
+uint32_t RCC_SetSysclkUsePLL(uint32_t clock, bool useHSE,
                              uint32_t hseClock);
 void RCC_HCLKPrescalerFromSYSCLK(uint8_t config);
 void RCC_PCLK1PrescalerHCLK(uint32_t config);
@@ -280,8 +280,6 @@ bool RCC_StartupLSI(void);
 void RCC_CloseLSI(void);
 uint8_t RCC_GetResetFlag(void);
 void RCC_ClrResetFlag(void);
-    
+
 
 #endif /* _STM32F10X_RCC_H_ */
-
-

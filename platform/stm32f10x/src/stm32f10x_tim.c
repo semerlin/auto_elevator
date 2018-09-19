@@ -10,6 +10,7 @@
 #include "stm32f10x_cfg.h"
 #include "assert.h"
 
+
 /* flash register structure */
 typedef struct
 {

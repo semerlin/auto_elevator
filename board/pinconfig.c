@@ -215,4 +215,3 @@ void get_pininfo(const char *name, uint8_t *group, uint8_t *num)
         *num = config->config.pin;
     }
 }
-

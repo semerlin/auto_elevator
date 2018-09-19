@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _DELAY_H_
-  #define _DELAY_H_
+#define _DELAY_H_
 
 #include "types.h"
 

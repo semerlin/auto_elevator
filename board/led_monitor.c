@@ -317,4 +317,3 @@ bool led_monitor_init(void)
 
     return TRUE;
 }
-

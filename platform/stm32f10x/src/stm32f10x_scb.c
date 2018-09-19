@@ -10,8 +10,6 @@
 #include "stm32f10x_cfg.h"
 
 /* SCB register must operate in privileged mode */
-
-
 typedef struct
 {
     volatile uint32_t CPUID;
@@ -31,10 +29,10 @@ typedef struct
     volatile uint32_t BFAR;
 } SCB_T;
 
-/* SCB寄存器结构体定义*/
+/* SCB register structure */
 static SCB_T *SCB = (SCB_T *)SCB_BASE;
 
-//寄存器内部位置定义
+/** register bitmap */
 #define NMIPENDSET    ((uint32_t)1 << 31)
 #define PENDSVSET     ((uint32_t)1 << 28)
 #define PENDSVCLR     ((uint32_t)1 << 27)
@@ -57,7 +55,7 @@ static SCB_T *SCB = (SCB_T *)SCB_BASE;
 #define SLEEPDEEP     ((uint32_t)0x01 << 2)
 #define SLEEPONEXIT   ((uint32_t)0x01 << 1)
 
-//CCR寄存器
+/** CCR register bitmap */
 #define STKALIGN      ((uint32_t)0x01 << 9)
 #define BFHFNMIGN     ((uint32_t)0x01 << 8)
 #define DIV0TRP       ((uint32_t)0x01 << 4)
@@ -65,7 +63,7 @@ static SCB_T *SCB = (SCB_T *)SCB_BASE;
 #define USERSETMPEND  ((uint32_t)0x01 << 1)
 #define NONBASETHRDENA ((uint32_t)0x01)
 
-//SHPRx寄存器
+/* SHPRx bitmap */
 #define MEMMANGEFAULT   ((uint32_t)0x0f << 4)
 #define BUSFAULT        ((uint32_t)0x0f << 12)
 #define USAGEFAULT      ((uint32_t)0x0f << 20)
@@ -74,7 +72,7 @@ static SCB_T *SCB = (SCB_T *)SCB_BASE;
 #define SYSTICK         ((uint32_t)0x0f << 28)
 
 
-//SHCSR寄存器
+/* SHCSR bitmap */
 #define USGFAULTENA    ((uint32_t)0x01 << 18)
 #define BUSFAULTENA    ((uint32_t)0x01 << 17)
 #define MEMFAULTENA    ((uint32_t)0x01 << 16)
@@ -848,9 +846,3 @@ void SCB_SystemReset(void)
     SCB->AIRCR = 0x05FA0004;
     for (;;);
 }
-
-
-
-
-
-

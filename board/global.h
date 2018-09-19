@@ -48,4 +48,3 @@
 #endif
 
 #endif /* _GLOBAL_H_ */
-

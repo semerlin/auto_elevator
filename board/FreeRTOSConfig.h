@@ -58,5 +58,3 @@ extern void assert_failed(const char *file, const char *line, const char *exp);
 
 
 #endif /* FREERTOS_CONFIG_H */
-
-

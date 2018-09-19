@@ -49,4 +49,3 @@ END_DECLS
 
 
 #endif /* _ELEVATOR_H_ */
-

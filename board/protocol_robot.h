@@ -29,5 +29,3 @@ END_DECLS
 
 
 #endif /* _PROTOCOL_ROBOT_H_ */
-
-

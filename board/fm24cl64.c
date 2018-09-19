@@ -67,14 +67,14 @@ bool fm_write(uint16_t addr, const uint8_t *data, uint16_t len)
     fm_wp(FALSE);
     bool ret = i2c_addr_write(fm_i2c, addr_data, 2, data, len);
     fm_wp(TRUE);
-    
+
     return ret;
 }
 
 /**
  * @brief read data from fm24
- * @param addr - address to read 
- * @param data - data to read 
+ * @param addr - address to read
+ * @param data - data to read
  * @param len - data length
  */
 bool fm_read(uint16_t addr, uint8_t *data, uint16_t len)
@@ -91,5 +91,3 @@ bool fm_read(uint16_t addr, uint8_t *data, uint16_t len)
 
     return FALSE;
 }
-
-

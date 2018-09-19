@@ -6,27 +6,27 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_SCB_H_
-  #define _STM32F10X_SCB_H_
+#define _STM32F10X_SCB_H_
 
 #include "types.h"
 
 typedef enum
 {
-    CODE, 
+    CODE,
     SRAM,
-}VectTablePlace;
+} VectTablePlace;
 
 typedef struct
 {
     uint32_t offsetAddr;
     VectTablePlace place;
-}VectTable, *PVectTable;
+} VectTable, *PVectTable;
 
 
 typedef enum
 {
     MemMangeFault = 0, BusFault, UsageFault, SVCall, PendSV, SysTick,
-}SysIntHandle;
+} SysIntHandle;
 
 
 /* sleep mode */
@@ -45,10 +45,10 @@ typedef enum
 #define SCB_ThreadMode_Enter_NoActiveException    (0x00)
 #define SCB_ThreadMode_Enter_EXC_RETURN           (1 << 0)
 #define IS_SCB_THREADMODE_PARAM(STACK)  \
-                    ((STACK == SCB_ThreadMode_Enter_NoActiveException) || \
-                    (STACK == SCB_ThreadMode_Enter_EXC_RETURN))
+    ((STACK == SCB_ThreadMode_Enter_NoActiveException) || \
+     (STACK == SCB_ThreadMode_Enter_EXC_RETURN))
 
-                        
+
 /* system exception handlers */
 #define SCB_Exception_MemMangeFault     (0x01)
 #define SCB_Exception_BusFault          (0x02)
@@ -58,23 +58,23 @@ typedef enum
 #define SCB_Exception_SysTick           (0x20)
 #define SCB_Debug_Monitor               (0x40)
 #define IS_SCB_EXCEPTION_PARAM(EXCEPTION) \
-                        ((EXCEPTION == SCB_Exception_MemMangeFault) || \
-                         (EXCEPTION == SCB_Exception_BusFault) || \
-                         (EXCEPTION == SCB_Exception_UsageFault) || \
-                         (EXCEPTION == SCB_Exception_SVCall) || \
-                         (EXCEPTION == SCB_Exception_PendSV) || \
-                         (EXCEPTION == SCB_Exception_SysTick))  
-                            
-#define IS_SCB_ACTIVE_PARAM(ACTIVE) \
-                        ((ACTIVE == SCB_Exception_MemMangeFault) || \
-                         (ACTIVE == SCB_Exception_BusFault) || \
-                         (ACTIVE == SCB_Exception_UsageFault) || \
-                         (ACTIVE == SCB_Exception_SVCall) || \
-                         (ACTIVE == SCB_Exception_PendSV) || \
-                         (ACTIVE == SCB_Exception_SysTick) || \
-                         (ACTIVE == SCB_Debug_Monitor))  
+    ((EXCEPTION == SCB_Exception_MemMangeFault) || \
+     (EXCEPTION == SCB_Exception_BusFault) || \
+     (EXCEPTION == SCB_Exception_UsageFault) || \
+     (EXCEPTION == SCB_Exception_SVCall) || \
+     (EXCEPTION == SCB_Exception_PendSV) || \
+     (EXCEPTION == SCB_Exception_SysTick))
 
-                            
+#define IS_SCB_ACTIVE_PARAM(ACTIVE) \
+    ((ACTIVE == SCB_Exception_MemMangeFault) || \
+     (ACTIVE == SCB_Exception_BusFault) || \
+     (ACTIVE == SCB_Exception_UsageFault) || \
+     (ACTIVE == SCB_Exception_SVCall) || \
+     (ACTIVE == SCB_Exception_PendSV) || \
+     (ACTIVE == SCB_Exception_SysTick) || \
+     (ACTIVE == SCB_Debug_Monitor))
+
+
 /* usage fault detail */
 #define SCB_USAGE_FAULT_DIVBYZERO          (1 << 25)
 #define SCB_USAGE_FAULT_UNALIGNED          (1 << 24)
@@ -83,14 +83,14 @@ typedef enum
 #define SCB_USAGE_FAULT_INVSTATE           (1 << 17)
 #define SCB_USAGE_FAULT_UNDEFINSTR         (1 << 16)
 #define IS_SCB_USAGE_FAULT_PARAM(USAGE) \
-                            ((USAGE == SCB_USAGE_FAULT_DIVBYZERO) || \
-                             (USAGE == SCB_USAGE_FAULT_UNALIGNED) || \
-                             (USAGE == SCB_USAGE_FAULT_NOCP) || \
-                             (USAGE == SCB_USAGE_FAULT_INVPC) || \
-                             (USAGE == SCB_USAGE_FAULT_INVSTATE) || \
-                             (USAGE == SCB_USAGE_FAULT_UNDEFINSTR))
-                                
-                                
+    ((USAGE == SCB_USAGE_FAULT_DIVBYZERO) || \
+     (USAGE == SCB_USAGE_FAULT_UNALIGNED) || \
+     (USAGE == SCB_USAGE_FAULT_NOCP) || \
+     (USAGE == SCB_USAGE_FAULT_INVPC) || \
+     (USAGE == SCB_USAGE_FAULT_INVSTATE) || \
+     (USAGE == SCB_USAGE_FAULT_UNDEFINSTR))
+
+
 /* bus fault detail */
 #define SCB_BUS_FAULT_BFARVALID            (1 << 15)
 #define SCB_BUS_FAULT_STKERR               (1 << 12)
@@ -99,34 +99,34 @@ typedef enum
 #define SCB_BUS_FAULT_PRECISERR            (1 << 9)
 #define SCB_BUS_FAULT_IBUSERR              (1 << 8)
 #define IS_SCB_BUS_FAULT_PARAM(BUS) \
-                            ((BUS == SCB_BUS_FAULT_BFARVALID) || \
-                             (BUS == SCB_BUS_FAULT_STKERR) || \
-                             (BUS == SCB_BUS_FAULT_UNSTKERR) || \
-                             (BUS == SCB_BUS_FAULT_IMPRECISERR) || \
-                             (BUS == SCB_BUS_FAULT_PRECISERR) || \
-                             (BUS == SCB_BUS_FAULT_IBUSERR))
-                                
-                                
- /* memory management fault detail */
+    ((BUS == SCB_BUS_FAULT_BFARVALID) || \
+     (BUS == SCB_BUS_FAULT_STKERR) || \
+     (BUS == SCB_BUS_FAULT_UNSTKERR) || \
+     (BUS == SCB_BUS_FAULT_IMPRECISERR) || \
+     (BUS == SCB_BUS_FAULT_PRECISERR) || \
+     (BUS == SCB_BUS_FAULT_IBUSERR))
+
+
+/* memory management fault detail */
 #define SCB_MEMFAULT_MMARVALID            (1 << 7)
 #define SCB_MEMFAULT_MSTKERR              (1 << 4)
 #define SCB_MEMFAULT_MUNSTKERR            (1 << 3)
 #define SCB_MEMFAULT_DACCVIOL             (1 << 1)
 #define SCB_MEMFAULT_IACCVIOL             (1 << 0)
 #define IS_SCB_MEM_FAULT_PARAM(MEM) \
-                            ((MEM == SCB_MEMFAULT_MMARVALID) || \
-                             (MEM == SCB_MEMFAULT_MSTKERR) || \
-                             (MEM == SCB_MEMFAULT_MUNSTKERR) || \
-                             (MEM == SCB_MEMFAULT_DACCVIOL) || \
-                             (MEM == SCB_MEMFAULT_IACCVIOL))
-                                
-                                
+    ((MEM == SCB_MEMFAULT_MMARVALID) || \
+     (MEM == SCB_MEMFAULT_MSTKERR) || \
+     (MEM == SCB_MEMFAULT_MUNSTKERR) || \
+     (MEM == SCB_MEMFAULT_DACCVIOL) || \
+     (MEM == SCB_MEMFAULT_IACCVIOL))
+
+
 /* hard fault detail */
 #define SCB_HARDFAULT_FORCED        (1 << 30)
 #define SCB_HARDFAULT_VECTTBL       (1 << 1)
 #define IS_SCB_HARD_FAULT_PARAM(HARD) \
-                            ((HARD == SCB_HARDFAULT_FORCED) || \
-                             (HARD == SCB_HARDFAULT_VECTTBL))
+    ((HARD == SCB_HARDFAULT_FORCED) || \
+     (HARD == SCB_HARDFAULT_VECTTBL))
 
 
 
@@ -148,15 +148,15 @@ uint8_t SCB_GetMinPreemptionPriority(void);
 uint8_t SCB_GetMinSubPriority(void);
 uint8_t SCB_GetPriorityGrouping(void);
 void SCB_GenSystemReset(void);
-void SCB_EnableAllIntWakeup(bool flag);         
+void SCB_EnableAllIntWakeup(bool flag);
 void SCB_SetSleepMode(uint8_t mode);
-void SCB_EnableSleepOnExit(bool flag);                
-void SCB_SetStackAlign(uint16_t align);               
-void SCB_BusFaultIgnore(bool flag);           
+void SCB_EnableSleepOnExit(bool flag);
+void SCB_SetStackAlign(uint16_t align);
+void SCB_BusFaultIgnore(bool flag);
 void SCB_EnableDiv0Trp(bool flag);
-void SCB_EnableUnalignTrp(bool flag);          
+void SCB_EnableUnalignTrp(bool flag);
 void SCB_EnableUserAccessSTIR(bool flag);
-void SCB_SetThreadModeEnterMethod(uint8_t mode);     
+void SCB_SetThreadModeEnterMethod(uint8_t mode);
 void SCB_SetExceptionPriorty(uint8_t exception, uint32_t priority);
 void SCB_EnableException(uint8_t handle, bool flag);
 uint8_t SCB_GetPendingException(void);
@@ -174,6 +174,5 @@ void SCB_ClrHardFaultStatus(uint32_t reg);
 uint32_t SCB_GetMemFaultAddress(void);
 uint32_t SCB_GetBusFaultAddress(void);
 void SCB_SystemReset(void);
-
 
 #endif /* _STM32F10X_SCB_H_ */

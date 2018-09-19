@@ -146,4 +146,3 @@ bool ptl_init(void)
 
     return TRUE;
 }
-

@@ -1560,5 +1560,3 @@ void CAN_ClearITPendingBit(CAN_Group group, uint32_t CAN_IT)
         break;
     }
 }
-
-

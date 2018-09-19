@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_MAP_H_
-  #define _STM32F10X_MAP_H_
+#define _STM32F10X_MAP_H_
 
 /* register address map */
 
@@ -85,7 +85,5 @@
 #define SCB_BASE         (0xE000ED00)
 #define NVIC_BASE        (0xE000E100)
 #define SYSTICK_BASE     (0xE000E010)
-
-
 
 #endif /* _STM32F10X_MAP_H_ */

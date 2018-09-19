@@ -69,4 +69,3 @@ void GPIO_PinRemap(uint32_t pin, bool flag);
 
 
 #endif /* _STM32F10X_GPIO_H_ */
-

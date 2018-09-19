@@ -18,6 +18,7 @@
 #include "stm32f10x_cfg.h"
 #include "config.h"
 
+
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[switchmtl]"
 

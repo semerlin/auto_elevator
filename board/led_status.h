@@ -23,4 +23,3 @@ END_DECLS
 
 
 #endif /* _LED_STATUS_H_ */
-

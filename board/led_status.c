@@ -258,4 +258,3 @@ bool is_up_led_on(uint8_t floor)
 }
 
 #endif
-

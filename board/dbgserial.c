@@ -26,7 +26,7 @@ void dbg_serial_setup(void)
     USART_Setup(USART3, &config);
     USART_EnableInt(USART3, USART_IT_RXNE, FALSE);
     USART_EnableInt(USART3, USART_IT_TXE, FALSE);
-    USART_Enable(USART3, TRUE);  
+    USART_Enable(USART3, TRUE);
 }
 
 /**
@@ -46,8 +46,10 @@ void dbg_putchar(char data)
 void dbg_putstring(const char *string, uint32_t length)
 {
     const char *pNext = string;
-    while(length--)
+    while (length--)
+    {
         dbg_putchar(*pNext++);
+    }
 }
 
 
@@ -61,7 +63,7 @@ void assert_failed(const char *file, const char *line, const char *exp)
     dbg_putstring("(", 1);
     dbg_putstring(exp, strlen(exp));
     dbg_putstring(")\n", 2);
-    while(1);
+    while (1);
 }
 #endif
 
@@ -79,6 +81,3 @@ void trace(const char *module, const char *fmt, ...)
     dbg_putstring(buf, cnt);
 }
 #endif
-
-
-

@@ -10,7 +10,6 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_cfg.h"
 
-
 /* systick register structure */
 typedef struct
 {
@@ -18,7 +17,7 @@ typedef struct
     volatile uint32_t LOAD;
     volatile uint32_t VAL;
     volatile uint32_t CALIB;
-}SYSTICK_T;
+} SYSTICK_T;
 
 static SYSTICK_T *SYSTICK = (SYSTICK_T *)SYSTICK_BASE;
 
@@ -48,8 +47,10 @@ void SYSTICK_SetClockSource(uint8_t source)
 void SYSTICK_EnableInt(bool flag)
 {
     SYSTICK->CTRL &= ~CTRL_TICKINT;
-    if(flag)
+    if (flag)
+    {
         SYSTICK->CTRL |= CTRL_TICKINT;
+    }
 }
 
 /**
@@ -59,8 +60,10 @@ void SYSTICK_EnableInt(bool flag)
 void SYSTICK_EnableCounter(bool flag)
 {
     SYSTICK->CTRL &= ~CTRL_ENABLE;
-    if(flag)
+    if (flag)
+    {
         SYSTICK->CTRL |= CTRL_ENABLE;
+    }
 }
 
 /**
@@ -69,9 +72,11 @@ void SYSTICK_EnableCounter(bool flag)
  */
 bool SYSTICK_IsCountFlagSet(void)
 {
-    if(SYSTICK->CTRL & CTRL_COUNTFLAG)
+    if (SYSTICK->CTRL & CTRL_COUNTFLAG)
+    {
         return TRUE;
-    
+    }
+
     return FALSE;
 }
 
@@ -91,15 +96,19 @@ void SYSTICK_SetTickInterval(uint32_t time)
 {
     uint32_t hclk = RCC_GetHCLK();
     uint32_t tickClock = 0;
-    if(SYSTICK->CTRL & CTRL_CLKSOURCE)
+    if (SYSTICK->CTRL & CTRL_CLKSOURCE)
+    {
         tickClock = hclk;
+    }
     else
+    {
         tickClock = (hclk >> 3);
-    
+    }
+
 #ifdef __DEBUG
     uint32_t maxInterval = (1 << 24) / (tickClock / 1000);
     assert_param(time <= maxInterval);
 #endif
-    
+
     SYSTICK->LOAD = ((tickClock / 1000 * time) & 0xffffff);
 }

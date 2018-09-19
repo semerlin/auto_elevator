@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _CM3_CORE_H
-  #define _CM3_CORE_H
+#define _CM3_CORE_H
 
 #include "types.h"
 
@@ -42,4 +42,3 @@ uint32_t __CLZ(uint32_t value);
 
 
 #endif
-

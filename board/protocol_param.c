@@ -453,4 +453,3 @@ void notify_calc(uint8_t floor, uint16_t floor_height, uint16_t distance)
     ptl_send_data(rsp, 5 + sizeof(msg));
 }
 #endif
-

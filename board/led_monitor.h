@@ -20,4 +20,3 @@ void led_monitor_process(uint8_t id_board, uint16_t prev_status, uint16_t cur_st
 END_DECLS
 
 #endif /* _LED_MONITOR_H_ */
-

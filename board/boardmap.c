@@ -257,4 +257,3 @@ uint16_t boardmap_get_led_status(uint8_t id_board)
 
     return 0xffff;
 }
-

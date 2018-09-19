@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_TIM_H_
-  #define _STM32F10X_TIM_H_
+#define _STM32F10X_TIM_H_
 
 #include "types.h"
 
@@ -17,7 +17,7 @@ typedef enum
     TIM4,
     TIM5,
     TIM_Count,
-}TIM_Group;
+} TIM_Group;
 
 #define TIM_COUNTMODE_UP     0
 #define TIM_COUNTMODE_DOWN   (1 << 4)

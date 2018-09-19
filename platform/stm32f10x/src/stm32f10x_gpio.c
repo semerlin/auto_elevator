@@ -224,4 +224,3 @@ void GPIO_PinRemap(uint32_t pin, bool flag)
         AFIO->MAPR &= ~pin;
     }
 }
-

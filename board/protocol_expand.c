@@ -335,6 +335,3 @@ void set_register_cb(register_cb_t register_cb)
 }
 
 #endif
-
-
-

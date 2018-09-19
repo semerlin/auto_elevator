@@ -12,6 +12,7 @@
 #include "fm24cl64.h"
 #include "dbgserial.h"
 
+
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[PARAM]"
 

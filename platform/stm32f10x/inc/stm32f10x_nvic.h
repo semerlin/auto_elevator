@@ -156,4 +156,3 @@ void NVIC_GetIRQPriority(uint8_t channel, uint8_t *preemptionPriority,
                          uint8_t *subPriority);
 
 #endif /* _STM32F10X_NVIC_H_ */
-

@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10x_CFG_H
-  #define _STM32F10x_CFG_H
+#define _STM32F10x_CFG_H
 
 #include "assert.h"
 #include "trace.h"
@@ -27,41 +27,40 @@
 
 /**********************************************************/
 #ifdef _MODULE_FLASH
-  #include "stm32f10x_flash.h" 
+#include "stm32f10x_flash.h"
 #endif
 
 #ifdef _MODULE_RCC
-  #include "stm32f10x_rcc.h" 
+#include "stm32f10x_rcc.h"
 #endif
 
 #ifdef _MODULE_GPIO
-  #include "stm32f10x_gpio.h" 
+#include "stm32f10x_gpio.h"
 #endif
 
 #ifdef _MODULE_USART
-  #include "stm32f10x_usart.h" 
+#include "stm32f10x_usart.h"
 #endif
 
 #ifdef _MODULE_SCB
-  #include "stm32f10x_scb.h" 
+#include "stm32f10x_scb.h"
 #endif
 
 #ifdef _MODULE_NVIC
-  #include "stm32f10x_nvic.h" 
+#include "stm32f10x_nvic.h"
 #endif
 
 #ifdef _MODULE_SYSTICK
-  #include "stm32f10x_systick.h"
+#include "stm32f10x_systick.h"
 #endif
 
 #ifdef _MODULE_TIM
-  #include "stm32f10x_tim.h"
+#include "stm32f10x_tim.h"
 #endif
 
 #ifdef _MODULE_CAN
-  #include "stm32f10x_can.h"
+#include "stm32f10x_can.h"
 #endif
 
 
 #endif /* _STM32F10x_CFG_H_ */
-

@@ -289,6 +289,10 @@
       <file>$PROJ_DIR$\expand\Obj\robot.o</file>
       <file>$PROJ_DIR$\expand\Obj\keymap.__cstat.et</file>
       <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+      <file>$PROJ_DIR$\expand\Obj\diagnosis.o</file>
+      <file>$PROJ_DIR$\expand\Obj\diagnosis.pbi</file>
+      <file>$PROJ_DIR$\board\diagnosis.c</file>
+      <file>$PROJ_DIR$\board\diagnosis.h</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\board\fm24cl64.c</name>
@@ -381,7 +385,7 @@
       <inputs>
         <tool>
           <name>ILINK</name>
-          <file> 83 244 279 250 13 71 246 91 243 21 278 275 84 240 269 252 94 31 227 97 8 59 104 43 56 34 17 110 245 25 98 14 237 117 280 26 95 273 115 69 57 53 22 256 92 7 272 103 35 276 74 67 125 282</file>
+          <file> 83 244 279 250 13 71 246 91 243 21 278 275 283 84 240 269 252 94 31 227 97 8 59 104 43 56 34 17 110 245 25 98 14 237 117 280 26 95 273 115 69 57 53 22 256 92 7 272 103 35 276 74 67 125 282</file>
         </tool>
       </inputs>
     </file>
@@ -887,11 +891,11 @@
       <inputs>
         <tool>
           <name>BICOMP</name>
-          <file> 176 166 183 174 150 108 65 18 151 157 133 154 70 266 161 39 210 179 186 142 175 134 158 140 198 3 107 121 50 28 248 165 211 216 213 222 207 215 220 232 221 180 167 169 144 259 146 171 178 217 129</file>
+          <file> 222 70 186 286 107 183 232 210 166 174 150 28 248 216 215 161 179 151 157 133 154 108 121 50 165 211 213 207 220 221 180 176 142 175 134 158 140 198 3 65 266 39 18 167 169 144 259 146 171 178 217 129</file>
         </tool>
         <tool>
           <name>ICCARM</name>
-          <file> 259 108 70 50 65 266 28 248 107 121 142 165 166 180 18 39 161 211 216 213 222 207 215 220 232 221 151 175 146 176 171 178 210 169 217 167 174 179 157 134 186 183 158 133 140 150 144 129 198 154 3</file>
+          <file> 259 108 70 50 65 266 28 248 107 121 142 165 166 180 18 39 161 211 216 213 222 207 215 220 232 221 151 175 146 176 171 178 210 169 217 167 174 179 157 134 186 183 158 133 140 150 144 129 198 154 3 286</file>
         </tool>
       </inputs>
     </file>
@@ -1564,10 +1568,25 @@
         </tool>
       </inputs>
     </file>
-    <forcedrebuild>
-      <name>[MULTI_TOOL]</name>
-      <tool>ILINK</tool>
-    </forcedrebuild>
+    <file>
+      <name>$PROJ_DIR$\board\diagnosis.c</name>
+      <outputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 284</file>
+        </tool>
+        <tool>
+          <name>ICCARM</name>
+          <file> 283</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 286 166 180 18 108 70 50 65 266 28 248 107 39 161</file>
+        </tool>
+      </inputs>
+    </file>
   </configuration>
   <configuration>
     <name>master</name>

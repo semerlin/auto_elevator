@@ -22,8 +22,8 @@
 #include "stm32f10x_it.h"
 
 /* Private typedef -----------------------------------------------------------*/
-typedef void( *intfunc )( void );
-typedef union { intfunc __fun; void * __ptr; } intvec_elem;
+typedef void(*intfunc)(void);
+typedef union { intfunc __fun; void *__ptr; } intvec_elem;
 
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -35,13 +35,13 @@ typedef union { intfunc __fun; void * __ptr; } intvec_elem;
 #pragma language=extended
 #pragma segment="CSTACK"
 
-void __iar_program_start( void );
+void __iar_program_start(void);
 
 #pragma location = ".intvec"
 /* STM32F10x Vector Table entries */
 const intvec_elem __vector_table[] =
 {
-    { .__ptr = __sfe( "CSTACK" ) },
+    { .__ptr = __sfe("CSTACK") },
     &__iar_program_start,
     NMIException,
     HardFaultException,
@@ -117,4 +117,3 @@ const intvec_elem __vector_table[] =
 };
 
 /******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE****/
-

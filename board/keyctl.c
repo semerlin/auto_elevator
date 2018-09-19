@@ -14,7 +14,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[keyctl]"
 
-#define KEY_NUM 16 
+#define KEY_NUM 16
 
 /* led status */
 static uint16_t key_status = 0x0000;
@@ -69,7 +69,7 @@ static void hc595_senddata(uint16_t data)
 }
 
 /**
- * @brief initialize key control 
+ * @brief initialize key control
  */
 void keyctl_init(void)
 {
@@ -111,4 +111,3 @@ void keyctl_release_all(void)
     key_status = 0x0000;
     hc595_senddata(key_status);
 }
-

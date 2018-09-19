@@ -22,4 +22,3 @@ bool is_expand_board_registered(void);
 END_DECLS
 
 #endif
-

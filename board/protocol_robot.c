@@ -553,4 +553,3 @@ void register_arrive_cb(process_robot_cb cb)
     arrive_cb = cb;
 }
 #endif
-

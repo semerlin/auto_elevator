@@ -347,6 +347,3 @@ char elev_floor(void)
     return elev_cur_floor;
 }
 #endif
-
-
-

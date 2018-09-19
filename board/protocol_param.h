@@ -21,5 +21,3 @@ END_DECLS
 
 
 #endif /* _PROTOCOL_PARAM_H_ */
-
-

@@ -31,4 +31,3 @@ END_DECLS
 #endif
 
 #endif /* _ROBOT_H_ */
-

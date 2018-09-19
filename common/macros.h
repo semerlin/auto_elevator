@@ -65,4 +65,3 @@
 
 
 #endif /* _MACROS_H_ */
-

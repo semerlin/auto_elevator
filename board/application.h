@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _APPLICATION_H_
-  #define _APPLICATION_H_
+#define _APPLICATION_H_
 
 #include "types.h"
 
@@ -17,4 +17,3 @@ void ApplicationStartup();
 END_DECLS
 
 #endif /* _APPLICATION_H_ */
-

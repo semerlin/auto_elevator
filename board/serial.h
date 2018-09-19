@@ -88,4 +88,3 @@ void serial_putstring(serial *handle, const char *string,
 END_DECLS
 
 #endif /* _SERIAL_H_ */
-

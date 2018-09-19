@@ -87,5 +87,4 @@ bool floormap_contains_floor(uint8_t floor)
     }
     return 0;
 }
-
 #endif

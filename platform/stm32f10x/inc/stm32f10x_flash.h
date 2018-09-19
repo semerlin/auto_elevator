@@ -6,7 +6,7 @@
 * See the COPYING file for the terms of usage and distribution.
 */
 #ifndef _STM32F10X_FLASH_H_
-  #define _STM32F10X_FLASH_H_
+#define _STM32F10X_FLASH_H_
 
 #include "types.h"
 
@@ -47,5 +47,3 @@ uint32_t FLASH_Write(uint32_t addr, uint8_t *data, uint32_t len);
 uint32_t FLASH_Read(uint32_t addr, uint8_t *data, uint32_t len);
 
 #endif /* _STM32F10X_FLASH_H_ */
-
-

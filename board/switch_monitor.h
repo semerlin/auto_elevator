@@ -19,4 +19,3 @@ END_DECLS
 #endif
 
 #endif /* _SWITCH_MONITOR_H_ */
-

@@ -197,6 +197,4 @@ void USART_IrdaEnable(USART_Group group, bool flag);
 void USART_SetIrdaMode(USART_Group group, uint8_t mode);
 void USART_SetGuardTime(USART_Group group, uint16_t time);
 
-
 #endif /* _STM32F10X_USART_H_ */
-

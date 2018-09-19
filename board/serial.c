@@ -417,4 +417,3 @@ void UART5_IRQHandler(void)
     /* check if there is any higher priority task need to wakeup */
     portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 }
-
