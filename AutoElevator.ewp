@@ -1988,6 +1988,12 @@
       <name>$PROJ_DIR$\board\delay.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\diagnosis.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\diagnosis.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\elevator.c</name>
     </file>
     <file>

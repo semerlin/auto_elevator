@@ -29,7 +29,7 @@ typedef struct
     uint32_t RESERVED;
     volatile uint32_t MMFAR;
     volatile uint32_t BFAR;
-}SCB_T;
+} SCB_T;
 
 /* SCB寄存器结构体定义*/
 static SCB_T *SCB = (SCB_T *)SCB_BASE;
@@ -66,7 +66,7 @@ static SCB_T *SCB = (SCB_T *)SCB_BASE;
 #define NONBASETHRDENA ((uint32_t)0x01)
 
 //SHPRx寄存器
-#define MEMMANGEFAULT   ((uint32_t)0x0f << 4)  
+#define MEMMANGEFAULT   ((uint32_t)0x0f << 4)
 #define BUSFAULT        ((uint32_t)0x0f << 12)
 #define USAGEFAULT      ((uint32_t)0x0f << 20)
 #define SVCALL          ((uint32_t)0x0f << 28)
@@ -99,7 +99,7 @@ static SCB_T *SCB = (SCB_T *)SCB_BASE;
  */
 uint32_t SCB_GetCPUID(void)
 {
-    return (SCB->CPUID);   
+    return (SCB->CPUID);
 }
 
 /**
@@ -116,10 +116,14 @@ void SCB_PendNMI(void)
  */
 bool SCB_IsNMIPending(void)
 {
-    if(((SCB->ICSR) & NMIPENDSET) == NMIPENDSET)
+    if (((SCB->ICSR) & NMIPENDSET) == NMIPENDSET)
+    {
         return TRUE;
+    }
     else
+    {
         return FALSE;
+    }
 }
 
 /**
@@ -128,10 +132,14 @@ bool SCB_IsNMIPending(void)
  */
 void SCB_PendPendSV(bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         SCB->ICSR |= PENDSVSET;
+    }
     else
+    {
         SCB->ICSR |= PENDSVCLR;
+    }
 }
 
 
@@ -141,10 +149,14 @@ void SCB_PendPendSV(bool flag)
  */
 bool SCB_IsPendSVPending(void)
 {
-    if(((SCB->ICSR) & PENDSVSET) == PENDSVSET)
+    if (((SCB->ICSR) & PENDSVSET) == PENDSVSET)
+    {
         return TRUE;
+    }
     else
+    {
         return FALSE;
+    }
 }
 
 /**
@@ -153,10 +165,14 @@ bool SCB_IsPendSVPending(void)
  */
 void SCB_PendSysTick(bool flag)
 {
-    if(flag)
+    if (flag)
+    {
         SCB->ICSR |= PENDSTSET;
+    }
     else
+    {
         SCB->ICSR |= PENDSTCLR;
+    }
 }
 
 /**
@@ -165,10 +181,14 @@ void SCB_PendSysTick(bool flag)
  */
 bool SCB_IsIntPending(void)
 {
-    if(((SCB->ICSR) & ISRPENDING) == ISRPENDING)
+    if (((SCB->ICSR) & ISRPENDING) == ISRPENDING)
+    {
         return TRUE;
+    }
     else
+    {
         return FALSE;
+    }
 }
 
 /**
@@ -187,10 +207,14 @@ uint32_t SCB_GetPendIntVector(void)
  */
 bool SCB_IsIntPreempted(void)
 {
-    if(((SCB->ICSR) & RETOBASE) == RETOBASE)
+    if (((SCB->ICSR) & RETOBASE) == RETOBASE)
+    {
         return FALSE;
+    }
     else
+    {
         return TRUE;
+    }
 }
 
 /**
@@ -208,12 +232,16 @@ uint32_t SCB_GetActiveIntVector(void)
 */
 void SCB_SetVectTableConfig(VectTable table)
 {
-    if(table.place == CODE)
+    if (table.place == CODE)
+    {
         SCB->VTOR &= ~TBLBASE;
+    }
     else
+    {
         SCB->VTOR |= TBLBASE;
-    
-    SCB->VTOR = (((table.offsetAddr) & 0x7ffff) << 9); 
+    }
+
+    SCB->VTOR = (((table.offsetAddr) & 0x7ffff) << 9);
 }
 
 /**
@@ -224,11 +252,15 @@ VectTable SCB_GetVectTableConfig(void)
 {
     VectTable table;
     table.offsetAddr = (((SCB->VTOR) & TBLOFF) >> 9);
-    if(((SCB->VTOR) & TBLBASE) == TBLBASE)
+    if (((SCB->VTOR) & TBLBASE) == TBLBASE)
+    {
         table.place = SRAM;
+    }
     else
+    {
         table.place = CODE;
-    
+    }
+
     return table;
 }
 
@@ -239,7 +271,7 @@ VectTable SCB_GetVectTableConfig(void)
 void SCB_SetPriorityGrouping(uint32_t group)
 {
     assert_param(group <= 7);
-	SCB->AIRCR = (VECTKEY | (group << 8));
+    SCB->AIRCR = (VECTKEY | (group << 8));
 }
 
 /**
@@ -249,7 +281,7 @@ void SCB_SetPriorityGrouping(uint32_t group)
 uint8_t SCB_GetMinPreemptionPriority(void)
 {
     uint8_t priorityGrouping = ((SCB->AIRCR >> 8) & 0x07);
-    return (1 << (7 - priorityGrouping)) - 1;   
+    return (1 << (7 - priorityGrouping)) - 1;
 }
 
 /**
@@ -275,7 +307,7 @@ uint8_t SCB_GetPriorityGrouping(void)
  */
 void SCB_GenSystemReset(void)
 {
-	SCB->AIRCR |= (VECTKEY | SYSRESETREQ);
+    SCB->AIRCR |= (VECTKEY | SYSRESETREQ);
 }
 
 
@@ -286,16 +318,18 @@ void SCB_GenSystemReset(void)
  */
 void SCB_EnableAllIntWakeup(bool flag)
 {
-	SCB->SCR &= ~SEVEONPEND;
-    if(flag)
+    SCB->SCR &= ~SEVEONPEND;
+    if (flag)
+    {
         SCB->SCR |= (1 << 4);
+    }
 }
 
 /**
  * @brief controls whether the processor uses sleep or deep sleep as its low
  *        power mode
  * @param sleep mode
- */                  
+ */
 void SCB_SetSleepMode(uint8_t mode)
 {
     assert_param(IS_SCB_SLEEP_PARAM(mode));
@@ -304,23 +338,25 @@ void SCB_SetSleepMode(uint8_t mode)
 }
 
 /**
- * @brief configures sleep-on-exit when returning from handler mode to thread 
+ * @brief configures sleep-on-exit when returning from handler mode to thread
  *        mode
  * @param TRUE: Enter sleep or deep sleep FALSE: Do not sleep
- */  
+ */
 void SCB_EnableSleepOnExit(bool flag)
 {
     SCB->SCR &= ~SLEEPONEXIT;
 
-    if(flag)
+    if (flag)
+    {
         SCB->SCR |= SLEEPONEXIT;
+    }
 }
 
 
 /**
 * @brief set stack align mode
 * @param align mode
-*/                   
+*/
 void SCB_SetStackAlign(uint16_t align)
 {
     assert_param(IS_SCB_STACK_PARAM(align));
@@ -332,48 +368,56 @@ void SCB_SetStackAlign(uint16_t align)
 /**
  * @brief whether process bus faults or not
  * @param TRUE: yes FALSE:no
- */                   
+ */
 void SCB_BusFaultIgnore(bool flag)
 {
     SCB->CCR &= ~BFHFNMIGN;
-    if(flag)
+    if (flag)
+    {
         SCB->CCR |= BFHFNMIGN;
+    }
 }
 
 
 
 /**
- * @brief configure trap divide by 0 
+ * @brief configure trap divide by 0
  * @param TRUE: yes FALSE:no
- */                   
+ */
 void SCB_EnableDiv0Trp(bool flag)
 {
     SCB->CCR &= ~DIV0TRP;
-    if(flag)
+    if (flag)
+    {
         SCB->CCR |= DIV0TRP;
+    }
 }
 
 
 /**
- * @brief enables unaligned access traps 
+ * @brief enables unaligned access traps
  * @param TRUE: yes FALSE:no
- */ 
+ */
 void SCB_EnableUnalignTrp(bool flag)
 {
     SCB->CCR &= ~UNALIGNTRP;
-    if(flag)
+    if (flag)
+    {
         SCB->CCR |= UNALIGNTRP;
+    }
 }
 
 /**
- * @brief enables unprivileged software access to the STIR 
+ * @brief enables unprivileged software access to the STIR
  * @param TRUE: yes FALSE:no
- */                   
+ */
 void SCB_EnableUserAccessSTIR(bool flag)
 {
     SCB->CCR &= ~USERSETMPEND;
-    if(flag)
+    if (flag)
+    {
         SCB->CCR |= USERSETMPEND;
+    }
 }
 
 /**
@@ -391,15 +435,15 @@ void SCB_SetThreadModeEnterMethod(uint8_t mode)
 /**
  * @brief set exception handlers priority
  * @param exception name
- * @param exception priority, 0-15, 0 has the highest priority, 15 has the 
-         lowest                   
- */                   
+ * @param exception priority, 0-15, 0 has the highest priority, 15 has the
+         lowest
+ */
 void SCB_SetExceptionPriorty(uint8_t exception, uint32_t priority)
 {
     assert_param(IS_SCB_EXCEPTION_PARAM(exception));
     assert_param(priority <= 15);
-   
-    switch(exception)
+
+    switch (exception)
     {
     case SCB_Exception_MemMangeFault:
         SCB->SHPR1 &= ~MEMMANGEFAULT;
@@ -439,28 +483,40 @@ void SCB_SetExceptionPriorty(uint8_t exception, uint32_t priority)
 void SCB_EnableException(uint8_t handle, bool flag)
 {
     assert_param(IS_SCB_EXCEPTION_PARAM(handle));
-    switch(handle)
+    switch (handle)
     {
     case SCB_Exception_MemMangeFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= MEMFAULTENA;
+        }
         else
+        {
             SCB->SHCSR &= ~MEMFAULTENA;
+        }
         break;
     case SCB_Exception_BusFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= BUSFAULTENA;
+        }
         else
+        {
             SCB->SHCSR &= ~BUSFAULTENA;
+        }
         break;
     case SCB_Exception_UsageFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= USGFAULTENA;
+        }
         else
+        {
             SCB->SHCSR &= ~USGFAULTENA;
+        }
         break;
     default:
-         break;
+        break;
     }
 }
 
@@ -473,19 +529,27 @@ uint8_t SCB_GetPendingException(void)
 {
     uint8_t pendException = (SCB->SHCSR >> 12) & 0x0f;
     uint8_t ret = 0;
-    
-    if(pendException & 0x01)
+
+    if (pendException & 0x01)
+    {
         ret |= SCB_Exception_UsageFault;
-    
-    if(pendException & 0x02)
+    }
+
+    if (pendException & 0x02)
+    {
         ret |= SCB_Exception_MemMangeFault;
-    
-    if(pendException & 0x04)
+    }
+
+    if (pendException & 0x04)
+    {
         ret |= SCB_Exception_BusFault;
-    
-    if(pendException & 0x08)
+    }
+
+    if (pendException & 0x08)
+    {
         ret |= SCB_Exception_SVCall;
-    
+    }
+
     return ret;
 }
 
@@ -495,34 +559,50 @@ uint8_t SCB_GetPendingException(void)
  * @param TRUE:set FALSE:reset
  */
 void SCB_SetPendingStatus(uint8_t exception, bool flag)
-{   
+{
     assert_param(IS_SCB_EXCEPTION_PARAM(exception));
-   
-    switch(exception)
+
+    switch (exception)
     {
     case SCB_Exception_MemMangeFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= MEMFAULTPENDED;
+        }
         else
+        {
             SCB->SHCSR &= ~MEMFAULTPENDED;
+        }
         break;
     case SCB_Exception_BusFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= BUSFAULTPENDED;
+        }
         else
+        {
             SCB->SHCSR &= ~BUSFAULTPENDED;
+        }
         break;
     case SCB_Exception_UsageFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= USGFAULTPENDED;
+        }
         else
+        {
             SCB->SHCSR &= ~USGFAULTPENDED;
+        }
         break;
     case SCB_Exception_SVCall:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= SVCALLPENDED;
+        }
         else
+        {
             SCB->SHCSR &= ~SVCALLPENDED;
+        }
         break;
     default:
         break;
@@ -536,37 +616,37 @@ void SCB_SetPendingStatus(uint8_t exception, bool flag)
 uint8_t SCB_GetActiveException(void)
 {
     uint8_t dwActiveStatus = 0;
-    if(SCB->SHCSR & MEMFAULTACT)
+    if (SCB->SHCSR & MEMFAULTACT)
     {
         dwActiveStatus |= SCB_Exception_MemMangeFault;
     }
 
-    if(SCB->SHCSR & BUSFAULTACT)
+    if (SCB->SHCSR & BUSFAULTACT)
     {
         dwActiveStatus |= SCB_Exception_BusFault;
     }
-    
-    if(SCB->SHCSR & USGFAULTACT)
+
+    if (SCB->SHCSR & USGFAULTACT)
     {
         dwActiveStatus |= SCB_Exception_UsageFault;
     }
 
-    if(SCB->SHCSR & SVCALLACT)
+    if (SCB->SHCSR & SVCALLACT)
     {
         dwActiveStatus |= SCB_Exception_SVCall;
     }
 
-    if(SCB->SHCSR & MONITORACT)
+    if (SCB->SHCSR & MONITORACT)
     {
         dwActiveStatus |= SCB_Debug_Monitor;
     }
 
-    if(SCB->SHCSR & PENDSVACT)
+    if (SCB->SHCSR & PENDSVACT)
     {
         dwActiveStatus |= SCB_Exception_PendSV;
     }
 
-    if(SCB->SHCSR & SYSTICKACT)
+    if (SCB->SHCSR & SYSTICKACT)
     {
         dwActiveStatus |= SCB_Exception_SysTick;
     }
@@ -580,53 +660,81 @@ uint8_t SCB_GetActiveException(void)
  * @param TRUE:set FALSE:reset
  */
 void SCB_SetActiveStatus(uint8_t exception, bool flag)
-{   
-    
+{
+
     assert_param(IS_SCB_ACTIVE_PARAM(exception));
-   
-    switch(exception)
+
+    switch (exception)
     {
     case SCB_Exception_MemMangeFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= MEMFAULTACT;
+        }
         else
+        {
             SCB->SHCSR &= ~MEMFAULTACT;
+        }
         break;
     case SCB_Exception_BusFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= BUSFAULTACT;
+        }
         else
+        {
             SCB->SHCSR &= ~BUSFAULTACT;
+        }
         break;
     case SCB_Exception_UsageFault:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= USGFAULTACT;
+        }
         else
+        {
             SCB->SHCSR &= ~USGFAULTACT;
+        }
         break;
     case SCB_Exception_SVCall:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= SVCALLACT;
+        }
         else
+        {
             SCB->SHCSR &= ~SVCALLACT;
+        }
         break;
     case SCB_Debug_Monitor:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= MONITORACT;
+        }
         else
+        {
             SCB->SHCSR &= ~MONITORACT;
+        }
         break;
     case SCB_Exception_PendSV:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= PENDSVACT;
+        }
         else
+        {
             SCB->SHCSR &= ~PENDSVACT;
+        }
         break;
     case SCB_Exception_SysTick:
-        if(flag)
+        if (flag)
+        {
             SCB->SHCSR |= SYSTICKACT;
+        }
         else
+        {
             SCB->SHCSR &= ~SYSTICKACT;
+        }
         break;
     default:
         break;
@@ -677,7 +785,7 @@ void SCB_ClrBusFaultStatus(uint32_t status)
  */
 uint32_t SCB_GetMemFaultDetail(void)
 {
-  return (SCB->CFSR & 0x000000ff);
+    return (SCB->CFSR & 0x000000ff);
 }
 
 
@@ -698,7 +806,7 @@ void SCB_ClrMemFaultStatus(uint32_t reg)
  */
 uint32_t SCB_GetHardFaultDetail(void)
 {
-  return SCB->HFSR;
+    return SCB->HFSR;
 }
 
 
@@ -733,13 +841,13 @@ uint32_t SCB_GetBusFaultAddress(void)
 /**
  * @brief reset system
  */
-void SCB_SystemReset(void) 
-{ 
-  __ASM("MOV R0, #1"); 
-  __ASM("MSR FAULTMASK, R0"); 
-  SCB->AIRCR = 0x05FA0004; 
-  for(;;); 
-} 
+void SCB_SystemReset(void)
+{
+    __ASM("MOV R0, #1");
+    __ASM("MSR FAULTMASK, R0");
+    SCB->AIRCR = 0x05FA0004;
+    for (;;);
+}
 
 
 

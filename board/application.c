@@ -28,12 +28,13 @@
 #endif
 #include "led_status.h"
 #include "expand.h"
+#include "diagnosis.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[app]"
 
 #ifdef __MASTER
-#define VERSION  ("v1.1.3.5")
+#define VERSION  ("v1.1.3.6")
 #else
 #define VERSION  ("v1.1.1.0")
 #endif
@@ -52,6 +53,7 @@ void ApplicationStartup()
     TRACE("Copyright 2018, Huang Yang <elious.huang@gmail.com>\r\n");
 #endif
     TRACE("version = %s\r\n", VERSION);
+    diagnosis_init();
     license_init();
     if (!param_init())
     {

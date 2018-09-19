@@ -226,6 +226,7 @@ static void process_param_set(const uint8_t *data, uint8_t len)
             status = INVALID_PARAM;
             goto END;
         }
+        param.start_floor = msg->start_floor;
 #ifdef __MASTER
         if ((!IS_TOTAL_FLOOR_VALID(msg->total_floor)) ||
             (!IS_CALC_TYPE_VALID(msg->calc_type)))
@@ -250,7 +251,6 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         }
         param.id_board = msg->id_board;
 #endif
-        param.start_floor = msg->start_floor;
 
         if (!param_store(param))
         {
