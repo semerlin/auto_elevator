@@ -23,12 +23,12 @@ void dump_register(void)
 
 void HardFaultException(void)
 {
-    TRACE("hardfault happened!");
+    TRACE("hardfault happened!\r\n");
     dump_register();
 }
 
 void BusFaultException(void)
 {
-    TRACE("busfault happened!");
+    TRACE("busfault happened!\r\n");
     dump_register();
 }

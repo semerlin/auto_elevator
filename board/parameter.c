@@ -76,7 +76,6 @@ bool is_param_setted(void)
 
 bool param_store(parameters_t param)
 {
-    flash_map_t flash_map;
     memcpy(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN);
     flash_map.parameters = param;
     return fm_write(PARAM_START_ADDRESS, (uint8_t *)&flash_map, sizeof(flash_map_t));
