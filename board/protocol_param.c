@@ -20,9 +20,7 @@
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_param]"
 
-#ifdef __MASTER
 extern parameters_t board_parameter;
-#endif
 
 /* protocol head and tail */
 #define PARAM_HEAD    0x55
