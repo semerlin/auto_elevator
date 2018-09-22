@@ -53,7 +53,7 @@ typedef struct
 bool param_init(void);
 void reset_param(void);
 bool is_param_setted(void);
-bool param_store(parameters_t param);
+bool param_store(const parameters_t *param);
 #ifdef __MASTER
 bool param_store_pwd(uint8_t interval, uint8_t *pwd);
 bool param_store_floor_height(uint8_t len, const floor_height_t *floor_height);

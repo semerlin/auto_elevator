@@ -74,10 +74,10 @@ bool is_param_setted(void)
     return param_setted;
 }
 
-bool param_store(parameters_t param)
+bool param_store(const parameters_t *param)
 {
     memcpy(flash_map.flag, PARAM_SETTED_FLAG, PARAM_SETTED_FLAG_LEN);
-    flash_map.parameters = param;
+    flash_map.parameters = *param;
     return fm_write(PARAM_START_ADDRESS, (uint8_t *)&flash_map, sizeof(flash_map_t));
 }
 

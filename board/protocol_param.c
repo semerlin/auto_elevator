@@ -220,13 +220,12 @@ static void process_param_set(const uint8_t *data, uint8_t len)
     {
         msg_param_t *msg = (msg_param_t *)data;
 
-        parameters_t param = param_get();
         if (!IS_FLOOR_VALID(msg->start_floor))
         {
             status = INVALID_PARAM;
             goto END;
         }
-        param.start_floor = msg->start_floor;
+        board_parameter.start_floor = msg->start_floor;
 #ifdef __MASTER
         if ((!IS_TOTAL_FLOOR_VALID(msg->total_floor)) ||
             (!IS_CALC_TYPE_VALID(msg->calc_type)))
@@ -235,12 +234,12 @@ static void process_param_set(const uint8_t *data, uint8_t len)
             goto END;
         }
 
-        param.id_ctl = msg->id_ctl;
-        param.id_elev = msg->id_elev;
-        param.total_floor = msg->total_floor;
-        param.threshold = msg->threshold;
-        param.calc_type = msg->calc_type;
-        param.id_board = 0x01;
+        board_parameter.id_ctl = msg->id_ctl;
+        board_parameter.id_elev = msg->id_elev;
+        board_parameter.total_floor = msg->total_floor;
+        board_parameter.threshold = msg->threshold;
+        board_parameter.calc_type = msg->calc_type;
+        board_parameter.id_board = 0x01;
 #endif
 
 #ifdef __EXPAND
@@ -249,10 +248,9 @@ static void process_param_set(const uint8_t *data, uint8_t len)
             status = INVALID_PARAM;
             goto END;
         }
-        param.id_board = msg->id_board;
+        board_parameter.id_board = msg->id_board;
 #endif
-
-        if (!param_store(param))
+        if (!param_store(&board_parameter))
         {
             status = OPERATION_FAIL;
         }
