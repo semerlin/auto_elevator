@@ -15,7 +15,7 @@ BEGIN_DECLS
 
 #define DEFAULT_CHECKIN   0
 
-void robot_init(void);
+bool robot_init(void);
 void robot_id_set(uint8_t id);
 void robot_id_reset(void);
 uint8_t robot_id_get(void);

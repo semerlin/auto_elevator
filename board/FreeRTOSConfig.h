@@ -25,6 +25,7 @@
 #define configUSE_16_BIT_TICKS        0
 #define configIDLE_SHOULD_YIELD       1
 #define configUSE_MUTEXES             1
+#define configUSE_TIMERS              1
 
 
 /* Co-routine definitions. */
@@ -42,6 +43,11 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil                 0
 #define INCLUDE_vTaskDelay                      1
 #define INCLUDE_uxTaskGetStackHighWaterMark     1
+
+/* Software timer definitions. */
+#define configTIMER_TASK_PRIORITY       (3)
+#define configTIMER_QUEUE_LENGTH        32
+#define configTIMER_TASK_STACK_DEPTH    (configMINIMAL_STACK_SIZE * 2)
 
 /* value can be 0(highest) to 15(lowest)*/
 #define configKERNEL_INTERRUPT_PRIORITY                 (15)

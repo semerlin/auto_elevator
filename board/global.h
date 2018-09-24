@@ -12,28 +12,22 @@
 
 /* task priority definition */
 #ifdef __MASTER
-#define SWITCH_MONITOR_PRIORITY      (tskIDLE_PRIORITY + 3)
-#define ROBOT_PRIORITY               (tskIDLE_PRIORITY + 1)
 #define ALTIMETER_PRIORITY           (tskIDLE_PRIORITY + 4)
 #define ALTIMETER_CALC_PRIORITY      (tskIDLE_PRIORITY + 3)
 #define BLUETOOTH_PRIORITY           (tskIDLE_PRIORITY + 4)
+#define LED_PROCESS_PRIORITY         (tskIDLE_PRIORITY + 3)
 #endif
-#define LICENSE_PRIORITY             (tskIDLE_PRIORITY + 1)
-#define LED_MONITOR_PRIORITY         (tskIDLE_PRIORITY + 2)
 #define PROTOCOL_PRIORITY            (tskIDLE_PRIORITY + 4)
 #define ELEV_PRIORITY                (tskIDLE_PRIORITY + 1)
 #define EXPAND_PRIORITY              (tskIDLE_PRIORITY + 2)
 
 /* task stack definition */
 #ifdef __MASTER
-#define SWITCH_MONITOR_STACK_SIZE    (configMINIMAL_STACK_SIZE)
-#define ROBOT_STACK_SIZE             (configMINIMAL_STACK_SIZE)
 #define ALTIMETER_STACK_SIZE         (configMINIMAL_STACK_SIZE * 2)
 #define ALTIMETER_CALC_STACK_SIZE    (configMINIMAL_STACK_SIZE)
 #define BLUETOOTH_STACK_SIZE         (configMINIMAL_STACK_SIZE)
+#define LED_PROCESS_STACK_SIZE       (configMINIMAL_STACK_SIZE)
 #endif
-#define LICENSE_STACK_SIZE           (configMINIMAL_STACK_SIZE)
-#define LED_MONITOR_STACK_SIZE       (configMINIMAL_STACK_SIZE)
 #define PROTOCOL_STACK_SIZE          (configMINIMAL_STACK_SIZE)
 #define ELEV_STACK_SIZE              (configMINIMAL_STACK_SIZE)
 #define EXPAND_STACK_SIZE            (configMINIMAL_STACK_SIZE)

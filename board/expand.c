@@ -9,6 +9,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "timers.h"
 #include "expand.h"
 #include "stm32f10x_cfg.h"
 #include "global.h"
@@ -39,7 +40,7 @@ typedef enum
     REGISTER_FAIL,
 } register_status_t;
 static register_status_t register_status = REGISTER_FAIL;
-#define REGISTER_INTERVAL         (1000 / portTICK_PERIOD_MS)
+#define REGISTER_INTERVAL         (2000 / portTICK_PERIOD_MS)
 #endif
 
 #define EXPAND_QUEUE_LEN   8
@@ -181,13 +182,9 @@ static uint8_t can_send_msg(uint8_t *data, uint8_t len)
  */
 static void vRegisterBoard(void *pvParameters)
 {
-    for (;;)
+    if (REGISTER_SUCCESS != register_status)
     {
-        vTaskDelay(REGISTER_INTERVAL);
-        if (REGISTER_SUCCESS != register_status)
-        {
-            register_board(board_parameter.id_board, board_parameter.start_floor);
-        }
+        register_board(board_parameter.id_board, board_parameter.start_floor);
     }
 }
 #endif
@@ -270,8 +267,14 @@ bool expand_init(void)
                 EXPAND_PRIORITY, NULL);
 #ifdef __EXPAND
     set_register_cb(register_status_cb);
-    xTaskCreate(vRegisterBoard, "register_board", EXPAND_STACK_SIZE, NULL,
-                EXPAND_PRIORITY, NULL);
+    TimerHandle_t expand_tmr = xTimerCreate("expand_tmr", REGISTER_INTERVAL, TRUE, NULL,
+                                            vRegisterBoard);
+    if (NULL == expand_tmr)
+    {
+        TRACE("initialise expand module failed!\r\n");
+        return FALSE;
+    }
+    xTimerStart(expand_tmr, 0);
 #endif
     return TRUE;
 }

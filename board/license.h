@@ -12,7 +12,7 @@
 
 BEGIN_DECLS
 
-void license_init(void);
+bool license_init(void);
 
 END_DECLS
 

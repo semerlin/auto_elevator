@@ -9,6 +9,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+#include "timers.h"
 #include "queue.h"
 #include "trace.h"
 #include "led_status.h"
@@ -134,30 +135,24 @@ static void elev_pwd_go(char floor)
 
 static void vLedWorkMonitor(void *pvParameters)
 {
-    uint8_t floor = 0;
-    for (;;)
+    /** check elevator status */
+    if (work_robot == elev_state_work())
     {
-        /** check elevator status */
-        if (work_robot == elev_state_work())
+        uint8_t floor = robot_checkin_get();
+        if (DEFAULT_CHECKIN != floor)
         {
-            floor = robot_checkin_get();
-            if (DEFAULT_CHECKIN != floor)
+            if (!is_led_on(floor) && (floor != elev_floor()))
             {
-                if (!is_led_on(floor) && (floor != elev_floor()))
+                if (CALC_PWD == board_parameter.calc_type)
                 {
-                    if (CALC_PWD == board_parameter.calc_type)
-                    {
-                        elev_pwd_go(floor);
-                    }
-                    else
-                    {
-                        elev_go(floor);
-                    }
+                    elev_pwd_go(floor);
+                }
+                else
+                {
+                    elev_go(floor);
                 }
             }
         }
-
-        vTaskDelay(LED_WORK_MONITOR_INTERVAL);
     }
 }
 
@@ -252,49 +247,50 @@ void led_monitor_process(uint8_t id_board, uint16_t prev_status, uint16_t cur_st
  */
 static void vLedMonitor(void *pvParameters)
 {
-    uint16_t cur_status = 0;
-#ifdef __MASTER
-    cur_status = led_status_get();
-    led_status_t status = {board_parameter.id_board, cur_status, cur_status};
-    boardmap_update_led_status(board_parameter.id_board, cur_status);
-#else
-    uint16_t prev_status = 0;
+    uint16_t cur_status = led_status_get();
     static bool first_time = TRUE;
-#endif
-    for (;;)
-    {
-        cur_status = led_status_get();
 #ifdef __MASTER
+    static led_status_t status = {0, 0, 0};
+    if (first_time)
+    {
+        status.id_board = board_parameter.id_board;
+        status.prev_status = cur_status;
         status.cur_status = cur_status;
-        if (status.cur_status != status.prev_status)
-        {
-            xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
-            boardmap_update_led_status(board_parameter.id_board, cur_status);
-            status.prev_status = status.cur_status;
-        }
+        boardmap_update_led_status(board_parameter.id_board, cur_status);
+        first_time = FALSE;
+    }
 #else
-        if (is_expand_board_registered())
-        {
-            if (first_time)
-            {
-                vTaskDelay(LED_MONITOR_INTERVAL);
-                notify_led_status(board_parameter.id_board, cur_status);
-                prev_status = cur_status;
-                first_time = FALSE;
-            }
-            else
-            {
-                if (cur_status != prev_status)
-                {
-                    notify_led_status(board_parameter.id_board, cur_status);
-                    prev_status = cur_status;
-                }
-            }
-        }
+    static uint16_t prev_status = 0;
 #endif
 
-        vTaskDelay(LED_MONITOR_INTERVAL);
+#ifdef __MASTER
+    status.cur_status = cur_status;
+    if (status.cur_status != status.prev_status)
+    {
+        xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
+        boardmap_update_led_status(board_parameter.id_board, cur_status);
+        status.prev_status = status.cur_status;
     }
+#else
+    if (is_expand_board_registered())
+    {
+        if (first_time)
+        {
+            vTaskDelay(LED_MONITOR_INTERVAL);
+            notify_led_status(board_parameter.id_board, cur_status);
+            prev_status = cur_status;
+            first_time = FALSE;
+        }
+        else
+        {
+            if (cur_status != prev_status)
+            {
+                notify_led_status(board_parameter.id_board, cur_status);
+                prev_status = cur_status;
+            }
+        }
+    }
+#endif
 }
 
 /**
@@ -305,14 +301,26 @@ bool led_monitor_init(void)
 {
     TRACE("initialize led monitor...\r\n");
 
-    xTaskCreate(vLedMonitor, "ledmonitor", LED_MONITOR_STACK_SIZE, NULL,
-                LED_MONITOR_PRIORITY, NULL);
+    TimerHandle_t led_tmr = xTimerCreate("led_tmr", LED_MONITOR_INTERVAL, TRUE, NULL, vLedMonitor);
+    if (NULL == led_tmr)
+    {
+        TRACE("initialise led monitor failed!\r\n");
+        return FALSE;
+    }
+    xTimerStart(led_tmr, 0);
 #ifdef __MASTER
-    xTaskCreate(vLedWorkMonitor, "ledworkmonitor", LED_MONITOR_STACK_SIZE, NULL,
-                LED_MONITOR_PRIORITY, NULL);
+    TimerHandle_t ledwork_tmr = xTimerCreate("ledwork_tmr", LED_WORK_MONITOR_INTERVAL, TRUE, NULL,
+                                             vLedWorkMonitor);
+    if (NULL == ledwork_tmr)
+    {
+        TRACE("initialise led monitor failed!\r\n");
+        return FALSE;
+    }
+    xTimerStart(ledwork_tmr, 0);
+
     xQueueLed = xQueueCreate(LED_QUEUE_SIZE, sizeof(led_status_t));
-    xTaskCreate(vLedProcess, "ledprocess", LED_MONITOR_STACK_SIZE, NULL,
-                LED_MONITOR_PRIORITY, NULL);
+    xTaskCreate(vLedProcess, "ledprocess", LED_PROCESS_STACK_SIZE, NULL,
+                LED_PROCESS_PRIORITY, NULL);
 #endif
 
     return TRUE;

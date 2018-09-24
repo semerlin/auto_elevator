@@ -8,7 +8,7 @@
 #ifdef __MASTER
 #include "robot.h"
 #include "FreeRTOS.h"
-#include "task.h"
+#include "timers.h"
 #include "trace.h"
 #include "global.h"
 #include "elevator.h"
@@ -29,9 +29,10 @@ static robot_info robot = {DEFAULT_ID, DEFAULT_CHECKIN};
 
 /* monitor flag */
 static bool robot_monitor = FALSE;
+static uint32_t monitor_count = 0;
 
-static uint32_t monitot_count = 0;
 #define RESET_TIME   (600)
+#define ROBOT_MONITOR_INTERVAL     (1000 / portTICK_PERIOD_MS)
 
 /**
  * @brief led monitor task
@@ -39,39 +40,42 @@ static uint32_t monitot_count = 0;
  */
 static void vRobotMonitor(void *pvParameters)
 {
-    for (;;)
+    if (robot_monitor)
     {
-        if (robot_monitor)
+        monitor_count ++;
+        if (monitor_count > RESET_TIME)
         {
-            monitot_count ++;
-            if (monitot_count > RESET_TIME)
-            {
-                monitot_count = 0;
-                robot_monitor = FALSE;
-                elev_hold_open(FALSE);
-                robot_id_reset();
-                elevator_set_state_work(work_idle);
-            }
+            monitor_count = 0;
+            robot_monitor = FALSE;
+            elev_hold_open(FALSE);
+            robot_id_reset();
+            elevator_set_state_work(work_idle);
         }
-        else
-        {
-            monitot_count = 0;
-        }
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+    else
+    {
+        monitor_count = 0;
     }
 }
 
 /**
  * @brief initialize robot
  */
-void robot_init(void)
+bool robot_init(void)
 {
     TRACE("initialize robot...\r\n");
     robot.id = DEFAULT_ID;
     robot.floor = DEFAULT_CHECKIN;
-    xTaskCreate(vRobotMonitor, "robot", ROBOT_STACK_SIZE, NULL,
-                ROBOT_PRIORITY, NULL);
+    TimerHandle_t robot_tmr = xTimerCreate("robot_tmr", ROBOT_MONITOR_INTERVAL, TRUE, NULL,
+                                           vRobotMonitor);
+    if (NULL == robot_tmr)
+    {
+        TRACE("initialise robot failed!\r\n");
+        return FALSE;
+    }
+    xTimerStart(robot_tmr, 0);
+
+    return TRUE;
 }
 
 /**
@@ -158,6 +162,6 @@ void robot_monitor_stop(void)
  */
 void robot_monitor_reset(void)
 {
-    monitot_count = 0;
+    monitor_count = 0;
 }
 #endif
