@@ -28,6 +28,7 @@ void robot_monitor_stop(void);
 void robot_monitor_reset(void);
 
 END_DECLS
+
 #endif
 
 #endif /* _ROBOT_H_ */

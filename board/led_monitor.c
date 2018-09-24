@@ -60,6 +60,18 @@ static pwd_node pwds[PARAM_PWD_LEN] =
     {0, 0}
 };
 
+typedef enum
+{
+    NORMAL_PHASE,
+    RESET_FLOOR_PHASE,
+} floor_phase_t;
+
+static uint8_t floor_err_cnt = 0;
+static floor_phase_t floor_phase = NORMAL_PHASE;
+#define RESET_FLOOR_COUNT_PHASE1    5
+#define RESET_FLOOR_COUNT_PHASE2    10
+static uint8_t floor_in_phase[RESET_FLOOR_COUNT_PHASE2];
+
 #endif
 
 #ifdef __MASTER
@@ -124,12 +136,64 @@ static void push_pwd_node(const pwd_node *node)
 #endif
 
 #ifdef __MASTER
+
+static bool is_all_floor_same(void)
+{
+    uint8_t floor = floor_in_phase[0];
+    for (uint8_t i = 0; i < RESET_FLOOR_COUNT_PHASE2; ++i)
+    {
+        if (floor_in_phase[i] != floor)
+        {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
 /**
  * @brief led monitor task
  * @param pvParameters - task parameter
  */
 static void elev_pwd_go(uint8_t floor)
 {
+    switch (floor_phase)
+    {
+    case NORMAL_PHASE:
+        if (floor_err_cnt > RESET_FLOOR_COUNT_PHASE1)
+        {
+            floor_err_cnt = 0;
+            /** error maybe happened */
+            TRACE("floor error maybe happened!\r\n");
+            floor_phase = RESET_FLOOR_PHASE;
+        }
+        break;
+    case RESET_FLOOR_PHASE:
+        if (floor_err_cnt > RESET_FLOOR_COUNT_PHASE2)
+        {
+            floor_err_cnt = 0;
+            /** check all floor data */
+            if (is_all_floor_same())
+            {
+                /** error really happened */
+                TRACE("floor reset to %d\r\n", floor);
+                elev_set_floor(floor, 0);
+                /** notify floor arrive */
+                elev_arrived(floor);
+            }
+
+            floor_phase = NORMAL_PHASE;
+        }
+        else
+        {
+            floor_in_phase[floor_err_cnt - 1] = elev_floor();
+        }
+        break;
+    default:
+        break;
+    }
+
+    floor_err_cnt ++;
     elev_go(floor);
 }
 
@@ -151,6 +215,11 @@ static void vLedWorkMonitor(void *pvParameters)
                 {
                     elev_go(floor);
                 }
+            }
+            else
+            {
+                floor_err_cnt = 0;
+                floor_phase = NORMAL_PHASE;
             }
         }
     }
