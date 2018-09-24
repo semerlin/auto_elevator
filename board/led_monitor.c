@@ -128,7 +128,7 @@ static void push_pwd_node(const pwd_node *node)
  * @brief led monitor task
  * @param pvParameters - task parameter
  */
-static void elev_pwd_go(char floor)
+static void elev_pwd_go(uint8_t floor)
 {
     elev_go(floor);
 }
