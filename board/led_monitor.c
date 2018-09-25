@@ -60,6 +60,7 @@ static pwd_node pwds[PARAM_PWD_LEN] =
     {0, 0}
 };
 
+#if AUTO_ADJUST
 typedef enum
 {
     NORMAL_PHASE,
@@ -71,6 +72,7 @@ static floor_phase_t floor_phase = NORMAL_PHASE;
 #define RESET_FLOOR_COUNT_PHASE1    5
 #define RESET_FLOOR_COUNT_PHASE2    10
 static uint8_t floor_in_phase[RESET_FLOOR_COUNT_PHASE2];
+#endif
 
 #endif
 
@@ -137,6 +139,7 @@ static void push_pwd_node(const pwd_node *node)
 
 #ifdef __MASTER
 
+#if AUTO_ADJUST
 static bool is_all_floor_same(void)
 {
     uint8_t floor = floor_in_phase[0];
@@ -150,6 +153,7 @@ static bool is_all_floor_same(void)
 
     return TRUE;
 }
+#endif
 
 /**
  * @brief led monitor task
@@ -157,6 +161,7 @@ static bool is_all_floor_same(void)
  */
 static void elev_pwd_go(uint8_t floor)
 {
+#if AUTO_ADJUST
     switch (floor_phase)
     {
     case NORMAL_PHASE:
@@ -194,6 +199,7 @@ static void elev_pwd_go(uint8_t floor)
     }
 
     floor_err_cnt ++;
+#endif
     elev_go(floor);
 }
 
@@ -216,11 +222,13 @@ static void vLedWorkMonitor(void *pvParameters)
                     elev_go(floor);
                 }
             }
+#if AUTO_ADJUST
             else
             {
                 floor_err_cnt = 0;
                 floor_phase = NORMAL_PHASE;
             }
+#endif
         }
     }
 }
