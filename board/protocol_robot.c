@@ -365,7 +365,7 @@ static void process_elev_release(const uint8_t *data, uint8_t len, void *pargs)
 static void process_elev_checkin(const uint8_t *data, uint8_t len, void *pargs)
 {
     uint8_t floor = data[4];
-    if ((floor > 0) && (floor < board_parameter.total_floor))
+    if ((floor > 0) && (floor <= board_parameter.total_floor))
     {
         /** checkin invalid floor */
         uint8_t payload[7];
