@@ -8,7 +8,7 @@
 #ifdef __MASTER
 #include "switch_monitor.h"
 #include "FreeRTOS.h"
-#include "timers.h"
+#include "task.h"
 #include "trace.h"
 #include "global.h"
 #include "pinconfig.h"
@@ -208,16 +208,21 @@ void TIM2_IRQHandler(void)
  */
 static void vSwitchMonitor(void *pvParameters)
 {
-    static int8_t prev_floor = 0;
-    int8_t delta = cur_floor - prev_floor;
-    prev_floor = cur_floor;
-    if (delta > 0)
+    char prev_floor = cur_floor;
+    char delta = 0;
+    for (;;)
     {
-        elev_increase();
-    }
-    else if (delta < 0)
-    {
-        elev_decrease();
+        delta = cur_floor - prev_floor;
+        prev_floor = cur_floor;
+        if (delta > 0)
+        {
+            elev_increase();
+        }
+        else if (delta < 0)
+        {
+            elev_decrease();
+        }
+        vTaskDelay(SWITCH_MONITOR_INTERVAL);
     }
 }
 
@@ -245,14 +250,8 @@ void init_filter(void)
 bool switch_monitor_init(void)
 {
     TRACE("initialize switch monitor...\r\n");
-    TimerHandle_t switch_tmr = xTimerCreate("switch_tmr", SWITCH_MONITOR_INTERVAL, TRUE, NULL,
-                                            vSwitchMonitor);
-    if (NULL == switch_tmr)
-    {
-        TRACE("initialize switch monitor failed!\r\n");
-        return FALSE;
-    }
-    xTimerStart(switch_tmr, 0);
+    xTaskCreate(vSwitchMonitor, "switchmonitor", SWITCH_MONITOR_STACK_SIZE, NULL,
+                SWITCH_MONITOR_PRIORITY, NULL);
     init_filter();
     return TRUE;
 }

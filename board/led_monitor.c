@@ -43,7 +43,7 @@ typedef struct
     uint16_t cur_status;
 } led_status_t;
 static xQueueHandle xQueueLed = NULL;
-#define LED_QUEUE_SIZE       20
+#define LED_QUEUE_SIZE       10
 #define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
 
 typedef struct
@@ -336,7 +336,7 @@ static void vLedMonitor(void *pvParameters)
     status.cur_status = cur_status;
     if (status.cur_status != status.prev_status)
     {
-        xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
+        xQueueSend(xQueueLed, &status, 20 / portTICK_PERIOD_MS);
         boardmap_update_led_status(board_parameter.id_board, cur_status);
         status.prev_status = status.cur_status;
     }
