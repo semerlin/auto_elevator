@@ -25,10 +25,10 @@
 #ifdef __MASTER
 #define ALTIMETER_STACK_SIZE         (configMINIMAL_STACK_SIZE * 2)
 #define ALTIMETER_CALC_STACK_SIZE    (configMINIMAL_STACK_SIZE)
-#define BLUETOOTH_STACK_SIZE         (configMINIMAL_STACK_SIZE)
+#define BLUETOOTH_STACK_SIZE         (configMINIMAL_STACK_SIZE * 2)
 #define LED_PROCESS_STACK_SIZE       (configMINIMAL_STACK_SIZE)
 #endif
-#define PROTOCOL_STACK_SIZE          (configMINIMAL_STACK_SIZE)
+#define PROTOCOL_STACK_SIZE          (configMINIMAL_STACK_SIZE * 2)
 #define ELEV_STACK_SIZE              (configMINIMAL_STACK_SIZE)
 #define EXPAND_STACK_SIZE            (configMINIMAL_STACK_SIZE)
 
