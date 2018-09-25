@@ -12,6 +12,7 @@
 
 /* task priority definition */
 #ifdef __MASTER
+#define SWITCH_MONITOR_PRIORITY      (tskIDLE_PRIORITY + 3)
 #define ALTIMETER_PRIORITY           (tskIDLE_PRIORITY + 4)
 #define ALTIMETER_CALC_PRIORITY      (tskIDLE_PRIORITY + 3)
 #define BLUETOOTH_PRIORITY           (tskIDLE_PRIORITY + 4)
@@ -23,6 +24,7 @@
 
 /* task stack definition */
 #ifdef __MASTER
+#define SWITCH_MONITOR_STACK_SIZE    (configMINIMAL_STACK_SIZE)
 #define ALTIMETER_STACK_SIZE         (configMINIMAL_STACK_SIZE * 2)
 #define ALTIMETER_CALC_STACK_SIZE    (configMINIMAL_STACK_SIZE)
 #define BLUETOOTH_STACK_SIZE         (configMINIMAL_STACK_SIZE * 2)
