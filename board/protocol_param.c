@@ -57,7 +57,7 @@ typedef struct
 #define CMD_BT_NAME        0x04
 #define CMD_CALC_NOTIFY    0x80
 #endif
-#define CMD_REBOOT         0x04
+#define CMD_REBOOT         0x05
 
 static cmd_handle_t cmd_handles[] =
 {

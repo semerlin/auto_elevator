@@ -306,7 +306,7 @@ static void vLedProcess(void *pvParameters)
 void led_monitor_process(uint8_t id_board, uint16_t prev_status, uint16_t cur_status)
 {
     led_status_t status = {id_board, prev_status, cur_status};
-    xQueueSend(xQueueLed, &status, 50 / portTICK_PERIOD_MS);
+    xQueueSend(xQueueLed, &status, 20 / portTICK_PERIOD_MS);
 }
 #endif
 
