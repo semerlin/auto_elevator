@@ -213,7 +213,7 @@ static void process_elev_led(const uint8_t *data, uint8_t len)
     msg_led_status_t *pmsg = (msg_led_status_t *)data;
     if (boardmap_is_board_id_exists(pmsg->id_board))
     {
-        TRACE("led status:%d-0x%04x", pmsg->id_board, pmsg->led_status);
+        TRACE("led status:%d-0x%04x\r\n", pmsg->id_board, pmsg->led_status);
         uint16_t prev_led_status = boardmap_get_led_status(pmsg->id_board);
         if (prev_led_status != pmsg->led_status)
         {

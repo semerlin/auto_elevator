@@ -16,6 +16,7 @@
 #include "altimeter_calc.h"
 #include "protocol_expand.h"
 #include "bluetooth.h"
+#include "delay.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_param]"
@@ -302,6 +303,7 @@ static void process_reboot(const uint8_t *data, uint8_t len)
     case 0x03:
         /** notify all expand board */
         expand_reboot(0xff);
+        delay_ms(1000);
         SCB_SystemReset();
         break;
     default:

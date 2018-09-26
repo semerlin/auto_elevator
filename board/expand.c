@@ -18,6 +18,7 @@
 #include "protocol_expand.h"
 #include "boardmap.h"
 #include "config.h"
+#include "dbgserial.h"
 
 
 #undef __TRACE_MODULE
@@ -47,6 +48,32 @@ static register_status_t register_status = REGISTER_FAIL;
 static xQueueHandle xExpandRecvQueue = NULL;
 static xQueueHandle xExpandSendQueue = NULL;
 
+#if DUMP_EXPAND
+/**
+ * @brief dump message
+ * @param data - message to dump
+ * @param len - data length
+ */
+static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
+{
+    if (dir)
+    {
+        TRACE("send data: ");
+    }
+    else
+    {
+        TRACE("recv data: ");
+    }
+    for (int i = 0; i < len; ++i)
+    {
+        dbg_putchar("0123456789abcdef"[data[i] >> 4]);
+        dbg_putchar("0123456789abcdef"[data[i] & 0x0f]);
+        dbg_putchar(' ');
+    }
+    dbg_putchar('\r');
+    dbg_putchar('\n');
+}
+#endif
 
 
 #ifdef __EXPAND
@@ -201,6 +228,9 @@ static void vExpandRecv(void *pvParameters)
         if (xQueueReceive(xExpandRecvQueue, &data, portMAX_DELAY))
         {
             process_expand_data(data.data, data.len);
+#if DUMP_EXPAND
+            dump_message(0, data.data, data.len);
+#endif
         }
     }
 }
@@ -217,6 +247,9 @@ static void vExpandSend(void *pvParameters)
         if (xQueueReceive(xExpandSendQueue, &data, portMAX_DELAY))
         {
             can_send_msg(data.data, data.len);
+#if DUMP_EXPAND
+            dump_message(1, data.data, data.len);
+#endif
         }
         vTaskDelay(50 / portTICK_PERIOD_MS);
     }
