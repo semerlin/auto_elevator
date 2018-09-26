@@ -84,7 +84,12 @@ static void dump_message(uint8_t dir, const uint8_t *data, uint8_t len)
  */
 static void register_status_cb(uint8_t *data, uint8_t len)
 {
-    register_status = (register_status_t) * data;
+    if (REGISTER_SUCCESS != register_status)
+    {
+        /** only process failed issue, in case of multi message send,
+            first is success, second is faild */
+        register_status = (register_status_t) * data;
+    }
 }
 #endif
 
