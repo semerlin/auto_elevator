@@ -14,6 +14,7 @@ BEGIN_DECLS
 
 bool expand_init(void);
 void expand_send_data(const uint8_t *buf, uint8_t len);
+void expand_send_data_immediately(const uint8_t *buf, uint8_t len);
 
 #ifdef __EXPAND
 bool is_expand_board_registered(void);

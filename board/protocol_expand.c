@@ -238,10 +238,14 @@ void expand_elev_go(uint8_t id_board, uint8_t floor)
  * @brief notify expand board to reboot
  * @param[in] id_board: expand board id, 0xff means all board
  */
-void expand_reboot(uint8_t id_board)
+void expand_reboot_immediately(uint8_t id_board)
 {
-    expand_ptl_send(CMD_REBOOT, &id_board, 1);
+    uint8_t data[3];
+    data[0] = CMD_REBOOT;
+    data[1] = id_board;
+    expand_send_data_immediately(data, 2);
 }
+
 #endif
 
 #ifdef __EXPAND

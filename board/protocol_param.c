@@ -74,9 +74,7 @@ static cmd_handle_t cmd_handles[] =
 typedef struct
 {
     /**
-     * 0x01: master board
-     * 0x02: expand board
-     * 0x03: master and expand board
+     * 0x01: master and expand board
      */
     uint8_t reboot_type;
 } msg_reboot_t;
@@ -90,7 +88,7 @@ typedef struct
 #define IS_ACTION_VALID(action)             ((0x01 == action) || (0x02 == action))
 #define IS_TOTAL_FLOOR_VALID(floor)         (floor > 0)
 #define IS_BT_NAME_LEN_VALID(len)           ((len > 0) && (len <= BT_NAME_MAX_LEN))
-#define IS_REBOOT_VALID(reboot) ((0x01 == reboot) || (0x02 == reboot) || (0x03 == reboot))
+#define IS_REBOOT_VALID(reboot)             (0x01 == reboot)
 
 #pragma pack(1)
 typedef struct
@@ -294,16 +292,9 @@ static void process_reboot(const uint8_t *data, uint8_t len)
     switch (data[0])
     {
     case 0x01:
-        SCB_SystemReset();
-        break;
-    case 0x02:
         /** notify all expand board */
-        expand_reboot(0xff);
-        break;
-    case 0x03:
-        /** notify all expand board */
-        expand_reboot(0xff);
-        delay_ms(1000);
+        expand_reboot_immediately(0xff);
+        delay_ms(500);
         SCB_SystemReset();
         break;
     default:

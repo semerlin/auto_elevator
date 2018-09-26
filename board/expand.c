@@ -163,7 +163,7 @@ static void can_init(void)
  * @param len - data length
  * @retval success sended length
  */
-static uint8_t can_send_msg(uint8_t *data, uint8_t len)
+static uint8_t can_send_msg(const uint8_t *data, uint8_t len)
 {
     uint8_t mbox;
     uint16_t count = 0;
@@ -275,6 +275,19 @@ void expand_send_data(const uint8_t *buf, uint8_t len)
     }
     memcpy(data.data, buf, data.len);
     xQueueSend(xExpandSendQueue, &data, 50 / portTICK_PERIOD_MS);
+}
+
+/**
+ * @brief send data to can imeediately
+ * @param data - data to send
+ * @param len - data length
+ */
+void expand_send_data_immediately(const uint8_t *buf, uint8_t len)
+{
+    can_send_msg(buf, len);
+#if DUMP_EXPAND
+    dump_message(1, buf, len);
+#endif
 }
 
 #ifdef __EXPAND
