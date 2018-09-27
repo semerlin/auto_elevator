@@ -105,6 +105,7 @@ static uint8_t bit_set_pos(uint32_t data)
     uint8_t pos = 0;
     while (0 != (data >> 1))
     {
+        data >>= 1;
         pos ++;
     }
 
