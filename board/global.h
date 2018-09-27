@@ -16,7 +16,7 @@
 #define ALTIMETER_PRIORITY           (tskIDLE_PRIORITY + 4)
 #define ALTIMETER_CALC_PRIORITY      (tskIDLE_PRIORITY + 3)
 #define BLUETOOTH_PRIORITY           (tskIDLE_PRIORITY + 4)
-#define LED_PROCESS_PRIORITY         (tskIDLE_PRIORITY + 2)
+#define LED_PROCESS_PRIORITY         (tskIDLE_PRIORITY + 3)
 #endif
 #define PROTOCOL_PRIORITY            (tskIDLE_PRIORITY + 4)
 #define ELEV_PRIORITY                (tskIDLE_PRIORITY + 1)
