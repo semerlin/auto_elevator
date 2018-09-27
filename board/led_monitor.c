@@ -26,6 +26,7 @@
 #include "altimeter.h"
 #include "altimeter_calc.h"
 #endif
+#include "config.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ledmtl]"
@@ -44,7 +45,7 @@ typedef struct
 } led_status_t;
 static xQueueHandle xQueueLed = NULL;
 #define LED_QUEUE_SIZE       10
-#define LED_WORK_MONITOR_INTERVAL    (1000 / portTICK_PERIOD_MS)
+#define LED_WORK_MONITOR_INTERVAL    (2000 / portTICK_PERIOD_MS)
 
 typedef struct
 {
@@ -70,7 +71,7 @@ typedef enum
 static uint8_t floor_err_cnt = 0;
 static floor_phase_t floor_phase = NORMAL_PHASE;
 #define RESET_FLOOR_COUNT_PHASE1    5
-#define RESET_FLOOR_COUNT_PHASE2    10
+#define RESET_FLOOR_COUNT_PHASE2    60
 static uint8_t floor_in_phase[RESET_FLOOR_COUNT_PHASE2];
 #endif
 
