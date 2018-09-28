@@ -29,6 +29,7 @@
 #include "led_status.h"
 #include "expand.h"
 #include "diagnosis.h"
+#include "dbgserial.h"
 
 
 #undef __TRACE_MODULE
@@ -41,6 +42,8 @@
 #endif
 
 parameters_t board_parameter;
+uint8_t chip_id[12];
+
 /**
  * @brief start system
  */
@@ -54,6 +57,16 @@ void ApplicationStartup()
     TRACE("Copyright 2018, Huang Yang <elious.huang@gmail.com>\r\n");
 #endif
     TRACE("version = %s\r\n", VERSION);
+    Get_ChipID(chip_id, NULL);
+    TRACE("serial number = ");
+    for (uint8_t i = 0; i < 12; ++i)
+    {
+        dbg_putchar("0123456789abcdef"[chip_id[i] >> 4]);
+        dbg_putchar("0123456789abcdef"[chip_id[i] & 0x0f]);
+    }
+    dbg_putchar('\r');
+    dbg_putchar('\n');
+
     diagnosis_init();
     license_init();
     if (!param_init())

@@ -29,5 +29,8 @@ void Get_ChipID(uint8_t *data, uint8_t *len)
             id[i] >>= 8;
         }
     }
-    *len = 12;
+    if (NULL != len)
+    {
+        *len = 12;
+    }
 }

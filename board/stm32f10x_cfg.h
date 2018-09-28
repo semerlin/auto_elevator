@@ -24,6 +24,7 @@
 #define _MODULE_SYSTICK
 #define _MODULE_TIM
 #define _MODULE_CAN
+#define _MODULE_SIG
 
 /**********************************************************/
 #ifdef _MODULE_FLASH
@@ -62,5 +63,8 @@
 #include "stm32f10x_can.h"
 #endif
 
+#ifdef _MODULE_SIG
+#include "stm32f10x_sig.h"
+#endif
 
 #endif /* _STM32F10x_CFG_H_ */
