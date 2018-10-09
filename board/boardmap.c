@@ -29,7 +29,11 @@ boardmap_t boardmaps[MAX_BOARD_NUM];
 uint8_t boardmap_opendoor_key(void)
 {
     /* open door key fixed to 0 */
+#if USE_KEY_OPEN0
     return 0;
+#else
+    return 16;
+#endif
 }
 
 /**

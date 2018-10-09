@@ -64,6 +64,8 @@ PIN_CONFIG pins[] =
     {"ALTIMETER_RX", GPIOC, 11, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
     {"BT_TX", GPIOC, 12, GPIO_Speed_50MHz, GPIO_Mode_AF_PP},
     {"BT_RX", GPIOD, 2, GPIO_Speed_2MHz, GPIO_Mode_IN_FLOATING},
+    {"RELAY1", GPIOC, 0, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
+    {"RELAY2", GPIOC, 1, GPIO_Speed_2MHz, GPIO_Mode_Out_PP},
 };
 
 /* clock arrays */
@@ -132,7 +134,6 @@ void pin_init(void)
         }
     }
 
-    //RCC_StopLSE();
 #if CAN_REMAP
     GPIO_PinRemap(CAN_REMAP_PB, TRUE);
 #endif

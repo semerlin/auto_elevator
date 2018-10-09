@@ -10,11 +10,16 @@
 #include "trace.h"
 #include "cm3_core.h"
 #include "pinconfig.h"
+#include "relay.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[keyctl]"
 
+#ifdef __MASTER
+#define KEY_NUM 18
+#else
 #define KEY_NUM 16
+#endif
 
 /* led status */
 static uint16_t key_status = 0x0000;
@@ -85,9 +90,17 @@ void keyctl_init(void)
 void keyctl_press(uint8_t num)
 {
     assert_param(num < KEY_NUM);
-    TRACE("press key: %d\r\n", num);
-    key_status |= (1 << num);
-    hc595_senddata(key_status);
+    if (num >= 16)
+    {
+        /** open relay */
+        relay_open(num - 16);
+    }
+    else
+    {
+        TRACE("press key: %d\r\n", num);
+        key_status |= (1 << num);
+        hc595_senddata(key_status);
+    }
 }
 
 /**
@@ -97,9 +110,17 @@ void keyctl_press(uint8_t num)
 void keyctl_release(uint8_t num)
 {
     assert_param(num < KEY_NUM);
-    TRACE("release key: %d\r\n", num);
-    key_status &= ~(1 << num);
-    hc595_senddata(key_status);
+    if (num >= 16)
+    {
+        /** close relay */
+        relay_close(num - 16);
+    }
+    else
+    {
+        TRACE("release key: %d\r\n", num);
+        key_status &= ~(1 << num);
+        hc595_senddata(key_status);
+    }
 }
 
 /**

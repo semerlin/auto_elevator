@@ -27,7 +27,12 @@
 #define MAX_FLOOR_NUM           15
 #define MAX_EXPAND_FLOOR_NUM    16
 #define MAX_BOARD_NUM           6
+#define USE_KEY_OPEN0           0
+#if USE_KEY_OPEN0
 #define START_KEY               1
+#else
+#define START_KEY               0
+#endif
 #define EXPAND_START_KEY        0
 #define PARAM_PWD_LEN           4
 #define BT_NAME_MAX_LEN         16

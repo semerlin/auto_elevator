@@ -2259,6 +2259,12 @@
       <name>$PROJ_DIR$\board\protocol_robot.h</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\board\relay.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\board\relay.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\board\robot.c</name>
     </file>
     <file>
