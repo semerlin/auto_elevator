@@ -13,50 +13,60 @@
 #include "parameter.h"
 #include "stm32f10x_cfg.h"
 #include "dbgserial.h"
+#include "config.h"
+#include "crc.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[license]"
 
 #define LICENSE_MONITOR_INTERVAL     (60000 / portTICK_PERIOD_MS)
-#define DEFULT_LICENSE_TIME          (30 * 24 * 60)
+#define DEFAULT_LICENSE_TIME          (30 * 24 * 60)
 
 #if USE_SIMPLE_LICENSE
 static uint32_t g_count = 0;
 #else
 /** run time, unit is minutes */
-uint64_t total_time = 0;
-uint64_t run_time = 0;
+uint32_t total_time = 0;
+uint32_t run_time = 0;
 
 #define KEY_LEN      16
 /** 8 bytes time and 2 bytes validate(key[9],key[4],key[12],key[2],key[5],key[15],key[10],key[13]) */
 #define TIME_LEN     10
-
 /** use chip id as key */
 uint8_t default_random[] = {0xde, 0xad, 0xbe, 0xef};
 uint8_t random_key = 0xae;
 uint8_t key[KEY_LEN];
 uint8_t serial_number[KEY_LEN];
 
-static void reorder_data(uint8_t *data)
+/**
+ * @brief reorder data
+ * @param data - data to reorder
+ */
+static void reorder_data(uint8_t *data, uint32_t data_len)
 {
     /** out-of-order key, odd-evev, even-odd */
     uint8_t temp = 0;
-    for (uint8_t i = 0; i < KEY_LEN / 2; ++i)
+    for (uint8_t i = 0; i < data_len / 2; ++i)
     {
         temp = data[i];
         if (0 != ((i + 1) % 2))
         {
-            data[i] = data[i + KEY_LEN / 2 + 1];
-            data[i + KEY_LEN / 2 + 1] = temp;
+            data[i] = data[i + data_len / 2 + 1];
+            data[i + data_len / 2 + 1] = temp;
         }
         else
         {
-            data[i] = data[i + KEY_LEN / 2 - 1];
-            data[i + KEY_LEN / 2 - 1] = temp;
+            data[i] = data[i + data_len / 2 - 1];
+            data[i + data_len / 2 - 1] = temp;
         }
     }
 }
 
+/**
+ * @brief generate key from chip id
+ * @param chip_id - chip id
+ * @param pkey - generated key
+ */
 void license_generate_key(const uint8_t *chip_id, uint8_t *pkey)
 {
     /** fill key */
@@ -71,9 +81,14 @@ void license_generate_key(const uint8_t *chip_id, uint8_t *pkey)
         pkey[i] = default_random[i - 12];
     }
 
-    reorder_data(pkey);
+    reorder_data(pkey, KEY_LEN);
 }
 
+/**
+ * @brief generate serial number from key
+ * @param pkey - key generate from chip id
+ * @param pserial - generated serial number
+ */
 void key_to_serial_number(const uint8_t *pkey, uint8_t *pserial)
 {
     /** fill serial number with key */
@@ -94,9 +109,14 @@ void key_to_serial_number(const uint8_t *pkey, uint8_t *pserial)
     /** xor random ro hide serial_number[2] */
     pserial[2] ^= random_key;
 
-    reorder_data(pserial);
+    reorder_data(pserial, KEY_LEN);
 }
 
+/**
+ * @brief convert serial number to key
+ * @param pserial - serial number
+ * @param pkey - converted key
+ */
 static void serial_number_to_key(const uint8_t *pserial, uint8_t *pkey)
 {
     /** fill key with serial_number */
@@ -105,7 +125,7 @@ static void serial_number_to_key(const uint8_t *pserial, uint8_t *pkey)
         pkey[i] = pserial[i];
     }
 
-    reorder_data(pkey);
+    reorder_data(pkey, KEY_LEN);
 
     /** xor random to show key[2] */
     pkey[2] ^= random_key;
@@ -120,15 +140,20 @@ static void serial_number_to_key(const uint8_t *pserial, uint8_t *pkey)
     }
 }
 
-void encrypt_time(uint64_t time, const uint8_t *pserial, uint8_t *pencrypt_time)
+/**
+ * @brief encrypt time
+ * @param time - time value to encrypt
+ * @param pserial - serial number
+ * @param pencrypt_time - encrypted time
+ */
+void encrypt_time(uint32_t time, const uint8_t *pserial, uint8_t *pencrypt_time)
 {
-    *(uint64_t *)pencrypt_time = time;
-
+    *(uint32_t *)pencrypt_time = time;
     uint8_t temp_key[KEY_LEN];
     serial_number_to_key(pserial, temp_key);
 
-
-    for (uint8_t i = 0; i < 8; ++i)
+    /** fill encrypt key */
+    for (uint8_t i = 0; i < 4; ++i)
     {
         for (uint8_t j = 0; j < KEY_LEN; ++j)
         {
@@ -139,19 +164,32 @@ void encrypt_time(uint64_t time, const uint8_t *pserial, uint8_t *pencrypt_time)
         }
     }
 
-    pencrypt_time[8] = temp_key[9];
-    pencrypt_time[9] = temp_key[4];
-    pencrypt_time[10] = temp_key[12];
-    pencrypt_time[11] = temp_key[2];
-    pencrypt_time[12] = temp_key[5];
-    pencrypt_time[13] = temp_key[15];
-    pencrypt_time[14] = temp_key[10];
-    pencrypt_time[15] = temp_key[13];
+    uint8_t sum = 0;
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        sum += pencrypt_time[i];
+    }
 
-    reorder_data(pencrypt_time);
+    /** add key verify data */
+    for (uint8_t i = 4; i < KEY_LEN; ++i)
+    {
+        pencrypt_time[i] = crc16(temp_key, KEY_LEN - i);
+
+        /** encrypt verify data */
+        pencrypt_time[i] ^= sum;
+    }
+
+    reorder_data(pencrypt_time, KEY_LEN);
 }
 
-bool decrypt_time(const uint8_t *pencrypt_time, const uint8_t *pserial, uint64_t *ptime)
+/**
+ * @brief decrypt time
+ * @param pencryt_time - time need to decrypt
+ * @param pserial - serial number
+ * @param ptime - decrypted time
+ * @param decrypt status
+ */
+bool decrypt_time(const uint8_t *pencrypt_time, const uint8_t *pserial, uint32_t *ptime)
 {
 
     uint8_t encrypt_time[KEY_LEN];
@@ -163,8 +201,27 @@ bool decrypt_time(const uint8_t *pencrypt_time, const uint8_t *pserial, uint64_t
     uint8_t temp_key[KEY_LEN];
     serial_number_to_key(pserial, temp_key);
 
-    reorder_data(encrypt_time);
-    for (uint8_t i = 0; i < 8; ++i)
+    reorder_data(encrypt_time, KEY_LEN);
+
+    uint8_t sum = 0;
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        sum += encrypt_time[i];
+    }
+
+    /** verify key */
+    for (uint8_t i = 4; i < KEY_LEN; ++i)
+    {
+        /** decrypt verify data */
+        encrypt_time[i] ^= sum;
+
+        if (encrypt_time[i] != (crc16(temp_key, KEY_LEN - i) & 0xff))
+        {
+            return FALSE;
+        }
+    }
+
+    for (uint8_t i = 0; i < 4; ++i)
     {
         for (uint8_t j = 0; j < KEY_LEN; ++j)
         {
@@ -175,21 +232,11 @@ bool decrypt_time(const uint8_t *pencrypt_time, const uint8_t *pserial, uint64_t
         }
     }
 
-    if ((encrypt_time[8] == temp_key[9]) &&
-        (encrypt_time[9] == temp_key[4]) &&
-        (encrypt_time[10] == temp_key[12]) &&
-        (encrypt_time[11] == temp_key[2]) &&
-        (encrypt_time[12] == temp_key[5]) &&
-        (encrypt_time[13] == temp_key[15]) &&
-        (encrypt_time[14] == temp_key[10]) &&
-        (encrypt_time[15] == temp_key[13]))
-    {
-        *ptime = *((uint64_t *)encrypt_time);
-        return TRUE;
-    }
+    *ptime = *((uint32_t *)encrypt_time);
 
-    return FALSE;
+    return TRUE;
 }
+
 
 bool is_data_uninited(const uint8_t *data)
 {
@@ -214,7 +261,7 @@ static void vLicense(void *pvParameters)
 {
 #if USE_SIMPLE_LICENSE
     g_count ++;
-    if (g_count > DEFULT_LICENSE_TIME)
+    if (g_count > DEFAULT_LICENSE_TIME)
     {
         /* license expired */
         TRACE("license expired!\r\n");
@@ -249,6 +296,15 @@ bool license_init(void)
     license_generate_key(chip_id, key);
     key_to_serial_number(key, serial_number);
 
+    TRACE("serial number = ");
+    for (uint8_t i = 0; i < KEY_LEN; ++i)
+    {
+        dbg_putchar("0123456789abcdef"[serial_number[i] >> 4]);
+        dbg_putchar("0123456789abcdef"[serial_number[i] & 0x0f]);
+    }
+    dbg_putchar('\r');
+    dbg_putchar('\n');
+
     /** read license */
     uint8_t license[KEY_LEN];
     if (!param_get_run_time(license))
@@ -266,7 +322,7 @@ bool license_init(void)
     if (is_data_uninited(license) && is_data_uninited(current_run_time))
     {
         /** TODO: set default license */
-        total_time = 30 * 24 * 60;
+        total_time = DEFAULT_LICENSE_TIME;
         run_time = 0;
         encrypt_time(total_time, serial_number, license);
         encrypt_time(run_time, serial_number, current_run_time);

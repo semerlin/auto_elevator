@@ -8,7 +8,7 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#define USE_SIMPLE_LICENSE      1
+#define USE_SIMPLE_LICENSE      0
 
 #define CAN_REMAP               0
 
