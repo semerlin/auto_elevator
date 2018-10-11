@@ -49,7 +49,6 @@ typedef struct
 } parameters_t;
 #endif
 
-
 bool param_init(void);
 void reset_param(void);
 bool is_param_setted(void);
@@ -58,6 +57,12 @@ bool param_store(const parameters_t *param);
 bool param_store_pwd(uint8_t interval, uint8_t *pwd);
 bool param_store_floor_height(uint8_t len, const floor_height_t *floor_height);
 bool param_store_bt_name(uint8_t len, const uint8_t *name);
+#endif
+#if !USE_SIMPLE_LICENSE
+bool param_get_license(uint8_t *license);
+bool param_set_license(const uint8_t *license);
+bool param_get_run_time(uint8_t *run_time);
+bool param_set_run_time(const uint8_t *run_time);
 #endif
 parameters_t param_get(void);
 void param_dump(void);

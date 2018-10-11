@@ -21,6 +21,11 @@
 #define PARAM_SETTED_FLAG        "AUTO"
 #define PARAM_SETTED_FLAG_LEN    4
 
+#if !USE_SIMPLE_LICENSE
+#define LICENSE_START_ADDRESS    896
+#define LICENSE_LEN              16
+#endif
+
 typedef struct
 {
     uint8_t flag[PARAM_SETTED_FLAG_LEN];
@@ -111,6 +116,28 @@ parameters_t param_get(void)
 {
     return flash_map.parameters;
 }
+
+#if !USE_SIMPLE_LICENSE
+bool param_get_license(uint8_t *license)
+{
+    return fm_read(LICENSE_START_ADDRESS, license, LICENSE_LEN);
+}
+
+bool param_set_license(const uint8_t *license)
+{
+    return fm_write(LICENSE_START_ADDRESS, license, LICENSE_LEN);
+}
+
+bool param_get_run_time(uint8_t *run_time)
+{
+    return fm_read(LICENSE_START_ADDRESS + LICENSE_LEN, run_time, LICENSE_LEN);
+}
+
+bool param_set_run_time(const uint8_t *run_time)
+{
+    return fm_write(LICENSE_START_ADDRESS + LICENSE_LEN, run_time, LICENSE_LEN);
+}
+#endif
 
 void param_dump(void)
 {

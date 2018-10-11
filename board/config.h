@@ -8,6 +8,8 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#define USE_SIMPLE_LICENSE      1
+
 #define CAN_REMAP               0
 
 #define SIMPLE_FILTER           0
