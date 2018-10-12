@@ -267,14 +267,13 @@ static void vLedProcess(void *pvParameters)
                             if (altimeter_is_calculating())
                             {
                                 altimeter_calc_once(floor);
+                                vTaskDelay(2000 / portTICK_PERIOD_MS);
                                 if (floor < board_parameter.total_floor)
                                 {
-                                    vTaskDelay(2000 / portTICK_PERIOD_MS);
                                     elev_go(floor + 1);
                                 }
                                 else
                                 {
-                                    vTaskDelay(2000 / portTICK_PERIOD_MS);
                                     elev_go(1);
                                 }
                             }

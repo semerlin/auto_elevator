@@ -169,6 +169,13 @@ bool elev_init(void)
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
 #endif
+    /** release opendoor key */
+    uint8_t key = boardmap_opendoor_key();
+    if (1 == board_parameter.opendoor_polar)
+    {
+        keyctl_press(key);
+    }
+
     return TRUE;
 }
 
@@ -232,7 +239,14 @@ void elev_hold_open(bool flag)
 #endif
             hold_cnt = 0;
             hold_door = TRUE;
-            keyctl_press(key);
+            if (0 == board_parameter.opendoor_polar)
+            {
+                keyctl_press(key);
+            }
+            else
+            {
+                keyctl_release(key);
+            }
 #if ARRIVE_JUDGE
         }
 #endif
@@ -243,7 +257,14 @@ void elev_hold_open(bool flag)
         {
             hold_door = FALSE;
             hold_cnt = 0;
-            keyctl_release(key);
+            if (0 == board_parameter.opendoor_polar)
+            {
+                keyctl_release(key);
+            }
+            else
+            {
+                keyctl_press(key);
+            }
         }
     }
 }

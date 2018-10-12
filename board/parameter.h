@@ -36,6 +36,7 @@ typedef struct
     uint8_t total_floor;
     uint16_t threshold;
     uint8_t calc_type;
+    uint8_t opendoor_polar;
     uint8_t bt_name[BT_NAME_MAX_LEN + 1];
     uint8_t pwd_window;
     uint8_t pwd[PARAM_PWD_LEN];
