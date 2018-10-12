@@ -112,7 +112,7 @@ static uint8_t bit_set_pos(uint32_t data)
     return pos;
 }
 
-static void msg2tof(const uint8_t *data, uint8_t len)
+static bool msg2tof(const uint8_t *data, uint8_t len)
 {
     if (len >= sizeof(msg_tof_t))
     {
@@ -131,13 +131,17 @@ static void msg2tof(const uint8_t *data, uint8_t len)
             else
             {
                 TRACE("data mask error!\r\n");
+                return FALSE;
             }
         }
     }
     else
     {
         TRACE("data range error!\r\n");
+        return FALSE;
     }
+
+    return TRUE;
 }
 
 /**
@@ -147,15 +151,20 @@ static void msg2tof(const uint8_t *data, uint8_t len)
  */
 uint8_t altimeter_get_height_floor(uint16_t height)
 {
+    //TRACE("get height floor: %d-%d\r\n", height, board_parameter.threshold);
     uint16_t floor_height_high, floor_height_low;
     for (uint8_t i = 0; i < MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
     {
-        floor_height_high = board_parameter.floor_height[i].height + board_parameter.threshold;
-        floor_height_low = board_parameter.floor_height[i].height - board_parameter.threshold;
-
-        if ((height > floor_height_low) && (height < floor_height_high))
+        if (0 != board_parameter.floor_height[i].height)
         {
-            return board_parameter.floor_height[i].floor;
+            floor_height_high = board_parameter.floor_height[i].height + board_parameter.threshold;
+            floor_height_low = board_parameter.floor_height[i].height - board_parameter.threshold;
+            //TRACE("floor %d-%d-%d\r\n", board_parameter.floor_height[i].floor, floor_height_low, floor_height_high);
+
+            if ((height > floor_height_low) && (height < floor_height_high))
+            {
+                return board_parameter.floor_height[i].floor;
+            }
         }
     }
 
@@ -186,24 +195,29 @@ static void vAltimeter(void *pvParameters)
             {
                 len = 0;
                 pdata = recv_data;
+                continue;
             }
 
             if ((len >= 2) && ((0x0d == pdata[-2]) && (0x0a == pdata[-1])))
             {
                 /** receive packet */
-                msg2tof(recv_data, len);
-                if (!altimeter_is_calculating())
+                if (msg2tof(recv_data, len))
                 {
-                    if (tof.range > 0)
+                    if (!altimeter_is_calculating())
                     {
-                        /** calculate physical floor */
-                        floor_cur = altimeter_get_height_floor(tof.range / 10);
-
-                        if (floor_cur != floor_prev)
+                        if (tof.range > 0)
                         {
-                            /** floor changed */
-                            elev_set_floor(floor_cur, floor_prev);
-                            floor_prev = floor_cur;
+                            /** calculate physical floor */
+                            floor_cur = altimeter_get_height_floor(tof.range / 10);
+                            if (floor_cur != INVALID_FLOOR)
+                            {
+                                if (floor_cur != floor_prev)
+                                {
+                                    /** floor changed */
+                                    elev_set_floor(floor_cur, floor_prev);
+                                    floor_prev = floor_cur;
+                                }
+                            }
                         }
                     }
                 }
