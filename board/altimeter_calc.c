@@ -121,6 +121,13 @@ bool altimeter_calc_run(calc_action_t action)
     }
     else
     {
+        /** clear all floor height first */
+        for (uint8_t i = 0; i < MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1); ++i)
+        {
+            board_parameter.floor_height[i].floor = i + 1;
+            board_parameter.floor_height[i].height = 0;
+        }
+
         uint16_t average_height = 0;
         uint32_t distance = 0;
         distance = altimeter_get_distance();
