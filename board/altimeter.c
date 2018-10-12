@@ -128,7 +128,15 @@ static void msg2tof(const uint8_t *data, uint8_t len)
                 tof.id_tag = pmsg->id_tag - '0';
                 tof.id_base_station = pmsg->id_base_station - '0';
             }
+            else
+            {
+                TRACE("data mask error!\r\n");
+            }
         }
+    }
+    else
+    {
+        TRACE("data range error!\r\n");
     }
 }
 
@@ -161,52 +169,51 @@ uint8_t altimeter_get_height_floor(uint16_t height)
 static void vAltimeter(void *pvParameters)
 {
     serial *pserial = pvParameters;
-    TickType_t xDelay = 10 / portTICK_PERIOD_MS;
     uint8_t recv_data[sizeof(msg_tof_t) + 5];
     uint8_t *pdata = recv_data;
     char data = 0;
     uint8_t len = 0;
     uint8_t floor_cur = 0;
     uint8_t floor_prev = 0;
+    /** end with 0d 0a */
     for (;;)
     {
-        len = 0;
-        pdata = recv_data;
         if (serial_getchar(pserial, &data, portMAX_DELAY))
         {
-            *pdata++ = (uint8_t)data;
+            *pdata ++ = (uint8_t)data;
             len ++;
-            while (serial_getchar(pserial, &data, xDelay))
+            if (len >= (sizeof(msg_tof_t) + 4))
             {
-                *pdata++ = (uint8_t)data;
-                len ++;
-                if (len >= (sizeof(msg_tof_t) + 5))
-                {
-                    break;
-                }
+                len = 0;
+                pdata = recv_data;
             }
 
-            /** receive packet */
-            msg2tof(recv_data, len);
-            if (!altimeter_is_calculating())
+            if ((len >= 2) && ((0x0d == pdata[-2]) && (0x0a == pdata[-1])))
             {
-                if (tof.range > 0)
+                /** receive packet */
+                msg2tof(recv_data, len);
+                if (!altimeter_is_calculating())
                 {
-                    /** calculate physical floor */
-                    floor_cur = altimeter_get_height_floor(tof.range / 10);
-
-                    if (floor_cur != floor_prev)
+                    if (tof.range > 0)
                     {
-                        /** floor changed */
-                        elev_set_floor(floor_cur, floor_prev);
-                        floor_prev = floor_cur;
+                        /** calculate physical floor */
+                        floor_cur = altimeter_get_height_floor(tof.range / 10);
+
+                        if (floor_cur != floor_prev)
+                        {
+                            /** floor changed */
+                            elev_set_floor(floor_cur, floor_prev);
+                            floor_prev = floor_cur;
+                        }
                     }
                 }
-            }
-            recv_data[len] = 0x00;
+                recv_data[len] = 0x00;
 #if DUMP_ALTIMETER_DATA
-            TRACE("recv data: %s\r\n", recv_data);
+                TRACE("recv data: %s\r\n", recv_data);
 #endif
+                len = 0;
+                pdata = recv_data;
+            }
         }
     }
 }
