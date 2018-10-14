@@ -34,7 +34,7 @@
 #define __TRACE_MODULE  "[app]"
 
 #ifdef __MASTER
-#define VERSION  ("v1.1.5.15")
+#define VERSION  ("v1.1.6.0")
 #else
 #define VERSION  ("v1.1.1.0")
 #endif
@@ -66,7 +66,8 @@ void ApplicationStartup()
     /** initialize license */
     if (!license_init())
     {
-        return;
+        ptl_init();
+        goto END;
     }
 
     ptl_init();
@@ -104,6 +105,7 @@ void ApplicationStartup()
         expand_init();
     }
 
+END:
     /* Start the scheduler. */
     vTaskStartScheduler();
 }

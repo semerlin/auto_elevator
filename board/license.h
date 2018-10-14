@@ -13,6 +13,7 @@
 BEGIN_DECLS
 
 bool license_init(void);
+bool license_set(const uint8_t *plicense);
 
 END_DECLS
 

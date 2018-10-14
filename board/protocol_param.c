@@ -17,11 +17,13 @@
 #include "protocol_expand.h"
 #include "bluetooth.h"
 #include "delay.h"
+#include "license.h"
 
 #undef __TRACE_MODULE
 #define __TRACE_MODULE  "[ptl_param]"
 
 extern parameters_t board_parameter;
+extern license_t license;
 
 /* protocol head and tail */
 #define PARAM_HEAD    0x55
@@ -34,6 +36,7 @@ static void process_param_calc(const uint8_t *data, uint8_t len);
 static void process_param_bt_name(const uint8_t *data, uint8_t len);
 #endif
 static void process_reboot(const uint8_t *data, uint8_t len);
+static void process_license(const uint8_t *data, uint8_t len);
 
 typedef enum
 {
@@ -59,6 +62,7 @@ typedef struct
 #define CMD_CALC_NOTIFY    0x80
 #endif
 #define CMD_REBOOT         0x05
+#define CMD_LICENSE        0x06
 
 static cmd_handle_t cmd_handles[] =
 {
@@ -69,6 +73,7 @@ static cmd_handle_t cmd_handles[] =
     {CMD_BT_NAME, process_param_bt_name},
 #endif
     {CMD_REBOOT, process_reboot},
+    {CMD_LICENSE, process_license},
 };
 
 typedef struct
@@ -78,6 +83,11 @@ typedef struct
      */
     uint8_t reboot_type;
 } msg_reboot_t;
+
+typedef struct
+{
+    uint8_t license[16];
+} msg_license_t;
 
 #define IS_FLOOR_VALID(floor)               (floor > 0)
 
@@ -303,6 +313,33 @@ static void process_reboot(const uint8_t *data, uint8_t len)
 #else
     SCB_SystemReset();
 #endif
+}
+
+/**
+ * @brief process license
+ * @param data - calculation data
+ * @param len - data length
+ */
+static void process_license(const uint8_t *data, uint8_t len)
+{
+    param_status_t status = SUCCESS;
+    if (len >= sizeof(msg_license_t))
+    {
+        msg_license_t *pdata = (msg_license_t *)data;
+        if (!license_set(pdata->license))
+        {
+            status = OPERATION_FAIL;
+        }
+    }
+    else
+    {
+        status = OPERATION_FAIL;
+    }
+    param_reply(CMD_LICENSE, status);
+    if (SUCCESS == status)
+    {
+        SCB_SystemReset();
+    }
 }
 
 #ifdef __MASTER

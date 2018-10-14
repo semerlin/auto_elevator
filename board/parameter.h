@@ -42,6 +42,13 @@ typedef struct
     uint8_t pwd[PARAM_PWD_LEN];
     floor_height_t floor_height[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
 } parameters_t;
+
+typedef struct
+{
+    uint8_t license[16];
+    uint8_t run_time[16];
+    uint8_t random[4];
+} license_t;
 #else
 typedef struct
 {
@@ -60,10 +67,10 @@ bool param_store_floor_height(uint8_t len, const floor_height_t *floor_height);
 bool param_store_bt_name(uint8_t len, const uint8_t *name);
 #endif
 #if !USE_SIMPLE_LICENSE
-bool param_get_license(uint8_t *license);
-bool param_set_license(const uint8_t *license);
-bool param_get_run_time(uint8_t *run_time);
-bool param_set_run_time(const uint8_t *run_time);
+void reset_license(void);
+bool param_has_license(void);
+license_t param_get_license(void);
+bool param_set_license(const license_t *license);
 #endif
 parameters_t param_get(void);
 void param_dump(void);
