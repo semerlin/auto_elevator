@@ -355,8 +355,10 @@ static void vLicense(void *pvParameters)
 bool license_init(void)
 {
     TRACE("initialise license system...\r\n");
-    //reset_license();
-    //while(1);
+#if 0
+    reset_license();
+    while (1);
+#endif
 #if !USE_SIMPLE_LICENSE
     license = param_get_license();
     generate_serial_and_key();
