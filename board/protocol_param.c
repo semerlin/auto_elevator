@@ -109,6 +109,7 @@ typedef struct
     uint8_t total_floor;
     uint16_t threshold;
     calc_type_t calc_type;
+    uint8_t opendoor_polar;
 } msg_param_t;
 
 typedef struct
@@ -246,6 +247,7 @@ static void process_param_set(const uint8_t *data, uint8_t len)
         board_parameter.total_floor = msg->total_floor;
         board_parameter.threshold = msg->threshold;
         board_parameter.calc_type = msg->calc_type;
+        board_parameter.opendoor_polar = msg->opendoor_polar;
         board_parameter.id_board = 0x01;
 #endif
 
