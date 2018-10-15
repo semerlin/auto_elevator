@@ -117,7 +117,7 @@ static void vBluetooth(void *pvParameters)
                     break;
                 }
             }
-#if DUMP_PROTOCOL
+#if DUMP_BT
             dump_message(0, recv_data, len);
 #endif
             process_robot_data(recv_data, len, &wn_type);
