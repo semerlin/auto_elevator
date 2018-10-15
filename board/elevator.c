@@ -168,13 +168,13 @@ bool elev_init(void)
 #ifdef __MASTER
     xTaskCreate(vElevArrive, "elvarrive", ELEV_STACK_SIZE, NULL,
                 ELEV_PRIORITY, NULL);
-#endif
     /** release opendoor key */
     uint8_t key = boardmap_opendoor_key();
     if (1 == board_parameter.opendoor_polar)
     {
         keyctl_press(key);
     }
+#endif
 
     return TRUE;
 }

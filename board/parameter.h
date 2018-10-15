@@ -19,6 +19,12 @@ typedef enum
     CALC_ALTIMETER,
 } calc_type_t;
 
+typedef struct
+{
+    uint8_t license[16];
+    uint8_t run_time[16];
+    uint8_t random[4];
+} license_t;
 
 #ifdef __MASTER
 typedef struct
@@ -42,13 +48,6 @@ typedef struct
     uint8_t pwd[PARAM_PWD_LEN];
     floor_height_t floor_height[MAX_FLOOR_NUM + MAX_EXPAND_FLOOR_NUM * (MAX_BOARD_NUM - 1)];
 } parameters_t;
-
-typedef struct
-{
-    uint8_t license[16];
-    uint8_t run_time[16];
-    uint8_t random[4];
-} license_t;
 #else
 typedef struct
 {

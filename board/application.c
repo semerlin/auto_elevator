@@ -36,7 +36,7 @@
 #ifdef __MASTER
 #define VERSION  ("v1.1.6.1")
 #else
-#define VERSION  ("v1.1.1.0")
+#define VERSION  ("v1.1.2.0")
 #endif
 
 parameters_t board_parameter;
