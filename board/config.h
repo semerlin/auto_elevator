@@ -13,7 +13,8 @@
 #define CAN_REMAP               0
 
 #define SIMPLE_FILTER           0
-#define AUTO_ADJUST             1
+#define AUTO_ADJUST             0
+#define WAIT_TO_SEND_ARRIVE     1
 
 #define DUMP_ALTIMETER_DATA     0
 #define DUMP_FLOORMAP           1

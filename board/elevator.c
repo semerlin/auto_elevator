@@ -29,7 +29,7 @@
 extern parameters_t board_parameter;
 #ifdef __MASTER
 /* elevator current floor */
-static char elev_cur_floor = 1;
+static uint8_t elev_cur_floor = 1;
 
 static bool hold_door = FALSE;
 static uint8_t hold_cnt = 0;
@@ -120,17 +120,27 @@ static void vElevArrive(void *pvParameters)
         {
             if (DEFAULT_CHECKIN != robot_checkin_get())
             {
-                while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
-                                                500 / portTICK_PERIOD_MS))
+#if WAIT_TO_SEND_ARRIVE
+                /** wait 2 senond to see whether really arrived */
+                vTaskDelay(2000 / portTICK_PERIOD_MS);
+                if (elev_cur_floor == floor)
                 {
-                    err_cnt ++;
-                    if (err_cnt > MAX_CHECK_CNT)
+#endif
+                    /** really arrived */
+                    while (pdTRUE != xSemaphoreTake(xNotifySemaphore,
+                                                    500 / portTICK_PERIOD_MS))
                     {
-                        robot_checkin_reset();
-                        break;
+                        err_cnt ++;
+                        if (err_cnt > MAX_CHECK_CNT)
+                        {
+                            robot_checkin_reset();
+                            break;
+                        }
+                        notify_arrive(floor, &wn_type);
                     }
-                    notify_arrive(floor, &wn_type);
+#if WAIT_TO_SEND_ARRIVE
                 }
+#endif
             }
         }
     }
@@ -327,7 +337,10 @@ void elev_increase(void)
     uint8_t prev_floor = elev_cur_floor;
     if (elev_cur_floor < board_parameter.total_floor)
     {
-        elev_cur_floor ++;
+        if (elev_cur_floor < 0xff)
+        {
+            elev_cur_floor ++;
+        }
     }
     elev_set_floor(elev_cur_floor, prev_floor);
 }
@@ -363,7 +376,7 @@ void elevator_set_state_work(elev_work_state state)
  * @brief get elevator current floor
  * @return elevator current floor
  */
-char elev_floor(void)
+uint8_t elev_floor(void)
 {
     return elev_cur_floor;
 }

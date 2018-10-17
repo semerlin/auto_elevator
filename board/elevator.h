@@ -35,7 +35,7 @@ void elev_go(uint8_t floor);
 #ifdef __MASTER
 void elev_arrived(uint8_t floor);
 void elev_hold_open(bool flag);
-char elev_floor(void);
+uint8_t elev_floor(void);
 void elev_decrease(void);
 void elev_increase(void);
 void elev_set_floor(uint8_t cur_floor, uint8_t prev_floor);
